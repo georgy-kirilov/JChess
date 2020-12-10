@@ -1,6 +1,6 @@
 package models.pieces;
 
-public class Knight 
+public class Knight
 {
 	//TODO: Implement the Knight class
 }
