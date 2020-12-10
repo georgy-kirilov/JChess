@@ -5,6 +5,7 @@ import jthrow.JThrower;
 public class Position 
 {
 	private static final int MIN_VALUE = 0;
+	
 	private int row;
 	private int column;
 	

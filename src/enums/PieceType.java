@@ -2,10 +2,10 @@ package enums;
 
 public enum PieceType
 {
-	Pawn,
-	Rook,
-	Knight,
-	Bishop,
-	Queen,
-	King;
+	PAWN,
+	ROOK,
+	KNIGHT,
+	BISHOP,
+	QUEEN,
+	KING;
 }

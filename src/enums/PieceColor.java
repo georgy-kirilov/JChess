@@ -2,6 +2,6 @@ package enums;
 
 public enum PieceColor 
 {
-	White,
-	Black;
+	WHITE,
+	BLACK;
 }

@@ -1,6 +1,6 @@
 package models.boards;
 
-public class Board 
+public abstract class Board 
 {
-	//TODO: Implement the class
+	//TODO: Implement the Board class
 }
