@@ -3,47 +3,19 @@ package models.pieces;
 import java.util.ArrayList;
 
 import common.Position;
-import enums.PieceColor;
 import enums.PieceType;
-import jthrow.JThrower;
+import enums.PieceColor;
 import models.boards.Board;
 
-public abstract class Piece 
+public interface Piece 
 {
-	private final PieceType type;
-	private final PieceColor color;
-	private boolean isMoved;
+	PieceType getType();
 	
-	public Piece(PieceType type, PieceColor color)
-	{
-		JThrower.throwIf(type, "Type").isNull();
-		this.type = type;
-			
-		JThrower.throwIf(color, "Color").isNull();
-		this.color = color;
-		
-		this.isMoved = false;
-	}
+	PieceColor getColor();
 	
-	public PieceType getType()
-	{
-		return this.type;
-	}
+	boolean hasMoved();
 	
-	public PieceColor getColor()
-	{
-		return this.color;
-	}
+	void move();
 	
-	public boolean hasMoved()
-	{
-		return this.isMoved;
-	}
-	
-	public void move()
-	{
-		this.isMoved = true;
-	}
-	
-	public abstract ArrayList<Position> getAllFreePositions(Position currentPosition, Board board);	 
+	ArrayList<Position> getAllReachablePositions(Position currentPosition, Board board);
 }

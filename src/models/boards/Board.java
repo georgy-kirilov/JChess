@@ -1,6 +1,17 @@
 package models.boards;
 
-public abstract class Board 
+import common.Position;
+import models.pieces.Piece;
+
+public interface Board 
 {
-	//TODO: Implement the Board class
+	int getHeight();
+
+	int getWidth();
+	
+	Piece getAt(Position position);
+	
+	void setAt(Position position, Piece piece);
+	
+	boolean isPositionInside(Position position);
 }
