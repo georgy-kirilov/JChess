@@ -17,5 +17,7 @@ public interface Board
 	
 	Piece setToEmpty(Position position);
 	
+	boolean isEmptyAt(Position position);
+	
 	boolean isPositionInside(Position position);
 }

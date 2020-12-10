@@ -3,11 +3,10 @@ package models.boards;
 import common.Position;
 import jthrow.JChecker;
 import jthrow.JThrower;
-import jthrow.custom.exceptions.OutOfRangeException;
 import models.pieces.Piece;
 import common.ParameterNames;
 
-public class BaseBoard implements Board
+public abstract class BaseBoard implements Board
 {	
 	private static final int MIN_HEIGHT = 4;
 	private static final int MAX_HEIGHT = 16;
@@ -33,7 +32,7 @@ public class BaseBoard implements Board
 		this.emptyCellValue = emptyCellValue;
 		
 		this.cells = new Piece[this.getHeight()][this.getWidth()];
-		this.intializeAsEmpty();
+		this.initializeAsEmpty();
 	}
 
 	@Override
@@ -77,13 +76,19 @@ public class BaseBoard implements Board
 	}
 	
 	@Override
+	public boolean isEmptyAt(Position position) 
+	{
+		return this.getAt(position) == this.getEmptyCellValue();
+	}
+	
+	@Override
 	public boolean isPositionInside(Position position)
 	{
 		try
 		{
 			this.validatePosition(position);			
 		}
-		catch (OutOfRangeException e)
+		catch (IllegalArgumentException e)
 		{
 			return false;
 		}
@@ -103,7 +108,7 @@ public class BaseBoard implements Board
 				.has(pos -> JChecker.isOutOfRange(minRowAndColumnValue, pos.getColumn(), maxColumns));
 	}
 	
-	private void intializeAsEmpty()
+	private void initializeAsEmpty()
 	{	
 		for (int row = 0; row < this.getHeight(); row++)
 		{
