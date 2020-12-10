@@ -21,7 +21,7 @@ public class JChecker
 	
 	public static boolean isNullOrWhiteSpace(String str)
 	{
-		return isNull(str) || str.isBlank();
+		return isNull(str) || str.trim().length() == 0;
 	}
 	
 	public static <T extends Comparable<T>> boolean isLessThan(T min, T actual)
