@@ -4,7 +4,6 @@ import common.Position;
 import jthrow.JChecker;
 import jthrow.JThrower;
 import models.pieces.Piece;
-import common.ParameterNames;
 
 public abstract class BaseBoard implements Board
 {	
@@ -21,10 +20,10 @@ public abstract class BaseBoard implements Board
 	
 	public BaseBoard(int height, int width, Piece emptyCellValue)
 	{
-		JThrower.throwIf(height, ParameterNames.HEIGHT)
+		JThrower.throwIf(height, "Height")
 				.isOutOfRange(MIN_HEIGHT, MAX_HEIGHT);
 		
-		JThrower.throwIf(width, ParameterNames.WIDTH)
+		JThrower.throwIf(width, "Width")
 				.isOutOfRange(MIN_WIDTH, MAX_WIDTH);
 		
 		this.height = height;
@@ -92,11 +91,16 @@ public abstract class BaseBoard implements Board
 	
 	private void initializeAsEmpty()
 	{	
-		for (int row = 0; row < this.getHeight(); row++)
+		int start = 0;
+		Position position = new Position(start, start);
+		
+		for (int row = start; row < this.getHeight(); row++)
 		{
-			for (int column = 0; column < this.getWidth(); column++)
+			for (int column = start; column < this.getWidth(); column++)
 			{
-				this.setAt(new Position(row, column), this.getEmptyCellValue());
+				position.setRow(row);
+				position.setColumn(column);
+				this.setAt(position, this.getEmptyCellValue());
 			}
 		}
 	}

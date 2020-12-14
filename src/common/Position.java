@@ -1,7 +1,5 @@
 package common;
 
-import jthrow.JThrower;
-
 public class Position 
 {
 	private int row;
@@ -43,11 +41,8 @@ public class Position
 	
 	public String toString()
 	{
-		String format = "%s: %d | %s: %d";
-		
-		String positionInfo = String.format(format, ParameterNames.ROW, this.getRow(), 
-				ParameterNames.COLUMN, this.getColumn());
-		
+		String format = "Row: %d | Column: %d";
+		String positionInfo = String.format(format, this.getRow(), this.getColumn());
 		return positionInfo;
 	}
 }
