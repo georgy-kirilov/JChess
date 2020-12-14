@@ -4,8 +4,6 @@ import jthrow.JThrower;
 
 public class Position 
 {
-	private static final int MIN_VALUE = 0;
-	
 	private int row;
 	private int column;
 	
@@ -17,17 +15,11 @@ public class Position
 	
 	public void setRow(int row)
 	{
-		JThrower.throwIf(row, ParameterNames.ROW)
-				.isLessThan(MIN_VALUE);
-		
 		this.row = row;
 	}
 	
 	public void setColumn(int column)
 	{
-		JThrower.throwIf(column, ParameterNames.COLUMN)
-				.isLessThan(MIN_VALUE);
-		
 		this.column = column;
 	}
 	
