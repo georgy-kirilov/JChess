@@ -19,54 +19,46 @@ public class King extends BasePiece
 	@Override
 	public ArrayList<Position> getAllReachablePositions(Position currentPosition, Board board)
 	{
-		// TODO Auto-generated method stub
+		
 		ArrayList<Position> availablePositionsToMoveList = new ArrayList<Position>();
+		
+		ArrayList<Position> AllKingProbablePositions = new ArrayList<Position>();
+		
+		// Adding all 8 of the Kings sides as positions to a List
 		Position kingProbablePositionUp = new Position(currentPosition.getRow()+1, currentPosition.getColumn());
+		AllKingProbablePositions.add(kingProbablePositionUp);
+		
 		Position kingProbablePositionRightUp = new Position(currentPosition.getRow()+1, currentPosition.getColumn()+1);
+		AllKingProbablePositions.add(kingProbablePositionRightUp);
+		
 		Position kingProbablePositionRight = new Position(currentPosition.getRow(), currentPosition.getColumn()+1);
+		AllKingProbablePositions.add(kingProbablePositionRight);
+		
 		Position kingProbablePositionRightDown = new Position(currentPosition.getRow()-1, currentPosition.getColumn()+1);
+		AllKingProbablePositions.add(kingProbablePositionRightDown);
+		
 		Position kingProbablePositionDown = new Position(currentPosition.getRow()-1, currentPosition.getColumn());
+		AllKingProbablePositions.add(kingProbablePositionDown);
+		
 		Position kingProbablePositionLeftDown = new Position(currentPosition.getRow()-1, currentPosition.getColumn()-1);
+		AllKingProbablePositions.add(kingProbablePositionLeftDown);
+		
 		Position kingProbablePositionLeft = new Position(currentPosition.getRow(), currentPosition.getColumn()-1);
+		AllKingProbablePositions.add(kingProbablePositionLeft);
+		
 		Position kingProbablePositionLeftUp = new Position(currentPosition.getRow()-1, currentPosition.getColumn()+1);
+		AllKingProbablePositions.add(kingProbablePositionLeftUp);
+		
+		//Checking all sides of the King if they are empty or taken by an opponent Figure
+		for (int i = 0; i < AllKingProbablePositions.size(); i++) 
+		{
+			if (board.isEmptyAt(AllKingProbablePositions.get(i)) || board.getAt(AllKingProbablePositions.get(i)).getColor()!=this.getColor())
+			{
+				availablePositionsToMoveList.add(AllKingProbablePositions.get(i));
+			}
 
-		if (board.isEmptyAt(kingProbablePositionUp) || 	board.getAt(kingProbablePositionUp).getColor()!=this.getColor())
-		{
-			availablePositionsToMoveList.add(kingProbablePositionUp);
-		}
-		
-		if (board.isEmptyAt(kingProbablePositionRightUp) || board.getAt(kingProbablePositionRightUp).getColor()!=this.getColor())
-		{
-			availablePositionsToMoveList.add(kingProbablePositionRightUp);
-		}
-		
-		if (board.isEmptyAt(kingProbablePositionRight) || board.getAt(kingProbablePositionRight).getColor()!=this.getColor())
-		{
-			availablePositionsToMoveList.add(kingProbablePositionRight);
-		}
-		if (board.isEmptyAt(kingProbablePositionRightDown) || board.getAt(kingProbablePositionRightDown).getColor()!=this.getColor())
-		{
-			availablePositionsToMoveList.add(kingProbablePositionRightDown);
-		}
-		if (board.isEmptyAt(kingProbablePositionDown) || board.getAt(kingProbablePositionDown).getColor()!=this.getColor())
-		{
-			availablePositionsToMoveList.add(kingProbablePositionDown);
-		}
-		if (board.isEmptyAt(kingProbablePositionLeftDown) || board.getAt(kingProbablePositionLeftDown).getColor()!=this.getColor())
-		{
-			availablePositionsToMoveList.add(kingProbablePositionLeftDown);
-		}
-		if (board.isEmptyAt(kingProbablePositionLeft) || board.getAt(kingProbablePositionLeft).getColor()!=this.getColor())
-		{
-			availablePositionsToMoveList.add(kingProbablePositionLeft);
-		}
-		if (board.isEmptyAt(kingProbablePositionLeftUp) || board.getAt(kingProbablePositionLeftUp).getColor()!=this.getColor())
-		{
-			availablePositionsToMoveList.add(kingProbablePositionLeftUp);
-		}
-		
-		
+}
+		//returning all Available Positions to move
 		return availablePositionsToMoveList;
 	}
-	//TODO: Implement the King class
 }
