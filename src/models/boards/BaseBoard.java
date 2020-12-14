@@ -56,14 +56,12 @@ public abstract class BaseBoard implements Board
 	@Override
 	public Piece getAt(Position position)
 	{
-		this.validatePosition(position);
 		return this.cells[position.getRow()][position.getColumn()];
 	}
 
 	@Override
 	public void setAt(Position position, Piece piece)
 	{
-		this.validatePosition(position);
 		this.cells[position.getRow()][position.getColumn()] = piece;
 	}
 
@@ -84,28 +82,12 @@ public abstract class BaseBoard implements Board
 	@Override
 	public boolean isPositionInside(Position position)
 	{
-		try
-		{
-			this.validatePosition(position);			
-		}
-		catch (IllegalArgumentException e)
-		{
-			return false;
-		}
-		
-		return true;
-	}
-	
-	private void validatePosition(Position position)
-	{
+		int minValue = 0;
 		int maxRows = this.getHeight() - 1;
 		int maxColumns = this.getWidth() - 1;
-		int minRowAndColumnValue = 0;
 		
-		JThrower.throwIf(position, ParameterNames.POSITION)
-				.isNull()
-				.has(pos -> JChecker.isOutOfRange(minRowAndColumnValue, pos.getRow(), maxRows))
-				.has(pos -> JChecker.isOutOfRange(minRowAndColumnValue, pos.getColumn(), maxColumns));
+		return JChecker.isInRange(minValue, position.getRow(), maxRows) && 
+				JChecker.isInRange(minValue, position.getColumn(), maxColumns);
 	}
 	
 	private void initializeAsEmpty()
@@ -114,7 +96,7 @@ public abstract class BaseBoard implements Board
 		{
 			for (int column = 0; column < this.getWidth(); column++)
 			{
-				this.cells[row][column] = this.getEmptyCellValue();
+				this.setAt(new Position(row, column), this.getEmptyCellValue());
 			}
 		}
 	}
