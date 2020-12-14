@@ -58,7 +58,7 @@ public class King extends BasePiece
 			}
 
 }
-		//returning all Available Positions to move
+		//returning list of all Available Positions to move
 		return availablePositionsToMoveList;
 	}
 }
