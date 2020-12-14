@@ -1,6 +1,5 @@
 package tests;
 
-
 import common.Position;
 import models.boards.BaseBoard;
 import models.boards.StandardBoard;

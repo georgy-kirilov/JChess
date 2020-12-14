@@ -3,97 +3,63 @@ package models.pieces;
 import java.util.ArrayList;
 
 import common.Position;
-import enums.PieceColor;
 import enums.PieceType;
-import jthrow.JThrower;
+import enums.PieceColor;
 import models.boards.Board;
+import java.util.function.Function;
 
-public class Rook extends BasePiece //implements Board
-{
-	ArrayList<Position> AllPossiblePosition;
-	Position newPosition;
-	
-	public Rook(PieceType type, PieceColor color) 
+public class Rook extends BasePiece
+{	
+	public Rook(PieceColor color) 
 	{
-		super(type, color);
-		AllPossiblePosition = new ArrayList<Position>();
+		super(PieceType.ROOK, color);
 	}
-
 	
 	@Override
 	public ArrayList<Position> getAllReachablePositions(Position currentPosition, Board board) 
 	{
-		for( int i = currentPosition.getColumn() ; i < board.getHeight(); i++ )
-		{
-			newPosition.setRow(currentPosition.getRow());
-			newPosition.setColumn(i + 1) ;
-			if( !board.isEmptyAt(newPosition) )
-			{
-				if( board.getAt(newPosition).getColor() != this.getColor() )
-				{
-					AllPossiblePosition.add(newPosition);
-				}
-			}
-			if( board.isEmptyAt(newPosition) )
-			{
-				AllPossiblePosition.add(newPosition);
-			}
-		}
+		ArrayList<Position> reachablePositions = new ArrayList<>();
 		
+		reachablePositions.addAll(this.reachablePositionsInDirection
+				(Position::moveUp, currentPosition, board));
 		
-		for( int i = currentPosition.getColumn() ; i >= 0; i-- )
-		{
-			newPosition.setRow(currentPosition.getRow());
-			newPosition.setColumn(i - 1) ;
-			if( !board.isEmptyAt(newPosition) )
-			{
-				if( board.getAt(newPosition).getColor() != this.getColor() )
-				{
-					AllPossiblePosition.add(newPosition);
-				}
-			}
-			if ( board.isEmptyAt(newPosition) )
-			{
-				AllPossiblePosition.add(newPosition);
-			}
-		}
+		reachablePositions.addAll(this.reachablePositionsInDirection
+				(Position::moveDown, currentPosition, board));
+
+		reachablePositions.addAll(this.reachablePositionsInDirection
+				(Position::moveLeft, currentPosition, board));
+	
+		reachablePositions.addAll(this.reachablePositionsInDirection
+				(Position::moveRight, currentPosition, board));
 		
-		for( int i = currentPosition.getRow() ; i < board.getWidth(); i++ )
-		{
-			newPosition.setColumn(currentPosition.getColumn());
-			newPosition.setRow( i + 1 );
-			if( !board.isEmptyAt(newPosition) )
-			{
-				if(board.getAt(newPosition).getColor() != this.getColor())
-				{
-					AllPossiblePosition.add(newPosition);
-				}
-			}
-			if ( board.isEmptyAt(newPosition) )
-			{
-				AllPossiblePosition.add(newPosition);
-			}
-		}
-		
-		for( int i = currentPosition.getRow() ; i >= 0; i-- )
-		{
-			newPosition.setColumn(currentPosition.getColumn());
-			newPosition.setRow(i - 1);
-			if( !board.isEmptyAt(newPosition) )
-			{
-				if(board.getAt(newPosition).getColor() != this.getColor())
-				{
-					AllPossiblePosition.add(newPosition);
-				}
-			}
-			if ( board.isEmptyAt(newPosition) )
-			{
-				AllPossiblePosition.add(newPosition);
-			}
-		}
-		return AllPossiblePosition;
+		return reachablePositions;
 	}
 
-
-	
+	private ArrayList<Position> reachablePositionsInDirection(Function<Position, Position> getNextPosition, 
+			Position current, Board board)
+	{
+		ArrayList<Position> positions = new ArrayList<>();
+		Position next = getNextPosition.apply(current);
+		
+		while (board.isPositionInside(next))
+		{
+			if (board.isEmptyAt(next))
+			{
+				positions.add(next);
+			}
+			else
+			{
+				if (board.getAt(next).getColor() != this.getColor())
+				{
+					positions.add(next);
+				}
+				
+				break;
+			}
+			
+			next = getNextPosition.apply(next);
+		}
+		
+		return positions;
+	}
 }
