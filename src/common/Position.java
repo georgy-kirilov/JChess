@@ -41,6 +41,7 @@ public class Position
 		return areEqual;
 	}
 	
+	@Override
 	public String toString()
 	{
 		String format = "Row: %d | Column: %d";
