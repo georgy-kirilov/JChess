@@ -3,70 +3,64 @@ package models.pieces;
 import java.util.ArrayList;
 
 import common.Position;
-import enums.PieceColor;
 import enums.PieceType;
+import enums.PieceColor;
 import models.boards.Board;
 
 public class King extends BasePiece
 {
-
 	public King(PieceColor color)
 	{
 		super(PieceType.KING, color);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public ArrayList<Position> getAllReachablePositions(Position currentPosition, Board board)
 	{
-		
-		ArrayList<Position> availablePositionsToMoveList = new ArrayList<Position>();
-		
-		ArrayList<Position> AllKingProbablePositions = new ArrayList<Position>();
+		ArrayList<Position> availablePositionsToMoveList = new ArrayList<>();
+		ArrayList<Position> allKingProbablePositions = new ArrayList<>();
 		
 		// Adding all 8 of the Kings sides as positions to a List
-		Position kingProbablePositionUp;
-		kingProbablePositionUp = currentPosition.moveUp(currentPosition);
-		AllKingProbablePositions.add(kingProbablePositionUp);
+		Position kingProbablePositionUp = Position.moveUp(currentPosition);
+		allKingProbablePositions.add(kingProbablePositionUp);
 		
-		Position kingProbablePositionRightUp;
-		kingProbablePositionRightUp = currentPosition.moveTopRight(currentPosition);
-		AllKingProbablePositions.add(kingProbablePositionRightUp);
+		Position kingProbablePositionRightUp = Position.moveTopRight(currentPosition);
+		allKingProbablePositions.add(kingProbablePositionRightUp);
 		
-		Position kingProbablePositionRight;
-		kingProbablePositionRight = currentPosition.moveBottomRight(currentPosition);
-		AllKingProbablePositions.add(kingProbablePositionRight);
+		Position kingProbablePositionRight = Position.moveRight(currentPosition);
+		allKingProbablePositions.add(kingProbablePositionRight);
 		
-		Position kingProbablePositionRightDown;
-		kingProbablePositionRightDown = currentPosition.moveBottomRight(currentPosition);
-		AllKingProbablePositions.add(kingProbablePositionRightDown);
+		Position kingProbablePositionRightDown = Position.moveBottomRight(currentPosition);
+		allKingProbablePositions.add(kingProbablePositionRightDown);
 		
-		Position kingProbablePositionDown;
-		kingProbablePositionDown = currentPosition.moveDown(currentPosition);
-		AllKingProbablePositions.add(kingProbablePositionDown);
+		Position kingProbablePositionDown = Position.moveDown(currentPosition);
+		allKingProbablePositions.add(kingProbablePositionDown);
 		
-		Position kingProbablePositionLeftDown;
-		kingProbablePositionLeftDown = currentPosition.moveBottomLeft(currentPosition);
-		AllKingProbablePositions.add(kingProbablePositionLeftDown);
+		Position kingProbablePositionLeftDown = Position.moveBottomLeft(currentPosition);
+		allKingProbablePositions.add(kingProbablePositionLeftDown);
 		
-		Position kingProbablePositionLeft;
-		kingProbablePositionLeft = currentPosition.moveLeft(currentPosition);
-		AllKingProbablePositions.add(kingProbablePositionLeft);
+		Position kingProbablePositionLeft = Position.moveLeft(currentPosition);
+		allKingProbablePositions.add(kingProbablePositionLeft);
 		
-		Position kingProbablePositionLeftUp;
-		kingProbablePositionLeftUp = currentPosition.moveTopLeft(currentPosition);
-		AllKingProbablePositions.add(kingProbablePositionLeftUp);
+		Position kingProbablePositionLeftUp = Position.moveTopLeft(currentPosition);
+		allKingProbablePositions.add(kingProbablePositionLeftUp);
 		
 		//Checking all sides of the King if they are empty or taken by an opponent Figure
-		for (int i = 0; i < AllKingProbablePositions.size(); i++) 
+		for (Position position : allKingProbablePositions)
 		{
-			if (board.isEmptyAt(AllKingProbablePositions.get(i)) || board.getAt(AllKingProbablePositions.get(i)).getColor()!=this.getColor())
+			if (board.isEmptyAt(position) || board.getAt(position).getColor() != this.getColor())
 			{
-				availablePositionsToMoveList.add(AllKingProbablePositions.get(i));
+				availablePositionsToMoveList.add(position);
 			}
-
-}
-		//returning all Available Positions to move
+		}
+		
+		//Returning all Available Positions to move
 		return availablePositionsToMoveList;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "K";
 	}
 }
