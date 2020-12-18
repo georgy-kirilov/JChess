@@ -1,0 +1,27 @@
+package tests;
+
+import java.util.ArrayList;
+
+import common.Position;
+import enums.PieceColor;
+import models.boards.Board;
+import models.boards.StandardBoard;
+import models.pieces.Rook;
+
+public class RookTest 
+{
+
+	public static void main(String[] args) 
+	{
+		Board board = new StandardBoard();
+		Rook rook = new Rook(PieceColor.WHITE);	
+		Position position = new Position(5, 4);
+		board.setAt(position, rook);
+		ArrayList<Position> positions = board.getAt(position).getAllReachablePositions(position, board);
+		for(Position p: positions)
+		{
+			System.out.println(p);
+		}
+	}
+
+}
