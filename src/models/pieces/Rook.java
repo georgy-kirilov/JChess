@@ -46,6 +46,7 @@ public class Rook extends BasePiece //implements Board
 				else if( board.getAt(newUpPosition).getColor() != this.getColor() )
 				{
 					upPositions.add(new Position(rowMove + 1, currentPosition.getColumn()));
+					break;
 				}
 			}
 		}
@@ -69,6 +70,7 @@ public class Rook extends BasePiece //implements Board
 				else if( board.getAt(newDownPosition).getColor() != this.getColor() )
 				{
 					downPositions.add(new Position(rowMove - 1, currentPosition.getColumn()));
+					break;
 				}
 			}
 		}
@@ -88,6 +90,7 @@ public class Rook extends BasePiece //implements Board
 				if( board.isEmptyAt(newRightPosition) )
 				{
 					rightPositions.add(new Position(columnMove + 1, currentPosition.getRow()));
+					break;
 				}
 				
 				else if( board.getAt(newRightPosition).getColor() != this.getColor() )
@@ -116,6 +119,7 @@ public class Rook extends BasePiece //implements Board
 				else if( board.getAt(newLeftPosition).getColor() != this.getColor() )
 				{
 					leftPositions.add(new Position(columnMove - 1, currentPosition.getRow()));
+					break;
 				}
 			}
 		}
