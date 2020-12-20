@@ -90,12 +90,12 @@ public class Rook extends BasePiece //implements Board
 				if( board.isEmptyAt(newRightPosition) )
 				{
 					rightPositions.add(new Position(columnMove + 1, currentPosition.getRow()));
-					break;
 				}
 				
 				else if( board.getAt(newRightPosition).getColor() != this.getColor() )
 				{
 					rightPositions.add(new Position(columnMove + 1, currentPosition.getRow()));
+					break;
 				}
 			}
 		}
