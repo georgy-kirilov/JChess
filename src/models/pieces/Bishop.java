@@ -2,6 +2,7 @@ package models.pieces;
 
 import java.util.ArrayList;
 
+import common.MovementOffsetPair;
 import common.Position;
 import enums.PieceColor;
 import models.boards.Board;
@@ -17,21 +18,17 @@ public class Bishop extends BasePiece
 	{		
 		ArrayList<Position> possibleMoves = new ArrayList<>();
 		
-		//UP - RIGHT
 		possibleMoves.addAll(
-				this.getReachableConsequtivePositions(currentPosition, board, -1, 1));
+				this.getReachableConsequtivePositions(currentPosition, board, MovementOffsetPair.TOP_RIGHT));
 		
-		//UP - LEFT
 		possibleMoves.addAll(
-				this.getReachableConsequtivePositions(currentPosition, board, -1, -1));
+				this.getReachableConsequtivePositions(currentPosition, board, MovementOffsetPair.TOP_LEFT));
 		
-		//DOWN - RIGHT
 		possibleMoves.addAll(
-				this.getReachableConsequtivePositions(currentPosition, board, 1, 1));
+				this.getReachableConsequtivePositions(currentPosition, board, MovementOffsetPair.BOTTOM_RIGHT));
 		
-		//DOWN - LEFT
 		possibleMoves.addAll(
-				this.getReachableConsequtivePositions(currentPosition, board, 1, -1));
+				this.getReachableConsequtivePositions(currentPosition, board, MovementOffsetPair.BOTTOM_LEFT));
 		
 		return possibleMoves;
 	}

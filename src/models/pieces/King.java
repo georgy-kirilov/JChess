@@ -17,14 +17,14 @@ public class King extends BasePiece
 	{
 		MovementOffsetPair[] offsetPairs = new MovementOffsetPair[]
 		{
-			new MovementOffsetPair(-1, 0),
-			new MovementOffsetPair(0, 1),
-			new MovementOffsetPair(1, 0),
-			new MovementOffsetPair(0, -1),
-			new MovementOffsetPair(-1, -1),
-			new MovementOffsetPair(-1, 1),
-			new MovementOffsetPair(1, 1),
-			new MovementOffsetPair(1, -1),
+			MovementOffsetPair.UP,
+			MovementOffsetPair.DOWN,
+			MovementOffsetPair.RIGHT,
+			MovementOffsetPair.LEFT,
+			MovementOffsetPair.TOP_RIGHT,
+			MovementOffsetPair.TOP_LEFT,
+			MovementOffsetPair.BOTTOM_RIGHT,
+			MovementOffsetPair.BOTTOM_LEFT,
 		};
 		
 		return this.getReachableSinglePositions(currentPosition, board, offsetPairs);
