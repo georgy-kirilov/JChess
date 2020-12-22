@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import common.Position;
 import enums.PieceColor;
-import enums.PieceType;
 import models.boards.Board;
 
 public class Bishop extends BasePiece
@@ -12,13 +11,13 @@ public class Bishop extends BasePiece
 	ArrayList<Position> possibleMoves;
 	private Position newPosition;
 	
-	public Bishop(PieceType type, PieceColor color) {
-		super(type, color);
+	public Bishop(PieceColor color) {
+		super(color);
 		possibleMoves = new ArrayList<>();
 	}
 
 	@Override
-	public ArrayList<Position> getAllReachablePositions(Position currentPosition, Board board) 
+	public Iterable<Position> getAllReachablePositions(Position currentPosition, Board board) 
 	{		
 		for(int i = currentPosition.getRow(); i < board.getWidth(); i++)
 		{

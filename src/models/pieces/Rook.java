@@ -4,20 +4,19 @@ import java.util.ArrayList;
 
 import common.Position;
 import enums.PieceColor;
-import enums.PieceType;
 import jthrow.JThrower;
 import models.boards.Board;
 
-public class Rook extends BasePiece //implements Board
+public class Rook extends BasePiece
 {
 	public Rook(PieceColor color) 
 	{
-		super(PieceType.ROOK, color);
+		super(color);
 	}
 
 	
 	@Override
-	public ArrayList<Position> getAllReachablePositions(Position currentPosition, Board board) 
+	public Iterable<Position> getAllReachablePositions(Position currentPosition, Board board) 
 	{
 		ArrayList<Position> allPossiblePositions = new ArrayList<Position>();
 		

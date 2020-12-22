@@ -3,7 +3,6 @@ package models.pieces;
 import java.util.ArrayList;
 
 import common.Position;
-import enums.PieceType;
 import enums.PieceColor;
 import models.boards.Board;
 
@@ -11,11 +10,11 @@ public class King extends BasePiece
 {
 	public King(PieceColor color)
 	{
-		super(PieceType.KING, color);
+		super(color);
 	}
 
 	@Override
-	public ArrayList<Position> getAllReachablePositions(Position currentPosition, Board board)
+	public Iterable<Position> getAllReachablePositions(Position currentPosition, Board board)
 	{
 		ArrayList<Position> availablePositionsToMoveList = new ArrayList<>();
 		ArrayList<Position> allKingProbablePositions = new ArrayList<>();

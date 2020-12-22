@@ -4,13 +4,12 @@ import java.util.ArrayList;
 
 import common.Position;
 import enums.PieceColor;
-import enums.PieceType;
 import models.boards.Board;
 
 public class Pawn extends BasePiece {
 
 	public Pawn(PieceColor color) {
-		super(PieceType.PAWN, color);
+		super(color);
 		// TODO Auto-generated constructor stub
 	}
 

@@ -2,10 +2,18 @@ package common;
 
 public class Position 
 {
+	public static final int DEFAULT_ROW = 0;
+	public static final int DEFAULT_COLUMN = 0;
+	
 	private static final int OFFSET = 1;
 	
 	private int row;
 	private int column;
+	
+	public Position()
+	{
+		this(DEFAULT_ROW, DEFAULT_COLUMN);
+	}
 	
 	public Position(int row, int column)
 	{
@@ -44,7 +52,7 @@ public class Position
 	@Override
 	public String toString()
 	{
-		String format = "Row: %d | Column: %d";
+		String format = "row: %d | column: %d";
 		String positionInfo = String.format(format, this.getRow(), this.getColumn());
 		return positionInfo;
 	}

@@ -17,7 +17,7 @@ public class RookTest
 		Rook rook = new Rook(PieceColor.WHITE);	
 		Position position = new Position(5, 4);
 		board.setAt(position, rook);
-		ArrayList<Position> positions = board.getAt(position).getAllReachablePositions(position, board);
+		Iterable<Position> positions = board.getAt(position).getAllReachablePositions(position, board);
 		for(Position p: positions)
 		{
 			System.out.println(p);

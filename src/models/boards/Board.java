@@ -9,8 +9,6 @@ public interface Board
 
 	int getWidth();
 	
-	Piece getEmptyCellValue();
-	
 	Piece getAt(Position position);
 	
 	void setAt(Position position, Piece piece);
@@ -20,4 +18,6 @@ public interface Board
 	boolean isEmptyAt(Position position);
 	
 	boolean isPositionInside(Position position);
+	
+	Piece EMPTY_CELL = null;
 }
