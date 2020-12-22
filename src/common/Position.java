@@ -5,8 +5,6 @@ public class Position
 	public static final int DEFAULT_ROW = 0;
 	public static final int DEFAULT_COLUMN = 0;
 	
-	private static final int OFFSET = 1;
-	
 	private int row;
 	private int column;
 	
@@ -55,45 +53,5 @@ public class Position
 		String format = "row: %d | column: %d";
 		String positionInfo = String.format(format, this.getRow(), this.getColumn());
 		return positionInfo;
-	}
-	
-	public static Position moveUp(Position current)
-	{
-		return new Position(current.getRow() - OFFSET, current.getColumn()); 
-	}
-	
-	public static Position moveDown(Position current)
-	{
-		return new Position(current.getRow() + OFFSET, current.getColumn());
-	}
-	
-	public static Position moveLeft(Position current)
-	{
-		return new Position(current.getRow(), current.getColumn() - OFFSET);
-	}
-	
-	public static Position moveRight(Position current)
-	{
-		return new Position(current.getRow(), current.getColumn() + OFFSET);
-	}
-	
-	public static Position moveTopLeft(Position current)
-	{
-		return new Position(current.getRow() - OFFSET, current.getColumn() - OFFSET);
-	}
-	
-	public static Position moveTopRight(Position current)
-	{
-		return new Position(current.getRow() - OFFSET, current.getColumn() + OFFSET);
-	}
-	
-	public static Position moveBottomLeft(Position current) 
-	{
-		return new Position(current.getRow() + OFFSET, current.getColumn() - OFFSET);
-	}
-	
-	public static Position moveBottomRight(Position current)
-	{
-		return new Position(current.getRow() + OFFSET, current.getColumn() + OFFSET);
 	}
 }

@@ -1,12 +1,12 @@
 package models.pieces;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import common.Position;
 import enums.PieceColor;
 import jthrow.JThrower;
 import models.boards.Board;
+import common.MovementOffsetPair;
 
 public abstract class BasePiece implements Piece
 {
@@ -37,12 +37,12 @@ public abstract class BasePiece implements Piece
 	}
 	
 	protected ArrayList<Position> getReachableConsequtivePositions(Position currentPosition, Board board, 
-			int rowOffset, int columnOffset)
+			MovementOffsetPair offsetPair)
 	{
 		ArrayList<Position> allPossiblePositions = new ArrayList<>();
 		
-		Position nextPosition = new Position(currentPosition.getRow() + rowOffset, 
-				currentPosition.getColumn() + columnOffset);
+		Position nextPosition = new Position(currentPosition.getRow() + offsetPair.getRowOffset(), 
+				currentPosition.getColumn() + offsetPair.getColumnOffset());
 		
 		while (board.isPositionInside(nextPosition))
 		{
@@ -60,11 +60,33 @@ public abstract class BasePiece implements Piece
 				break;
 			}
 			
-			nextPosition = new Position(nextPosition.getRow() + rowOffset, 
-					nextPosition.getColumn() + columnOffset);
+			nextPosition = new Position(nextPosition.getRow() + offsetPair.getRowOffset(), 
+					nextPosition.getColumn() + offsetPair.getColumnOffset());
 		}
 		
 		return allPossiblePositions;
+	}
+	
+	protected Iterable<Position> getReachableSinglePositions(Position currentPosition, Board board, 
+			MovementOffsetPair[] offsetPairs)
+	{
+		ArrayList<Position> positions = new ArrayList<>();
+		
+		for (MovementOffsetPair pair : offsetPairs)
+		{
+			Position nextPosition = new Position(currentPosition.getRow() + pair.getRowOffset(), 
+					currentPosition.getColumn() + pair.getColumnOffset());
+			
+			boolean isPositionValid = board.isPositionInside(nextPosition) && 
+					(board.isEmptyAt(nextPosition) || board.getAt(nextPosition).getColor() != this.getColor());
+			
+			if (isPositionValid)
+			{
+				positions.add(nextPosition);
+			}
+		}
+		
+		return positions;
 	}
 	
 	public abstract Iterable<Position> getAllReachablePositions(Position currentPosition, Board board);

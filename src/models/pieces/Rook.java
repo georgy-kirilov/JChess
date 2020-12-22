@@ -2,13 +2,13 @@ package models.pieces;
 
 import java.util.ArrayList;
 
-import common.Position;
+import common.*;
 import enums.PieceColor;
 import models.boards.Board;
 
 public class Rook extends BasePiece
 {
-	public Rook(PieceColor color) 
+	public Rook(PieceColor color)
 	{
 		super(color);
 	}
@@ -18,21 +18,17 @@ public class Rook extends BasePiece
 	{
 		ArrayList<Position> allPossiblePositions = new ArrayList<>();
 		
-		//UP
 		allPossiblePositions.addAll(
-				this.getReachableConsequtivePositions(currentPosition, board, -1, 0));
+				this.getReachableConsequtivePositions(currentPosition, board, MovementOffsetPair.UP));
+
+		allPossiblePositions.addAll(
+				this.getReachableConsequtivePositions(currentPosition, board, MovementOffsetPair.RIGHT));
 		
-		//RIGHT
 		allPossiblePositions.addAll(
-				this.getReachableConsequtivePositions(currentPosition, board, 0, 1));
+				this.getReachableConsequtivePositions(currentPosition, board, MovementOffsetPair.DOWN));
 		
-		//DOWN
 		allPossiblePositions.addAll(
-				this.getReachableConsequtivePositions(currentPosition, board, 1, 0));
-		
-		//LEFT
-		allPossiblePositions.addAll(
-				this.getReachableConsequtivePositions(currentPosition, board, 0, -1));
+				this.getReachableConsequtivePositions(currentPosition, board, MovementOffsetPair.LEFT));
 		
 		return allPossiblePositions;
 	}
