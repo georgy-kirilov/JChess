@@ -14,7 +14,7 @@ public class Pawn extends BasePiece {
 	}
 
 	@Override
-	public ArrayList<Position> getAllReachablePositions(Position currentPosition, Board board) {
+	public Iterable<Position> getAllReachablePositions(Position currentPosition, Board board) {
 		ArrayList<Position> availableTakingPositionsToMoveList = new ArrayList<>();
 		ArrayList<Position> availableMovingPositionsToMoveList = new ArrayList<>();
 		ArrayList<Position> availablePositionsToMoveList = new ArrayList<>();
