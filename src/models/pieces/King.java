@@ -1,9 +1,9 @@
 package models.pieces;
 
-import common.MovementOffsetPair;
 import common.Position;
 import enums.PieceColor;
 import models.boards.Board;
+import common.MovementOffsetPair;
 
 public class King extends BasePiece
 {

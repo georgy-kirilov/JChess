@@ -36,46 +36,52 @@ public abstract class BasePiece implements Piece
 		this.moved = true;
 	}
 	
-	protected ArrayList<Position> getReachableConsequtivePositions(Position currentPosition, Board board, 
-			MovementOffsetPair offsetPair)
+	public boolean canCaptureAt(Position position, Board board)
 	{
-		ArrayList<Position> allPossiblePositions = new ArrayList<>();
+		return board.isPositionInside(position) && !board.isEmptyAt(position) 
+				&& board.getAt(position).getColor() != this.getColor();
+	}
+	
+	public boolean canMoveFreelyTo(Position position, Board board)
+	{
+		return board.isPositionInside(position) && board.isEmptyAt(position);
+	}
+	
+	protected ArrayList<Position> getReachableConsequtivePositions(Position currentPosition, Board board, MovementOffsetPair offsetPair)
+	{
+		ArrayList<Position> positions = new ArrayList<>();
 		
-		Position nextPosition = new Position(currentPosition.getRow() + offsetPair.getRowOffset(), 
-				currentPosition.getColumn() + offsetPair.getColumnOffset());
+		Position nextPosition = currentPosition.move(offsetPair);
 		
-		while (board.isPositionInside(nextPosition))
+		while (true)
 		{
-			if (board.isEmptyAt(nextPosition))
+			if (this.canMoveFreelyTo(nextPosition, board))
 			{
-				allPossiblePositions.add(nextPosition);
+				positions.add(nextPosition);
 			}
 			else
 			{
-				if (board.getAt(nextPosition).getColor() != this.getColor())
+				if (this.canCaptureAt(nextPosition, board))
 				{
-					allPossiblePositions.add(nextPosition);
+					positions.add(nextPosition);
 				}
 				
 				break;
 			}
 			
-			nextPosition = new Position(nextPosition.getRow() + offsetPair.getRowOffset(), 
-					nextPosition.getColumn() + offsetPair.getColumnOffset());
+			nextPosition = nextPosition.move(offsetPair);
 		}
 		
-		return allPossiblePositions;
+		return positions;
 	}
 	
-	protected Iterable<Position> getReachableSinglePositions(Position currentPosition, Board board, 
-			MovementOffsetPair[] offsetPairs)
+	protected Iterable<Position> getReachableSinglePositions(Position currentPosition, Board board, MovementOffsetPair[] offsetPairs)
 	{
 		ArrayList<Position> positions = new ArrayList<>();
 		
-		for (MovementOffsetPair pair : offsetPairs)
+		for (MovementOffsetPair offsetPair : offsetPairs)
 		{
-			Position nextPosition = new Position(currentPosition.getRow() + pair.getRowOffset(), 
-					currentPosition.getColumn() + pair.getColumnOffset());
+			Position nextPosition = currentPosition.move(offsetPair);
 			
 			boolean isPositionValid = board.isPositionInside(nextPosition) && 
 					(board.isEmptyAt(nextPosition) || board.getAt(nextPosition).getColor() != this.getColor());

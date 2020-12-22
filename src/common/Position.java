@@ -47,6 +47,12 @@ public class Position
 		return areEqual;
 	}
 	
+	public Position move(MovementOffsetPair offsetPair)
+	{
+		return new Position(this.getRow() + offsetPair.getRowOffset(), 
+				this.getColumn() + offsetPair.getColumnOffset());
+	}
+	
 	@Override
 	public String toString()
 	{

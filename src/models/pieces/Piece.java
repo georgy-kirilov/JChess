@@ -12,5 +12,9 @@ public interface Piece
 	
 	void move();
 	
+	boolean canCaptureAt(Position position, Board board);
+	
+	boolean canMoveFreelyTo(Position position, Board board);
+	
 	Iterable<Position> getAllReachablePositions(Position currentPosition, Board board);
 }
