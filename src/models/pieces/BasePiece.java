@@ -2,9 +2,9 @@ package models.pieces;
 
 import java.util.ArrayList;
 
+import jthrow.JThrower;
 import common.Position;
 import enums.PieceColor;
-import jthrow.JThrower;
 import models.boards.Board;
 import common.MovementOffsetPair;
 
@@ -17,7 +17,6 @@ public abstract class BasePiece implements Piece
 	{	
 		JThrower.throwIf(color, "color").isNull();
 		this.color = color;
-		
 		this.moved = false;
 	}
 	
