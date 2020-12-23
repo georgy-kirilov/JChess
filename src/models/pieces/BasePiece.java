@@ -83,9 +83,10 @@ public abstract class BasePiece implements Piece
 		{
 			Position nextPosition = currentPosition.move(offsetPair);
 			
-			boolean isPositionValid = board.isPositionInside(nextPosition) && 
-					(board.isEmptyAt(nextPosition) || board.getAt(nextPosition).getColor() != this.getColor());
+			boolean isPositionValid = this.canMoveFreelyTo(nextPosition, board) || this.canCaptureAt(nextPosition, board);
+				
 			
+		
 			if (isPositionValid)
 			{
 				positions.add(nextPosition);
