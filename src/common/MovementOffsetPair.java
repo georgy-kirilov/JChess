@@ -3,6 +3,7 @@ package common;
 public class MovementOffsetPair
 {
 	public static final MovementOffsetPair UP = new MovementOffsetPair(-1, 0);
+	public static final MovementOffsetPair DOUBLEUP = new MovementOffsetPair(-2, 0);
 	public static final MovementOffsetPair RIGHT = new MovementOffsetPair(0, 1);
 	public static final MovementOffsetPair DOWN = new MovementOffsetPair(1, 0);
 	public static final MovementOffsetPair LEFT = new MovementOffsetPair(0, -1);
