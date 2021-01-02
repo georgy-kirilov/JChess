@@ -2,10 +2,10 @@ package models.pieces;
 
 import java.util.ArrayList;
 
-import common.MovementOffsetPair;
 import common.Position;
 import enums.PieceColor;
 import models.boards.Board;
+import common.MovementOffsetPair;
 
 public class Queen extends BasePiece
 {
@@ -17,23 +17,32 @@ public class Queen extends BasePiece
 	@Override
 	public Iterable<Position> getAllReachablePositions(Position currentPosition, Board board) 
 	{
-		ArrayList<Position> allPossiblePositions = new ArrayList<>();
+		ArrayList<Position> reachablePositions = new ArrayList<>();
 
-		allPossiblePositions.addAll(this.getReachableConsequtivePositions(currentPosition, board, MovementOffsetPair.UP));
+		reachablePositions.addAll(this.getReachableConsequtivePositions
+				(currentPosition, board, MovementOffsetPair.UP));
 
-		allPossiblePositions.addAll(this.getReachableConsequtivePositions(currentPosition, board, MovementOffsetPair.DOWN));
+		reachablePositions.addAll(this.getReachableConsequtivePositions
+				(currentPosition, board, MovementOffsetPair.DOWN));
 
-		allPossiblePositions.addAll(this.getReachableConsequtivePositions(currentPosition, board, MovementOffsetPair.RIGHT));
+		reachablePositions.addAll(this.getReachableConsequtivePositions
+				(currentPosition, board, MovementOffsetPair.RIGHT));
 		
-		allPossiblePositions.addAll(this.getReachableConsequtivePositions(currentPosition, board, MovementOffsetPair.LEFT));
+		reachablePositions.addAll(this.getReachableConsequtivePositions
+				(currentPosition, board, MovementOffsetPair.LEFT));
 			
-		allPossiblePositions.addAll(this.getReachableConsequtivePositions(currentPosition, board, MovementOffsetPair.TOP_LEFT));
+		reachablePositions.addAll(this.getReachableConsequtivePositions
+				(currentPosition, board, MovementOffsetPair.TOP_LEFT));
 		
-		allPossiblePositions.addAll(this.getReachableConsequtivePositions(currentPosition, board, MovementOffsetPair.BOTTOM_LEFT));
+		reachablePositions.addAll(this.getReachableConsequtivePositions
+				(currentPosition, board, MovementOffsetPair.BOTTOM_LEFT));
 		
-		allPossiblePositions.addAll(this.getReachableConsequtivePositions(currentPosition, board, MovementOffsetPair.TOP_RIGHT));
+		reachablePositions.addAll(this.getReachableConsequtivePositions
+				(currentPosition, board, MovementOffsetPair.TOP_RIGHT));
 		
-		allPossiblePositions.addAll(this.getReachableConsequtivePositions(currentPosition, board, MovementOffsetPair.BOTTOM_RIGHT));
+		reachablePositions.addAll(this.getReachableConsequtivePositions
+				(currentPosition, board, MovementOffsetPair.BOTTOM_RIGHT));
 		
-		return allPossiblePositions;
-	}}
+		return reachablePositions;
+	}
+}

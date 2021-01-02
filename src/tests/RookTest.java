@@ -1,7 +1,5 @@
 package tests;
 
-import java.util.ArrayList;
-
 import common.Position;
 import enums.PieceColor;
 import models.boards.Board;

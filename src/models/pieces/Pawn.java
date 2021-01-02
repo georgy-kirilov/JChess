@@ -2,52 +2,54 @@ package models.pieces;
 
 import java.util.ArrayList;
 
-import common.MovementOffsetPair;
 import common.Position;
 import enums.PieceColor;
 import models.boards.Board;
+import common.MovementOffsetPair;
 
-public class Pawn extends BasePiece {
-
-	public Pawn(PieceColor color) {
+public class Pawn extends BasePiece
+{
+	public Pawn(PieceColor color)
+	{
 		super(color);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public Iterable<Position> getAllReachablePositions(Position currentPosition, Board board) {
-		
-		ArrayList<Position> availablePositionsToMoveList = new ArrayList<>();
+	public Iterable<Position> getAllReachablePositions(Position currentPosition, Board board)
+	{	
+		ArrayList<Position> reachablePositions = new ArrayList<>();
 		
 		Position pawnProbablePositionUp = currentPosition.move(MovementOffsetPair.UP);
-		if(canMoveFreelyTo(pawnProbablePositionUp,board))	
-			availablePositionsToMoveList.add(pawnProbablePositionUp);
-			
-
-		if (!isMoved()) 
+		
+		if (this.canMoveFreelyTo(pawnProbablePositionUp, board))
 		{
-			Position pawnProbablePositionDoubleUp = currentPosition.move(MovementOffsetPair.DOUBLEUP);
-			if(canMoveFreelyTo(pawnProbablePositionDoubleUp,board))
-				availablePositionsToMoveList.add(pawnProbablePositionDoubleUp);
+			reachablePositions.add(pawnProbablePositionUp);			
+		}
+
+		if (!this.isMoved())
+		{
+			Position pawnProbablePositionTwiceUp = currentPosition.move(MovementOffsetPair.TWICE_UP);
+			
+			if (this.canMoveFreelyTo(pawnProbablePositionTwiceUp, board))
+			{
+				reachablePositions.add(pawnProbablePositionTwiceUp);		
+			}
 		}
 
 		Position pawnProbablePositionTopRight = currentPosition.move(MovementOffsetPair.TOP_RIGHT);
-		if (canCaptureAt(pawnProbablePositionTopRight,board)) 
-		{
-			
-			availablePositionsToMoveList.add(pawnProbablePositionTopRight);
+		
+		if (this.canCaptureAt(pawnProbablePositionTopRight, board)) 
+		{	
+			reachablePositions.add(pawnProbablePositionTopRight);
 		}
 
 		Position pawnProbablePositionTopLeft = currentPosition.move(MovementOffsetPair.TOP_LEFT);
-		if (canCaptureAt(pawnProbablePositionTopLeft,board)) 
-		{
-			
-			availablePositionsToMoveList.add(pawnProbablePositionTopLeft);
+		
+		if (this.canCaptureAt(pawnProbablePositionTopLeft, board)) 
+		{	
+			reachablePositions.add(pawnProbablePositionTopLeft);
 		}
 		
-			return availablePositionsToMoveList;
-
-		
+		return reachablePositions;
 	}
-	// TODO: Implement the Pawn class
 }

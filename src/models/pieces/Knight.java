@@ -17,14 +17,14 @@ public class Knight extends BasePiece
 	{
 		MovementOffsetPair[] offsetPairs = new MovementOffsetPair[]
 		{
-			MovementOffsetPair.Knight_2Up_1Left,
-			MovementOffsetPair.Knight_2Up_1Right,
-			MovementOffsetPair.Knight_1Up_2Left,
-			MovementOffsetPair.Knight_1Up_2Right,
-			MovementOffsetPair.Knight_2Down_1Left,
-			MovementOffsetPair.Knight_2Down_1Right,
-			MovementOffsetPair.Knight_1Down_2Left,
-			MovementOffsetPair.Knight_1Down_2Right,
+			MovementOffsetPair.TWICE_UP_ONCE_LEFT,
+			MovementOffsetPair.TWICE_UP_ONCE_RIGHT,
+			MovementOffsetPair.ONCE_UP_TWICE_LEFT,
+			MovementOffsetPair.ONCE_UP_TWICE_RIGHT,
+			MovementOffsetPair.TWICE_DOWN_ONCE_LEFT,
+			MovementOffsetPair.TWICE_DOWN_ONCE_RIGHT,
+			MovementOffsetPair.ONCE_DOWN_TWICE_LEFT,
+			MovementOffsetPair.ONCE_DOWN_TWICE_RIGHT,
 		};
 		
 		return this.getReachableSinglePositions(currentPosition, board, offsetPairs);

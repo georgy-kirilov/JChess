@@ -46,7 +46,8 @@ public abstract class BasePiece implements Piece
 		return board.isPositionInside(position) && board.isEmptyAt(position);
 	}
 	
-	protected ArrayList<Position> getReachableConsequtivePositions(Position currentPosition, Board board, MovementOffsetPair offsetPair)
+	protected ArrayList<Position> getReachableConsequtivePositions(Position currentPosition, Board board, 
+			MovementOffsetPair offsetPair)
 	{
 		ArrayList<Position> positions = new ArrayList<>();
 		
@@ -74,7 +75,8 @@ public abstract class BasePiece implements Piece
 		return positions;
 	}
 	
-	protected Iterable<Position> getReachableSinglePositions(Position currentPosition, Board board, MovementOffsetPair[] offsetPairs)
+	protected Iterable<Position> getReachableSinglePositions(Position currentPosition, Board board, 
+			MovementOffsetPair[] offsetPairs)
 	{
 		ArrayList<Position> positions = new ArrayList<>();
 		
@@ -82,9 +84,8 @@ public abstract class BasePiece implements Piece
 		{
 			Position nextPosition = currentPosition.move(offsetPair);
 			
-			boolean isPositionValid = this.canMoveFreelyTo(nextPosition, board) || this.canCaptureAt(nextPosition, board);
-				
-			
+			boolean isPositionValid = this.canMoveFreelyTo(nextPosition, board) || 
+					this.canCaptureAt(nextPosition, board);
 		
 			if (isPositionValid)
 			{
