@@ -8,11 +8,10 @@ import models.pieces.Rook;
 
 public class RookTest 
 {
-
 	public static void main(String[] args) 
 	{
 		Board board = new StandardBoard();
-		Rook rook = new Rook(PieceColor.WHITE);	
+		Rook rook = new Rook(PieceColor.WHITE);
 		Position position = new Position(5, 4);
 		board.setAt(position, rook);
 		Iterable<Position> positions = board.getAt(position).getAllReachablePositions(position, board);
