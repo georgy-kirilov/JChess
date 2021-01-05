@@ -1,6 +1,8 @@
 package views.gui;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 import javax.swing.JPanel;
@@ -12,6 +14,7 @@ public class BoardView extends JPanel
 {
 	private Board board;
 	private CellView[][] cells;
+	private final int CELL_WH = 60;
 	
 	public BoardView(Board board)
 	{
@@ -19,33 +22,23 @@ public class BoardView extends JPanel
 		cells = new CellView[board.getHeight()][board.getWidth()];
 	}
 	
-	private void paint()
-	{		
-		for(int i = 0; i <= board.getHeight(); i++)
+	public void paintComponent(Graphics graphics)
+	{	
+		super.paintComponent(graphics);
+		
+		for(int i = 0; i < board.getHeight(); i++)
 		{
-			for(int j = 0; j <= board.getWidth(); j++)
+			int y = i * CELL_WH;
+			
+			for(int j = 0; j < board.getWidth(); j++)
 			{
-				boolean check = true;
-				cells[i][j] = new CellView(new Rectangle(0, 0, board.getHeight(), board.getWidth()),
-						board.getAt(new Position(i, j)), check);
+				int x = j * CELL_WH;
+				boolean isCellDark = i % 2 == 0 && j % 2 == 0 || i % 2 != 0 && j % 2 != 0;
 				
-				if(i == 0 || i == 2 || i == 4 || i == 6)
-				{
-					if(i % 2 == 0 && j % 2 == 0)
-					{
-						check = true;
-					}
-					else check = false;
-				}
+				cells[i][j] = new CellView(new Rectangle(x, y, CELL_WH, CELL_WH),
+						board.getAt(new Position(i, j)), isCellDark);
 				
-				if(i == 1 || i == 3 || i == 5 || i == 7)
-				{
-					if(i % 2 != 0 && j % 2 != 0)
-					{
-						check = true;
-					}
-					else check = false;
-				}		
+				this.add(cells[i][j]);
 			}
 		}
 	}
