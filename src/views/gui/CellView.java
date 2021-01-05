@@ -16,13 +16,9 @@ public class CellView extends JPanel
 	private Color backround;
 	private Piece p;
 	
-	
-	
-	
 	public CellView(Rectangle bounds, Piece p, boolean isCellDark) 
 	{
 		this.setBounds(bounds);
-		
 		
 		if(isCellDark) 
 		{
@@ -30,7 +26,7 @@ public class CellView extends JPanel
 		}
 		else backround = Color.LIGHT_GRAY;
 		
-		this.p=p;
+		this.p = p;
 		
 	}
 	
@@ -38,9 +34,7 @@ public class CellView extends JPanel
 	public void paintComponent(Graphics graphics) 
 	{
 		super.paintComponent(graphics);
-		Graphics2D g =  (Graphics2D) graphics;
-		
-		
+		Graphics2D g = (Graphics2D) graphics;
 		
 		this.setBackground(backround);
 		
