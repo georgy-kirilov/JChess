@@ -18,7 +18,7 @@ import views.gui.CellView;
 public class TestDraw {
 
 	public static void main(String[] args) {
-		Knight Knight = new Knight(PieceColor.WHITE);
+		/*Knight Knight = new Knight(PieceColor.WHITE);
 		
 		Pawn pawn = new Pawn (PieceColor.BLACK);
 		
@@ -42,17 +42,18 @@ public class TestDraw {
 		cv[1].setBounds(270,20,50,50);
 		f.add(cv[1]);
 		
-		System.out.println("ok");
-		/*JFrame  f = new JFrame();
+		System.out.println("ok");*/
+		JFrame  f = new JFrame();
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setBounds(100,100,900,500);
+		f.setBounds(100,100,700,540);
+		f.setResizable(false);
 		f.setVisible(true);
 		f.setLayout(null);
 		
 		Board b = new StandardBoard();
 		BoardView board = new BoardView(b);
-		board.setBounds(10, 10, 500, 500);
-		f.add(board);*/
+		
+		f.add(board);
 	}
 
 }
