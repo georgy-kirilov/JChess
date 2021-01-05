@@ -1,24 +1,16 @@
 package tests;
 
-import java.awt.Font;
 import java.awt.Rectangle;
 
 import javax.swing.JFrame;
 
-import common.Position;
-import enums.PieceColor;
-import models.boards.BaseBoard;
 import models.boards.Board;
-import models.boards.StandardBoard;
-import models.pieces.Pawn;
-import models.pieces.Knight;
 import views.gui.BoardView;
-import views.gui.CellView;
 import views.gui.TextPieceDrawer;
+import models.boards.StandardBoard;
 
 public class TestDraw
 {
-
 	public static void main(String[] args) 
 	{
 		JFrame  f = new JFrame();
@@ -33,5 +25,4 @@ public class TestDraw
 		
 		f.add(board);
 	}
-
 }
