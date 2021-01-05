@@ -6,20 +6,32 @@ import java.awt.Rectangle;
 import javax.swing.JPanel;
 
 import common.Position;
+import jthrow.JThrower;
 import models.boards.Board;
 
 public class BoardView extends JPanel
 {
-	private Board board;
-	private CellView[][] cells;
-	private final int CELL_SIDES = 60;
+	private final Board board;
+	private final CellView[][] cells;
+	private final PieceDrawer drawer;
+	private final int cellWidth;
+	private final int cellHeight;
 	
-	public BoardView(Board board)
+	public BoardView(Rectangle bounds,Board board, PieceDrawer drawer)
 	{
-		this.setBounds(10, 10, 490, 490);
-		this.setVisible(true);
+		this.cellWidth = bounds.width / board.getWidth();
+		this.cellHeight = bounds.height / board.getHeight();
+		this.setBounds(bounds);
+		
+		JThrower.throwIf(drawer).isNull();
+		this.drawer = drawer;
+		
+		JThrower.throwIf(board).isNull();
 		this.board = board;
-		cells = new CellView[board.getWidth()][board.getHeight()];
+		
+		this.cells = new CellView[board.getWidth()][board.getHeight()];
+		this.initialize();
+		
 	}
 	
 	public void paintComponent(Graphics graphics)
@@ -28,18 +40,32 @@ public class BoardView extends JPanel
 		
 		for(int row = 0; row < board.getWidth(); row++)
 		{
-			int y = row * CELL_SIDES;
-			
 			for(int col = 0; col < board.getHeight(); col++)
 			{
-				int x = col * CELL_SIDES;
+				this.cells[row][col].setPiece(this.board.getAt(row, col));
+				this.add(cells[row][col]);
+			}
+		}
+	}
+	
+	public void initialize()
+	{
+		for(int row = 0; row < board.getHeight(); row++)
+		{
+			int y = row * this.cellHeight;
+			
+			for(int col = 0; col < board.getWidth(); col++)
+			{
+				int x = col * this.cellWidth;
 				boolean isCellDark = row % 2 == 0 && col % 2 == 0 ||
 						row % 2 != 0 && col % 2 != 0;
 				
-				cells[row][col] = new CellView(new Rectangle(x, y, CELL_SIDES, CELL_SIDES),
-						board.getAt(new Position(row, col)), isCellDark);
+				this.cells[row][col] = new CellView(new Rectangle(x, y, 
+						this.cellWidth, this.cellHeight),
+						board.getAt(row, col), 
+						isCellDark, this.drawer);
 						
-				this.add(cells[row][col]);
+				this.add(this.cells[row][col]);
 			}
 		}
 	}

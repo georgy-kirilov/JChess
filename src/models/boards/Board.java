@@ -19,5 +19,7 @@ public interface Board
 	
 	boolean isPositionInside(Position position);
 	
+	Piece getAt(int row, int column);
+	
 	Piece EMPTY_CELL = null;
 }

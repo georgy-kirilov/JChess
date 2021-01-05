@@ -14,44 +14,22 @@ import models.pieces.Pawn;
 import models.pieces.Knight;
 import views.gui.BoardView;
 import views.gui.CellView;
+import views.gui.TextPieceDrawer;
 
-public class TestDraw {
+public class TestDraw
+{
 
-	public static void main(String[] args) {
-		/*Knight Knight = new Knight(PieceColor.WHITE);
-		
-		Pawn pawn = new Pawn (PieceColor.BLACK);
-		
-		CellView cv[] = new CellView[2];
-		
-		Rectangle r = new Rectangle(10,20,30,30);
-		
-		cv[0] = new CellView(r,pawn,true);
-		
-		cv[1] = new CellView(r,Knight,false);
-		
+	public static void main(String[] args) 
+	{
 		JFrame  f = new JFrame();
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setBounds(100,100,900,500);
-		f.setVisible(true);
-		f.setLayout(null);
-		
-		cv[0].setBounds(20,20,80,80);
-		f.add(cv[0]);
-		
-		cv[1].setBounds(270,20,50,50);
-		f.add(cv[1]);
-		
-		System.out.println("ok");*/
-		JFrame  f = new JFrame();
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setBounds(100,100,700,540);
+		f.setBounds(100, 100, 700, 540);
 		f.setResizable(false);
 		f.setVisible(true);
 		f.setLayout(null);
 		
 		Board b = new StandardBoard();
-		BoardView board = new BoardView(b);
+		BoardView board = new BoardView(new Rectangle(10, 10, 480, 480), b, new TextPieceDrawer());
 		
 		f.add(board);
 	}

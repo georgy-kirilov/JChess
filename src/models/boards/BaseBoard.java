@@ -81,6 +81,12 @@ public abstract class BaseBoard implements Board
 				JChecker.isInRange(minSideValue, position.getColumn(), maxColumns);
 	}
 	
+	@Override
+	public Piece getAt(int row, int column)
+	{
+		return this.cells[row][column];
+	}
+	
 	private void initializeAsEmpty()
 	{	
 		Position position = new Position();
@@ -95,4 +101,5 @@ public abstract class BaseBoard implements Board
 			}
 		}
 	}
+	
 }
