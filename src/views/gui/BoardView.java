@@ -1,6 +1,7 @@
 package views.gui;
 
 import java.awt.Color;
+import java.awt.Rectangle;
 
 import javax.swing.JPanel;
 
@@ -20,19 +21,32 @@ public class BoardView extends JPanel
 	
 	private void paint()
 	{		
-		for(int i = 0; i < board.getHeight(); i++)
+		for(int i = 0; i <= board.getHeight(); i++)
 		{
-			for(int j = 0; j < board.getWidth(); j++)
+			for(int j = 0; j <= board.getWidth(); j++)
 			{
-				cells[i][j] = new CellView(null, board.getAt(new Position(i, j)), false);
+				boolean check = true;
+				cells[i][j] = new CellView(new Rectangle(0, 0, board.getHeight(), board.getWidth()),
+						board.getAt(new Position(i, j)), check);
 				
-				if(i % 2 == 0 && j % 2 == 0)
+				if(i == 0 || i == 2 || i == 4 || i == 6)
 				{
-					cells[i][j].setBackground(new Color(92, 92, 92));
+					if(i % 2 == 0 && j % 2 == 0)
+					{
+						check = true;
+					}
+					else check = false;
 				}
-				else cells[i][j].setBackground(new Color(251, 249, 198));
+				
+				if(i == 1 || i == 3 || i == 5 || i == 7)
+				{
+					if(i % 2 != 0 && j % 2 != 0)
+					{
+						check = true;
+					}
+					else check = false;
+				}		
 			}
 		}
-		
 	}
 }
