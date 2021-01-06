@@ -3,6 +3,7 @@ package views.gui;
 import java.awt.Rectangle;
 import javax.swing.JFrame;
 import models.boards.Board;
+import views.gui.drawers.TextPieceDrawer;
 
 @SuppressWarnings("serial")
 public class GameWindow extends JFrame

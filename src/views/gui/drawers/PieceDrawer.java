@@ -1,4 +1,4 @@
-package views.gui;
+package views.gui.drawers;
 
 import java.awt.Rectangle;
 import java.awt.Graphics2D;

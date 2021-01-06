@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import jthrow.JThrower;
 import models.pieces.Piece;
+import views.gui.drawers.PieceDrawer;
 
 @SuppressWarnings("serial")
 public class CellView extends JPanel

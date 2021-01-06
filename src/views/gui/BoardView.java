@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import jthrow.JThrower;
 import models.boards.Board;
 import models.pieces.Piece;
+import views.gui.drawers.PieceDrawer;
 
 @SuppressWarnings("serial")
 public class BoardView extends JPanel
