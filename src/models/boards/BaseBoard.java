@@ -47,15 +47,27 @@ public abstract class BaseBoard implements Board
 	@Override
 	public Piece getAt(Position position)
 	{
-		return this.cells[position.getRow()][position.getColumn()];
+		return this.getAt(position.getRow(), position.getColumn());
+	}
+	
+	@Override
+	public Piece getAt(int row, int column)
+	{
+		return this.cells[row][column];
 	}
 
 	@Override
 	public void setAt(Position position, Piece piece)
 	{
-		this.cells[position.getRow()][position.getColumn()] = piece;
+		this.setAt(position.getRow(), position.getColumn(), piece);
 	}
 
+	@Override
+	public void setAt(int row, int column, Piece piece)
+	{
+		this.cells[row][column] = piece;
+	}
+	
 	@Override
 	public Piece setToEmpty(Position position) 
 	{
@@ -65,30 +77,37 @@ public abstract class BaseBoard implements Board
 	}
 	
 	@Override
+	public Piece setToEmpty(int row, int column) 
+	{
+		Piece oldPiece = this.getAt(row, column);
+		this.setAt(row, column, EMPTY_CELL);
+		return oldPiece;
+	}
+	
+	@Override
 	public boolean isEmptyAt(Position position) 
 	{
 		return this.getAt(position) == EMPTY_CELL;
+	}
+
+	@Override
+	public boolean isEmptyAt(int row, int column)
+	{
+		return this.getAt(row, column) == EMPTY_CELL;
 	}
 	
 	@Override
 	public boolean isPositionInside(Position position)
 	{
-		int minSideValue = 0;
 		int maxRows = this.getHeight() - 1;
 		int maxColumns = this.getWidth() - 1;
 		
-		return JChecker.isInRange(minSideValue, position.getRow(), maxRows) && 
-				JChecker.isInRange(minSideValue, position.getColumn(), maxColumns);
+		return JChecker.isInRange(0, position.getRow(), maxRows) && 
+				JChecker.isInRange(0, position.getColumn(), maxColumns);
 	}
 	
 	@Override
-	public Piece getAt(int row, int column)
-	{
-		return this.cells[row][column];
-	}
-	
-	@Override
-	public void flipBoard() 
+	public void flip() 
 	{
 		int lenght = cells.length-1;
 		Piece temp;
@@ -104,17 +123,12 @@ public abstract class BaseBoard implements Board
 	
 	private void initializeAsEmpty()
 	{	
-		Position position = new Position();
-		
 		for (int row = 0; row < this.getHeight(); row++)
 		{
-			for (int column = 0; column < this.getWidth(); column++)
+			for (int col = 0; col < this.getWidth(); col++)
 			{
-				position.setRow(row);
-				position.setColumn(column);
-				this.setAt(position, EMPTY_CELL);
+				this.setToEmpty(row, col);
 			}
 		}
 	}
-	
 }

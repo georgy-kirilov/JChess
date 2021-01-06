@@ -11,7 +11,7 @@ import models.pieces.Piece;
 import views.gui.drawers.PieceDrawer;
 
 @SuppressWarnings("serial")
-public class BoardView extends JPanel
+public class BoardView extends JPanel implements CellViewListener
 {
 	private final int cellWidth;
 	private final int cellHeight;
@@ -19,8 +19,9 @@ public class BoardView extends JPanel
 	private final Board board;
 	private final CellView[][] cells;
 	private final PieceDrawer drawer;
+	private final GameListener listener;
 	
-	public BoardView(Rectangle bounds, Board board, PieceDrawer drawer)
+	public BoardView(Rectangle bounds, Board board, PieceDrawer drawer, GameListener listener)
 	{
 		this.cellWidth = bounds.width / board.getWidth();
 		this.cellHeight = bounds.height / board.getHeight();
@@ -34,6 +35,9 @@ public class BoardView extends JPanel
 		
 		JThrower.throwIf(board).isNull();
 		this.board = board;
+		
+		JThrower.throwIf(listener).isNull();
+		this.listener = listener;
 		
 		this.cells = new CellView[board.getWidth()][board.getHeight()];
 		this.initialize();
@@ -54,6 +58,18 @@ public class BoardView extends JPanel
 		}
 	}
 	
+	@Override
+	public void onInitialClick(CellView cell)
+	{
+		
+	}
+
+	@Override
+	public void onConfirmationClick(CellView cell)
+	{
+		
+	}
+	
 	private void initialize()
 	{
 		for (int row = 0; row < board.getHeight(); row++)
@@ -70,7 +86,7 @@ public class BoardView extends JPanel
 				
 				boolean isCellDark = row % 2 == 0 && col % 2 == 0 || row % 2 != 0 && col % 2 != 0;
 				
-				this.cells[row][col] = new CellView(bounds, piece, isCellDark, this.drawer);
+				this.cells[row][col] = new CellView(bounds, piece, isCellDark, this.drawer, this);
 			}
 		}
 	}

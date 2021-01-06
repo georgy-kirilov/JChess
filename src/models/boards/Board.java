@@ -11,17 +11,23 @@ public interface Board
 	
 	Piece getAt(Position position);
 	
+	Piece getAt(int row, int column);
+	
 	void setAt(Position position, Piece piece);
+	
+	void setAt(int row, int column, Piece piece);
 	
 	Piece setToEmpty(Position position);
 	
+	public Piece setToEmpty(int row, int column);
+	
 	boolean isEmptyAt(Position position);
+	
+	boolean isEmptyAt(int row, int column);
 	
 	boolean isPositionInside(Position position);
 	
-	Piece getAt(int row, int column);
+	void flip();
 	
 	Piece EMPTY_CELL = null;
-	
-	void flipBoard();
 }

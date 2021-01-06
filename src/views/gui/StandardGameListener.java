@@ -64,7 +64,7 @@ public class StandardGameListener implements GameListener
 		piece.move();
 		this.nextPlayer();
 		
-		this.board.flipBoard();
+		//this.board.flipBoard();
 	}
 	
 	private PieceColor currentPlayer()

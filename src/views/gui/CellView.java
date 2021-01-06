@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
@@ -20,8 +22,11 @@ public class CellView extends JPanel
 	private Piece piece;
 	private final PieceDrawer drawer;
 	private final Color backroundColor;
+	private final CellViewListener listener;
+	private boolean highlighted;
 	
-	public CellView(Rectangle bounds, Piece piece, boolean isCellDark, PieceDrawer drawer) 
+	public CellView(Rectangle bounds, Piece piece, boolean isCellDark, 
+			PieceDrawer drawer, CellViewListener listener) 
 	{
 		this.setBounds(bounds);
 		this.setPiece(piece);
@@ -31,6 +36,11 @@ public class CellView extends JPanel
 
 		JThrower.throwIf(drawer).isNull();
 		this.drawer = drawer;
+		
+		JThrower.throwIf(listener).isNull();
+		this.listener = listener;
+		
+		this.attachClickListener(this);
 	}
 	
 	public Piece getPiece()
@@ -43,6 +53,16 @@ public class CellView extends JPanel
 		this.piece = piece;
 	}
 
+	public boolean isHighlighted()
+	{
+		return this.highlighted;
+	}
+	
+	public void setHighlighted(boolean highlighted)
+	{
+		this.highlighted = highlighted;
+	}
+	
 	@Override
 	public void paintComponent(Graphics graphics) 
 	{
@@ -50,5 +70,24 @@ public class CellView extends JPanel
 		Graphics2D g = (Graphics2D)graphics;
 		
 		this.drawer.drawPiece(g, piece, this.getBounds());
+	}
+	
+	private void attachClickListener(CellView cell)
+	{
+		this.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				if (!cell.isHighlighted())
+				{
+					cell.listener.onInitialClick(cell);
+				}
+				else
+				{
+					cell.listener.onConfirmationClick(cell);
+				}
+			}
+		});
 	}
 }

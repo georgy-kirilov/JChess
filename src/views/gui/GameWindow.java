@@ -20,6 +20,6 @@ public class GameWindow extends JFrame
 		
 		Rectangle boardBounds = new Rectangle(1, 1, 600, 600);
 		
-		this.add(new BoardView(boardBounds, board, new TextPieceDrawer()));
+		this.add(new BoardView(boardBounds, board, new TextPieceDrawer(), new StandardGameListener(board)));
 	}
 }
