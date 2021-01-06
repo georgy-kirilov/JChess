@@ -22,4 +22,6 @@ public interface Board
 	Piece getAt(int row, int column);
 	
 	Piece EMPTY_CELL = null;
+	
+	void flipBoard();
 }

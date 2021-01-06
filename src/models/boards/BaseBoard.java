@@ -87,6 +87,21 @@ public abstract class BaseBoard implements Board
 		return this.cells[row][column];
 	}
 	
+	@Override
+	public void flipBoard() 
+	{
+		int lenght = cells.length-1;
+		Piece temp;
+		for (int i = lenght; i >= 3; i--) { 
+			for (int j = lenght; j >= 0; j--) {
+	           temp = cells[i][j];
+	           cells[i][j] = cells[Math.abs(i-lenght)][Math.abs(j-lenght)];
+	           cells[Math.abs(i-lenght)][Math.abs(j-lenght)] = temp;
+			}
+		} 
+	} 
+	
+	
 	private void initializeAsEmpty()
 	{	
 		Position position = new Position();
