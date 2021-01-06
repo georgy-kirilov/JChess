@@ -7,15 +7,17 @@ import javax.swing.JPanel;
 
 import jthrow.JThrower;
 import models.boards.Board;
+import models.pieces.Piece;
 
 @SuppressWarnings("serial")
 public class BoardView extends JPanel
 {
+	private final int cellWidth;
+	private final int cellHeight;
+	
 	private final Board board;
 	private final CellView[][] cells;
 	private final PieceDrawer drawer;
-	private final int cellWidth;
-	private final int cellHeight;
 	
 	public BoardView(Rectangle bounds, Board board, PieceDrawer drawer)
 	{
@@ -23,7 +25,9 @@ public class BoardView extends JPanel
 		this.cellHeight = bounds.height / board.getHeight();
 		
 		this.setBounds(bounds);
+		this.setLayout(null);
 		
+		System.out.println(this.getWidth());
 		JThrower.throwIf(drawer).isNull();
 		this.drawer = drawer;
 		
@@ -31,13 +35,26 @@ public class BoardView extends JPanel
 		this.board = board;
 		
 		this.cells = new CellView[board.getWidth()][board.getHeight()];
+		this.initialize();
 	}
 	
 	@Override
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
-		
+	
+		for (int row = 0; row < board.getHeight(); row++)
+		{	
+			for (int col = 0; col < board.getWidth(); col++)
+			{
+				this.cells[row][col].setPiece(this.board.getAt(row, col));
+				this.add(this.cells[row][col]);
+			}
+		}
+	}
+	
+	private void initialize()
+	{
 		for (int row = 0; row < board.getHeight(); row++)
 		{
 			int y = row * this.cellHeight;
@@ -45,15 +62,14 @@ public class BoardView extends JPanel
 			for (int col = 0; col < board.getWidth(); col++)
 			{
 				int x = col * this.cellWidth;
-				boolean isCellDark = row % 2 == 0 && col % 2 == 0 ||
-						row % 2 != 0 && col % 2 != 0;
 				
-				this.cells[row][col] = new CellView(new Rectangle(x, y, 
-						this.cellWidth, this.cellHeight),
-						board.getAt(row, col), 
-						isCellDark, this.drawer);
-						
-				this.add(this.cells[row][col]);
+				Rectangle bounds = new Rectangle(x, y, this.cellWidth, this.cellHeight);
+				
+				Piece piece = this.board.getAt(row, col);
+				
+				boolean isCellDark = row % 2 == 0 && col % 2 == 0 || row % 2 != 0 && col % 2 != 0;
+				
+				this.cells[row][col] = new CellView(bounds, piece, isCellDark, this.drawer);
 			}
 		}
 	}
