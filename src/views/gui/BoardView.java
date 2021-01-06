@@ -21,6 +21,7 @@ public class BoardView extends JPanel implements CellViewListener
 	private final CellView[][] cells;
 	private final PieceDrawer drawer;
 	private final GameListener listener;
+	private Position lastSelectedPosition;
 	
 	public BoardView(Rectangle bounds, Board board, PieceDrawer drawer, GameListener listener)
 	{
@@ -61,7 +62,18 @@ public class BoardView extends JPanel implements CellViewListener
 	@Override
 	public void onInitialClick(CellView cell)
 	{
-		this.listener.onFromPositionSelected(cell.getPosition());
+		this.unhighlightAllCells();
+		
+		Iterable<Position> reachablePositions = 
+				this.listener.onFromPositionSelected(cell.getPosition());
+		
+		for (Position position : reachablePositions)
+		{
+			this.getAt(position).setHighlighted(true);
+		}
+		
+		this.lastSelectedPosition = cell.getPosition(); 
+		this.repaint();
 	}
 
 	@Override
@@ -91,5 +103,21 @@ public class BoardView extends JPanel implements CellViewListener
 						this.drawer, this, new Position(row, col));
 			}
 		}
+	}
+	
+	private void unhighlightAllCells()
+	{
+		for (CellView[] cellRow : this.cells)
+		{
+			for (CellView cell : cellRow)
+			{
+				cell.setHighlighted(false);
+			}
+		}
+	}
+	
+	private CellView getAt(Position position)
+	{
+		return this.cells[position.getRow()][position.getColumn()];
 	}
 }
