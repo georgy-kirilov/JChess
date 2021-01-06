@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 
 import javax.swing.JPanel;
 
+import common.Position;
 import jthrow.JThrower;
 import models.boards.Board;
 import models.pieces.Piece;
@@ -29,12 +30,11 @@ public class BoardView extends JPanel implements CellViewListener
 		this.setBounds(bounds);
 		this.setLayout(null);
 		
-		System.out.println(this.getWidth());
-		JThrower.throwIf(drawer).isNull();
-		this.drawer = drawer;
-		
 		JThrower.throwIf(board).isNull();
 		this.board = board;
+		
+		JThrower.throwIf(drawer).isNull();
+		this.drawer = drawer;
 		
 		JThrower.throwIf(listener).isNull();
 		this.listener = listener;
@@ -61,7 +61,7 @@ public class BoardView extends JPanel implements CellViewListener
 	@Override
 	public void onInitialClick(CellView cell)
 	{
-		
+		this.listener.onFromPositionSelected(cell.getPosition());
 	}
 
 	@Override
@@ -86,7 +86,9 @@ public class BoardView extends JPanel implements CellViewListener
 				
 				boolean isCellDark = row % 2 == 0 && col % 2 == 0 || row % 2 != 0 && col % 2 != 0;
 				
-				this.cells[row][col] = new CellView(bounds, piece, isCellDark, this.drawer, this);
+				this.cells[row][col] = new CellView(
+						bounds, piece, isCellDark, 
+						this.drawer, this, new Position(row, col));
 			}
 		}
 	}
