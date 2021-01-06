@@ -19,35 +19,35 @@ public class Pawn extends BasePiece
 	{	
 		ArrayList<Position> reachablePositions = new ArrayList<>();
 		
-		Position pawnProbablePositionUp = currentPosition.move(MovementOffsetPair.UP);
+		Position up = currentPosition.move(MovementOffsetPair.UP);
 		
-		if (this.canMoveFreelyTo(pawnProbablePositionUp, board))
+		if (this.canMoveFreelyTo(up, board))
 		{
-			reachablePositions.add(pawnProbablePositionUp);			
-		}
-
-		if (!this.isMoved())
-		{
-			Position pawnProbablePositionTwiceUp = currentPosition.move(MovementOffsetPair.TWICE_UP);
+			reachablePositions.add(up);
 			
-			if (this.canMoveFreelyTo(pawnProbablePositionTwiceUp, board))
+			if (!this.isMoved())
 			{
-				reachablePositions.add(pawnProbablePositionTwiceUp);		
+				Position twiceUp = currentPosition.move(MovementOffsetPair.TWICE_UP);
+				
+				if (this.canMoveFreelyTo(twiceUp, board))
+				{
+					reachablePositions.add(twiceUp);		
+				}
 			}
 		}
 
-		Position pawnProbablePositionTopRight = currentPosition.move(MovementOffsetPair.TOP_RIGHT);
+		Position topRight = currentPosition.move(MovementOffsetPair.TOP_RIGHT);
 		
-		if (this.canCaptureAt(pawnProbablePositionTopRight, board)) 
+		if (this.canCaptureAt(topRight, board)) 
 		{	
-			reachablePositions.add(pawnProbablePositionTopRight);
+			reachablePositions.add(topRight);
 		}
 
-		Position pawnProbablePositionTopLeft = currentPosition.move(MovementOffsetPair.TOP_LEFT);
+		Position topLeft = currentPosition.move(MovementOffsetPair.TOP_LEFT);
 		
-		if (this.canCaptureAt(pawnProbablePositionTopLeft, board)) 
+		if (this.canCaptureAt(topLeft, board)) 
 		{	
-			reachablePositions.add(pawnProbablePositionTopLeft);
+			reachablePositions.add(topLeft);
 		}
 		
 		return reachablePositions;
