@@ -18,10 +18,12 @@ public class GameWindow extends JFrame
 		this.setLayout(null);
 		this.setVisible(true);
 		
-		this.add(new BoardView
-				(new Rectangle(1, 1, 600, 600), 
-				 board, 
-				 new TextPieceDrawer(), 
-				 new StandardGameListener(board)));
+		BoardView boardView = new BoardView(
+						new Rectangle(1, 1, 600, 600), 
+						board, 
+						new TextPieceDrawer(), 
+						new StandardGameListener(board));
+		
+		this.add(boardView);
 	}
 }

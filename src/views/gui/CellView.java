@@ -25,9 +25,9 @@ public class CellView extends JPanel
 	private Piece piece;
 	private boolean highlighted;
 	
+	private final Position position;
 	private final PieceDrawer drawer;
 	private final CellViewListener listener;
-	private final Position position;
 	private final boolean isBackgroundDark;
 	
 	public CellView(
@@ -56,15 +56,30 @@ public class CellView extends JPanel
 		this.attachClickListener(this);
 	}
 	
-	public Piece getPiece() { return this.piece; }
+	public Piece getPiece()
+	{ 
+		return this.piece; 
+	}
 	
-	public void setPiece(Piece piece) { this.piece = piece; }
+	public void setPiece(Piece piece) 
+	{ 
+		this.piece = piece; 
+	}
 
-	public boolean isHighlighted() { return this.highlighted; }
+	public boolean isHighlighted() 
+	{ 
+		return this.highlighted; 
+	}
 	
-	public void setHighlighted(boolean highlighted) { this.highlighted = highlighted; }
+	public void setHighlighted(boolean highlighted) 
+	{ 
+		this.highlighted = highlighted; 
+	}
 	
-	public Position getPosition() { return this.position; }
+	public Position getPosition() 
+	{ 
+		return this.position; 
+	}
 	
 	@Override
 	public void paintComponent(Graphics graphics) 
