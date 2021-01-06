@@ -79,7 +79,9 @@ public class BoardView extends JPanel implements CellViewListener
 	@Override
 	public void onConfirmationClick(CellView cell)
 	{
-		
+		this.listener.onToPositionSelected(this.lastSelectedPosition, cell.getPosition());
+		this.unhighlightAllCells();
+		this.repaint();
 	}
 	
 	private void initialize()
