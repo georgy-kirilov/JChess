@@ -7,6 +7,9 @@ public class TestDraw
 {
 	public static void main(String[] args) 
 	{
-		GameWindow window = new GameWindow(new StandardBoard());
+		StandardBoard board = new StandardBoard ();
+		board.flipBoard();
+		GameWindow window = new GameWindow(board);
+		
 	}
 }
