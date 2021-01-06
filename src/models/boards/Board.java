@@ -19,7 +19,7 @@ public interface Board
 	
 	Piece setToEmpty(Position position);
 	
-	public Piece setToEmpty(int row, int column);
+	Piece setToEmpty(int row, int column);
 	
 	boolean isEmptyAt(Position position);
 	
@@ -27,7 +27,7 @@ public interface Board
 	
 	boolean isPositionInside(Position position);
 	
-	void flip();
+	void rotateAnticlockwise(int rotations);
 	
 	Piece EMPTY_CELL = null;
 }

@@ -63,8 +63,7 @@ public class StandardGameListener implements GameListener
 		
 		piece.move();
 		this.nextPlayer();
-		
-		//this.board.flipBoard();
+		this.board.rotateAnticlockwise(2);
 	}
 	
 	private PieceColor currentPlayer()
@@ -87,20 +86,14 @@ public class StandardGameListener implements GameListener
 	private PieceColor[] getUniquePlayers(Board board)
 	{
 		TreeSet<PieceColor> uniquePlayers = new TreeSet<>();
-		
-		Position position = new Position();
 
 		for (int row = 0; row < board.getHeight(); row++)
 		{
-			position.setRow(row);
-			
 			for (int col = 0; col < board.getWidth(); col++)
-			{
-				position.setColumn(col);
-				
-				if (!board.isEmptyAt(position))
+			{	
+				if (!board.isEmptyAt(row, col))
 				{
-					PieceColor player = board.getAt(position).getColor();
+					PieceColor player = board.getAt(row, col).getColor();
 					uniquePlayers.add(player);
 				}
 			}

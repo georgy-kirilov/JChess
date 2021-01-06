@@ -107,19 +107,27 @@ public abstract class BaseBoard implements Board
 	}
 	
 	@Override
-	public void flip() 
-	{
-		int lenght = cells.length-1;
-		Piece temp;
-		for (int i = lenght; i >= 3; i--) { 
-			for (int j = lenght; j >= 0; j--) {
-	           temp = cells[i][j];
-	           cells[i][j] = cells[Math.abs(i-lenght)][Math.abs(j-lenght)];
-	           cells[Math.abs(i-lenght)][Math.abs(j-lenght)] = temp;
-			}
-		} 
+	public void rotateAnticlockwise(int rotations) 
+	{	
+		for (int i = 0; i < rotations; i++) 
+		{
+			for (int row = 0; row < this.getHeight() / 2; row++)
+	        {
+	            for (int col = row; col < this.getWidth() - row - 1; col++) 
+	            { 
+	                Piece temp = this.getAt(row, col);
+	  
+	                int newCol = this.getHeight() - 1 - row;
+	                int newRow = this.getWidth() - 1 - col;
+	                
+	                this.cells[row][col] = this.cells[col][newCol]; 
+	                this.cells[col][newCol] = this.cells[newCol][newRow];
+	                this.cells[newCol][newRow] = this.cells[newRow][row]; 
+	                this.cells[newRow][row] = temp;
+	            } 
+	        } 
+		}
 	} 
-	
 	
 	private void initializeAsEmpty()
 	{	
