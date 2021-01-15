@@ -268,7 +268,160 @@ public class King extends BasePiece
 			}
 
 		}
-				
+		
+		// the number of times we are going to check UP RIGHT
+		int timesToMoveRightUp;
+		
+		if (8-currentPosition.getColumn()< 8-currentPosition.getRow())
+		{
+			timesToMoveRightUp = 8-currentPosition.getColumn();
+		}
+		else
+		{
+			timesToMoveRightUp = 8-currentPosition.getRow();
+		}
+		
+		
+		for (int i = 0; i < timesToMoveRightUp; i++)
+		{
+			
+			
+			boolean breakOnNonEmpty = false;
+
+			// if boards position is empty the loop can continue
+			if (board.isEmptyAt(currentPosition.getColumn()+i, currentPosition.getRow()+i))
+			{
+
+				breakOnNonEmpty = false;
+
+			}
+			else 
+			{
+
+				// Checking if there's Bishop or Queen on the position
+				if (board.getAt(currentPosition.getColumn()+i, currentPosition.getRow()+i).getClass() == Bishop.class
+						|| board.getAt(currentPosition.getColumn()+i, currentPosition.getRow()+i).getClass() == Queen.class)
+				{
+
+					// Checking if the color of the Bishop/Queen is the opposite of the Kings
+					if ((board.getAt(currentPosition.getColumn()+i, currentPosition.getRow()+i).getColor()) != this.getColor()) 
+					{
+
+						// if it's a Bishop or a Queen with the opposite color of the King's then we are
+						// in Check
+						// returning true which means that the King is in Check
+						return true;
+
+						// if the Piece is not the opposite of the King's color then we are breaking the
+						// loop
+					} 
+					else 
+					{
+						breakOnNonEmpty = true;
+
+					}
+
+					// if the Piece is not a Bishop or a Queen then we are breaking the loop
+				} 
+				else
+{
+					breakOnNonEmpty = true;
+
+				}
+
+			}
+
+			// If variable breakOnNonEmpty equals true then we break the loop
+			if (breakOnNonEmpty == true)
+			{
+				break;
+			}
+
+			
+			
+			
+			
+			
+		}
+		
+		
+		int timesToMoveRightDown;
+		
+		if (8-currentPosition.getColumn()< currentPosition.getRow())
+		{
+			timesToMoveRightDown = 8-currentPosition.getColumn();
+		}
+		else
+		{
+			timesToMoveRightDown = 8-currentPosition.getRow();
+		}
+		
+		
+		for (int i = 0; i < timesToMoveRightDown; i++)
+		{
+			
+			
+			boolean breakOnNonEmpty = false;
+
+			// if boards position is empty the loop can continue
+			if (board.isEmptyAt(currentPosition.getColumn()+i, currentPosition.getRow()-i))
+			{
+
+				breakOnNonEmpty = false;
+
+			}
+			else 
+			{
+
+				// Checking if there's Bishop or Queen on the position
+				if (board.getAt(currentPosition.getColumn()+i, currentPosition.getRow()-i).getClass() == Bishop.class
+						|| board.getAt(currentPosition.getColumn()+i, currentPosition.getRow()-i).getClass() == Queen.class)
+				{
+
+					// Checking if the color of the Bishop/Queen is the opposite of the Kings
+					if ((board.getAt(currentPosition.getColumn()+i, currentPosition.getRow()-i).getColor()) != this.getColor()) 
+					{
+
+						// if it's a Bishop or a Queen with the opposite color of the King's then we are
+						// in Check
+						// returning true which means that the King is in Check
+						return true;
+
+						// if the Piece is not the opposite of the King's color then we are breaking the
+						// loop
+					} 
+					else 
+					{
+						breakOnNonEmpty = true;
+
+					}
+
+					// if the Piece is not a Bishop or a Queen then we are breaking the loop
+				} 
+				else
+{
+					breakOnNonEmpty = true;
+
+				}
+
+			}
+
+			// If variable breakOnNonEmpty equals true then we break the loop
+			if (breakOnNonEmpty == true)
+			{
+				break;
+			}
+
+			
+			
+			
+			
+			
+		}
+		
+		
+		
+		
 		return false;
 	}
 }
