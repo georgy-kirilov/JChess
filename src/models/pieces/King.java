@@ -36,7 +36,7 @@ public class King extends BasePiece
 		
 		
 		//checking for a Rook or Queen above the King with the opposite of his color
-		for (int i = currentPosition.getRow(); i < 8; i++)
+		for (int i = currentPosition.getRow(); i <= 8; i++)
 		{
 			boolean breakOnNonEmpty = false;
 			
@@ -82,9 +82,6 @@ public class King extends BasePiece
 					breakOnNonEmpty = true;
 					
 				}
-				
-				
-				
 				
 			}
 			
@@ -157,7 +154,7 @@ public class King extends BasePiece
 		
 		// checking for a Rook or Queen on the right of the King with the opposite of
 		// his color
-		for (int i = currentPosition.getColumn(); i < 8; i++)
+		for (int i = currentPosition.getColumn(); i <= 8; i++)
 		{
 			boolean breakOnNonEmpty = false;
 
@@ -282,7 +279,7 @@ public class King extends BasePiece
 		}
 		
 		
-		for (int i = 0; i < timesToMoveRightUp; i++)
+		for (int i = 1; i <= timesToMoveRightUp; i++)
 		{
 			
 			
@@ -336,35 +333,30 @@ public class King extends BasePiece
 			{
 				break;
 			}
-
-			
-			
-			
-			
 			
 		}
 		
 		
-		int timesToMoveRightDown;
+		int timesToMoveLeftUp;
 		
-		if (8-currentPosition.getColumn()< currentPosition.getRow())
+		if (currentPosition.getColumn()< 8-currentPosition.getRow())
 		{
-			timesToMoveRightDown = 8-currentPosition.getColumn();
+			timesToMoveLeftUp = currentPosition.getColumn();
 		}
 		else
 		{
-			timesToMoveRightDown = 8-currentPosition.getRow();
+			timesToMoveLeftUp = 8-currentPosition.getRow();
 		}
 		
 		
-		for (int i = 0; i < timesToMoveRightDown; i++)
+		for (int i = 1; i <= timesToMoveLeftUp; i++)
 		{
 			
 			
 			boolean breakOnNonEmpty = false;
 
 			// if boards position is empty the loop can continue
-			if (board.isEmptyAt(currentPosition.getColumn()+i, currentPosition.getRow()-i))
+			if (board.isEmptyAt(currentPosition.getColumn()-i, currentPosition.getRow()+i))
 			{
 
 				breakOnNonEmpty = false;
@@ -374,12 +366,12 @@ public class King extends BasePiece
 			{
 
 				// Checking if there's Bishop or Queen on the position
-				if (board.getAt(currentPosition.getColumn()+i, currentPosition.getRow()-i).getClass() == Bishop.class
-						|| board.getAt(currentPosition.getColumn()+i, currentPosition.getRow()-i).getClass() == Queen.class)
+				if (board.getAt(currentPosition.getColumn()-i, currentPosition.getRow()+i).getClass() == Bishop.class
+						|| board.getAt(currentPosition.getColumn()-i, currentPosition.getRow()+i).getClass() == Queen.class)
 				{
 
 					// Checking if the color of the Bishop/Queen is the opposite of the Kings
-					if ((board.getAt(currentPosition.getColumn()+i, currentPosition.getRow()-i).getColor()) != this.getColor()) 
+					if ((board.getAt(currentPosition.getColumn()-i, currentPosition.getRow()+i).getColor()) != this.getColor()) 
 					{
 
 						// if it's a Bishop or a Queen with the opposite color of the King's then we are
@@ -413,12 +405,224 @@ public class King extends BasePiece
 			}
 
 			
+		}
+		
+		
+		
+		int timesToMoveLeftDown;
+		
+		if (currentPosition.getColumn()< currentPosition.getRow())
+		{
+			timesToMoveLeftDown = currentPosition.getColumn();
+		}
+		else
+		{
+			timesToMoveLeftDown = currentPosition.getRow();
+		}
+		
+		
+		for (int i = 1; i <= timesToMoveLeftDown; i++)
+		{
 			
 			
-			
+			boolean breakOnNonEmpty = false;
+
+			// if boards position is empty the loop can continue
+			if (board.isEmptyAt(currentPosition.getColumn()-i, currentPosition.getRow()-i))
+			{
+
+				breakOnNonEmpty = false;
+
+			}
+			else 
+			{
+
+				// Checking if there's Bishop or Queen on the position
+				if (board.getAt(currentPosition.getColumn()-i, currentPosition.getRow()-i).getClass() == Bishop.class
+						|| board.getAt(currentPosition.getColumn()-i, currentPosition.getRow()-i).getClass() == Queen.class)
+				{
+
+					// Checking if the color of the Bishop/Queen is the opposite of the Kings
+					if ((board.getAt(currentPosition.getColumn()-i, currentPosition.getRow()-i).getColor()) != this.getColor()) 
+					{
+
+						// if it's a Bishop or a Queen with the opposite color of the King's then we are
+						// in Check
+						// returning true which means that the King is in Check
+						return true;
+
+						// if the Piece is not the opposite of the King's color then we are breaking the
+						// loop
+					} 
+					else 
+					{
+						breakOnNonEmpty = true;
+
+					}
+
+					// if the Piece is not a Bishop or a Queen then we are breaking the loop
+				} 
+				else
+{
+					breakOnNonEmpty = true;
+
+				}
+
+			}
+
+			// If variable breakOnNonEmpty equals true then we break the loop
+			if (breakOnNonEmpty == true)
+			{
+				break;
+			}
+
 			
 		}
 		
+		
+		
+		
+		
+		
+		
+		
+		//checking one field up and right
+		Position checkingPositionRightUp = new Position(currentPosition.getRow()+1, currentPosition.getColumn()+1);
+		if (board.isPositionInside(checkingPositionRightUp)
+				&& !board.isEmptyAt(currentPosition.getRow()+1, currentPosition.getColumn()+1)
+				&& board.getAt(currentPosition.getRow()+1, currentPosition.getColumn()+1).getColor() != this.getColor()
+				&& board.getAt(currentPosition.getRow()+1, currentPosition.getColumn()+1).getClass()!= Rook.class
+				&& board.getAt(currentPosition.getRow()+1, currentPosition.getColumn()+1).getClass()!= Knight.class)
+		{
+			return true;
+		}
+		
+		//checking one field up and left 
+		Position checkingPositionLeftUp = new Position(currentPosition.getRow()+1, currentPosition.getColumn()-1);
+		if (board.isPositionInside(checkingPositionLeftUp)
+				&& !board.isEmptyAt(currentPosition.getRow()+1, currentPosition.getColumn()-1)
+				&& board.getAt(currentPosition.getRow()+1, currentPosition.getColumn()-1).getColor() != this.getColor()
+				&& board.getAt(currentPosition.getRow()+1, currentPosition.getColumn()-1).getClass()!= Rook.class
+				&& board.getAt(currentPosition.getRow()+1, currentPosition.getColumn()-1).getClass()!= Knight.class)
+		{
+			return true;
+		}
+		
+		//checking one field up
+		Position checkingPositionUp = new Position(currentPosition.getRow()+1, currentPosition.getColumn());
+		if (board.isPositionInside(checkingPositionUp)
+				&& !board.isEmptyAt(currentPosition.getRow()+1, currentPosition.getColumn())
+				&& board.getAt(currentPosition.getRow()+1, currentPosition.getColumn()).getColor() != this.getColor()
+				&& board.getAt(currentPosition.getRow()+1, currentPosition.getColumn()).getClass()!= Bishop.class
+				&& board.getAt(currentPosition.getRow()+1, currentPosition.getColumn()).getClass()!= Knight.class
+				&& board.getAt(currentPosition.getRow()-1, currentPosition.getColumn()).getClass()!= Pawn.class)
+		{
+			return true;
+		}
+		
+		
+		//checking one field down
+		Position checkingPositionDown = new Position(currentPosition.getRow()-1, currentPosition.getColumn());
+		if (board.isPositionInside(checkingPositionDown)
+				&& !board.isEmptyAt(currentPosition.getRow()-1, currentPosition.getColumn())
+				&& board.getAt(currentPosition.getRow()-1, currentPosition.getColumn()).getColor() != this.getColor()
+				&& board.getAt(currentPosition.getRow()-1, currentPosition.getColumn()).getClass()!= Bishop.class
+				&& board.getAt(currentPosition.getRow()-1, currentPosition.getColumn()).getClass()!= Knight.class
+				&& board.getAt(currentPosition.getRow()-1, currentPosition.getColumn()).getClass()!= Pawn.class)
+		{
+			return true;
+		}
+		
+		//checking one field left
+		Position checkingPositionLeft = new Position(currentPosition.getRow(), currentPosition.getColumn()+1);
+		if (board.isPositionInside(checkingPositionLeft)
+				&& !board.isEmptyAt(currentPosition.getRow(), currentPosition.getColumn()+1)
+				&& board.getAt(currentPosition.getRow(), currentPosition.getColumn()+1).getColor() != this.getColor()
+				&& board.getAt(currentPosition.getRow(), currentPosition.getColumn()+1).getClass()!= Bishop.class
+				&& board.getAt(currentPosition.getRow(), currentPosition.getColumn()+1).getClass()!= Knight.class
+				&& board.getAt(currentPosition.getRow(), currentPosition.getColumn()+1).getClass()!= Pawn.class)
+		{
+			return true;
+		}
+		
+		//checking one field right
+		Position checkingPositionRight = new Position(currentPosition.getRow(), currentPosition.getColumn()-1);
+		if (board.isPositionInside(checkingPositionRight)
+				&& !board.isEmptyAt(currentPosition.getRow(), currentPosition.getColumn()-1)
+				&& board.getAt(currentPosition.getRow(), currentPosition.getColumn()-1).getColor() != this.getColor()
+				&& board.getAt(currentPosition.getRow(), currentPosition.getColumn()-1).getClass()!= Bishop.class
+				&& board.getAt(currentPosition.getRow(), currentPosition.getColumn()-1).getClass()!= Knight.class
+				&& board.getAt(currentPosition.getRow(), currentPosition.getColumn()-1).getClass()!= Pawn.class)
+		{
+			return true;
+		}
+		
+		
+		// checking one field down and right
+		Position checkingPositionRightDown = new Position(currentPosition.getRow() + 1, currentPosition.getColumn() - 1);
+		if (board.isPositionInside(checkingPositionRightDown)
+				&& !board.isEmptyAt(currentPosition.getRow() + 1, currentPosition.getColumn() - 1)
+				&& board.getAt(currentPosition.getRow() + 1, currentPosition.getColumn() - 1).getColor() != this.getColor()
+				&& board.getAt(currentPosition.getRow() + 1, currentPosition.getColumn() - 1).getClass() != Rook.class
+				&& board.getAt(currentPosition.getRow() + 1, currentPosition.getColumn() - 1).getClass() != Knight.class)
+		{
+			return true;
+		}
+		// checking one field down and left
+		Position checkingPositionLeftDown = new Position(currentPosition.getRow()-1, currentPosition.getColumn()-1);
+		if (board.isPositionInside(checkingPositionLeftDown)
+				&& !board.isEmptyAt(currentPosition.getRow()-1, currentPosition.getColumn()-1)
+				&& board.getAt(currentPosition.getRow()-1, currentPosition.getColumn()-1).getColor() != this.getColor()
+				&& board.getAt(currentPosition.getRow()-1, currentPosition.getColumn()-1).getClass() != Rook.class
+				&& board.getAt(currentPosition.getRow()-1, currentPosition.getColumn()-1).getClass() != Knight.class)
+		{
+			return true;
+		}
+		
+		
+		
+		//checking for knight attacks on the Up Right
+		Position checkingPositionUpRight = new Position(currentPosition.getRow()+2, currentPosition.getColumn()+1);
+		if (board.isPositionInside(checkingPositionUpRight)
+				&& !board.isEmptyAt(currentPosition.getRow()+2, currentPosition.getColumn()+1)
+				&& board.getAt(currentPosition.getRow()+2, currentPosition.getColumn()+1).getColor() != this.getColor()
+				&& board.getAt(currentPosition.getRow()+2, currentPosition.getColumn()+1).getClass() == Knight.class)
+		{
+			return true;
+		}
+		
+		
+		
+		//checking for knight attacks on the Down Right
+		Position checkingPositionDownRight = new Position(currentPosition.getRow()-2, currentPosition.getColumn()+1);
+		if (board.isPositionInside(checkingPositionDownRight)
+				&& !board.isEmptyAt(currentPosition.getRow()-2, currentPosition.getColumn()+1)
+				&& board.getAt(currentPosition.getRow()-2, currentPosition.getColumn()+1).getColor() != this.getColor()
+				&& board.getAt(currentPosition.getRow()-2, currentPosition.getColumn()+1).getClass() == Knight.class)
+		{
+			return true;
+		}	
+		
+		//checking for knight attacks on the Down Left
+		Position checkingPositionDownLeft = new Position(currentPosition.getRow()-2, currentPosition.getColumn()-1);
+		if (board.isPositionInside(checkingPositionDownLeft) &&
+				!board.isEmptyAt(currentPosition.getRow()-2, currentPosition.getColumn()-1)
+				&& board.getAt(currentPosition.getRow()-2, currentPosition.getColumn()-1).getColor() != this.getColor()
+				&& board.getAt(currentPosition.getRow()-2, currentPosition.getColumn()-1).getClass() == Knight.class)
+		{
+			return true;
+		}	
+		
+		
+		//checking for knight attacks on the Up Left
+		Position checkingPositionUpLeft = new Position(currentPosition.getRow()+2, currentPosition.getColumn()-1);
+		if (board.isPositionInside(checkingPositionUpLeft)
+				&& !board.isEmptyAt(currentPosition.getRow()+2, currentPosition.getColumn()-1)
+				&& board.getAt(currentPosition.getRow()+2, currentPosition.getColumn()-1).getColor() != this.getColor()
+				&& board.getAt(currentPosition.getRow()+2, currentPosition.getColumn()-1).getClass() == Knight.class)
+		{
+			return true;
+		}	
 		
 		
 		
