@@ -622,7 +622,55 @@ public class King extends BasePiece
 				&& board.getAt(currentPosition.getRow()+2, currentPosition.getColumn()-1).getClass() == Knight.class)
 		{
 			return true;
+		}
+		
+		
+
+		// checking for the Knight attacks on the sides 
+
+		
+		//checking for knight attacks on the Up Right side
+		Position checkingPositionSideUpRight = new Position(currentPosition.getRow()+1, currentPosition.getColumn()+2);
+		if (board.isPositionInside(checkingPositionSideUpRight)
+				&& !board.isEmptyAt(currentPosition.getRow()+1, currentPosition.getColumn()+2)
+				&& board.getAt(currentPosition.getRow()+1, currentPosition.getColumn()+2).getColor() != this.getColor()
+				&& board.getAt(currentPosition.getRow()+1, currentPosition.getColumn()+2).getClass() == Knight.class)
+		{
+			return true;
+		}
+		
+		
+		
+		//checking for knight attacks on the Down Right side
+		Position checkingPositionSideDownRight = new Position(currentPosition.getRow()-1, currentPosition.getColumn()+2);
+		if (board.isPositionInside(checkingPositionSideDownRight)
+				&& !board.isEmptyAt(currentPosition.getRow()-1, currentPosition.getColumn()+2)
+				&& board.getAt(currentPosition.getRow()-1, currentPosition.getColumn()+2).getColor() != this.getColor()
+				&& board.getAt(currentPosition.getRow()-1, currentPosition.getColumn()+2).getClass() == Knight.class)
+		{
+			return true;
 		}	
+		
+		//checking for knight attacks on the Down Left side
+		Position checkingPositionSideDownLeft = new Position(currentPosition.getRow()-1, currentPosition.getColumn()-2);
+		if (board.isPositionInside(checkingPositionSideDownLeft) &&
+				!board.isEmptyAt(currentPosition.getRow()-1, currentPosition.getColumn()-2)
+				&& board.getAt(currentPosition.getRow()-1, currentPosition.getColumn()-2).getColor() != this.getColor()
+				&& board.getAt(currentPosition.getRow()-1, currentPosition.getColumn()-2).getClass() == Knight.class)
+		{
+			return true;
+		}	
+		
+		
+		//checking for knight attacks on the Up Left
+		Position checkingPositionSideUpLeft = new Position(currentPosition.getRow()+1, currentPosition.getColumn()-2);
+		if (board.isPositionInside(checkingPositionSideUpLeft)
+				&& !board.isEmptyAt(currentPosition.getRow()+1, currentPosition.getColumn()-2)
+				&& board.getAt(currentPosition.getRow()+1, currentPosition.getColumn()-2).getColor() != this.getColor()
+				&& board.getAt(currentPosition.getRow()+1, currentPosition.getColumn()-2).getClass() == Knight.class)
+		{
+			return true;
+		}
 		
 		
 		
