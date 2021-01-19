@@ -4,5 +4,5 @@ public enum GameStatus
 {
 	CONTINUE,
 	CHECK,
-	CHECKMATE,
+	CHECKMATE;
 }

@@ -17,8 +17,8 @@ public class Position
 	
 	public Position(int row, int column)
 	{
-		this.setRow(row);
-		this.setColumn(column);
+		setRow(row);
+		setColumn(column);
 	}
 	
 	public void setRow(int row)
@@ -33,39 +33,39 @@ public class Position
 	
 	public int getRow()
 	{
-		return this.row;
+		return row;
 	}
 	
 	public int getColumn()
 	{
-		return this.column;
+		return column;
 	}
 	
 	public boolean equals(Position position)
 	{
-		boolean areEqual = position != null && position.getRow() == this.getRow() 
-				&& position.getColumn() == this.getColumn();
+		boolean areEqual = position != null && position.getRow() == getRow() 
+				&& position.getColumn() == getColumn();
 		
 		return areEqual;
 	}
 	
-	public Position move(MovementOffsetPair offsetPair)
+	public Position move(OffsetPair offsetPair)
 	{
-		return new Position(this.getRow() + offsetPair.getRowOffset(), 
-				this.getColumn() + offsetPair.getColumnOffset());
+		return new Position(getRow() + offsetPair.getRowOffset(), 
+				getColumn() + offsetPair.getColumnOffset());
 	}
 	
 	public void translate(Board board)
 	{
-		this.setRow(board.getHeight() - 1 - this.getRow());
-		this.setColumn(board.getWidth() - 1 - this.getColumn());
+		setRow(board.getHeight() - 1 - getRow());
+		setColumn(board.getWidth() - 1 - getColumn());
 	}
 	
 	@Override
 	public String toString()
 	{
 		String format = "row: %d | column: %d";
-		String positionInfo = String.format(format, this.getRow(), this.getColumn());
+		String positionInfo = String.format(format, getRow(), getColumn());
 		return positionInfo;
 	}
 }

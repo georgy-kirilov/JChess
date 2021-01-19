@@ -2,11 +2,11 @@ package models.pieces;
 
 import java.util.ArrayList;
 
-import jthrow.JThrower;
 import common.Position;
 import enums.PieceColor;
+import common.OffsetPair;
 import models.boards.Board;
-import common.MovementOffsetPair;
+import validation.ThrowHelper;
 
 public abstract class BasePiece implements Piece
 {
@@ -15,30 +15,30 @@ public abstract class BasePiece implements Piece
 	
 	public BasePiece(PieceColor color)
 	{	
-		JThrower.throwIf(color, "color").isNull();
+		ThrowHelper.throwIfNull(color);
 		this.color = color;
-		this.moved = false;
+		moved = false;
 	}
 	
 	public PieceColor getColor()
 	{
-		return this.color;
+		return color;
 	}
 	
 	public boolean isMoved()
 	{
-		return this.moved;
+		return moved;
 	}
 	
 	public void move()
 	{
-		this.moved = true;
+		moved = true;
 	}
 	
 	public boolean canCaptureAt(Position position, Board board)
 	{
 		return board.isPositionInside(position) && !board.isEmptyAt(position) 
-				&& board.getAt(position).getColor() != this.getColor();
+				&& board.getAt(position).getColor() != getColor();
 	}
 	
 	public boolean canMoveFreelyTo(Position position, Board board)
@@ -46,55 +46,58 @@ public abstract class BasePiece implements Piece
 		return board.isPositionInside(position) && board.isEmptyAt(position);
 	}
 	
-	protected ArrayList<Position> getReachableConsequtivePositions(Position currentPosition, Board board, 
-			MovementOffsetPair offsetPair)
+	protected Iterable<Position> getReachableConsequtivePositions(
+			Position currentPosition, 
+			Board board, 
+			OffsetPair[] offsetPairs)
 	{
 		ArrayList<Position> positions = new ArrayList<>();
 		
-		Position nextPosition = currentPosition.move(offsetPair);
-		
-		while (true)
-		{
-			if (this.canMoveFreelyTo(nextPosition, board))
-			{
-				positions.add(nextPosition);
-			}
-			else
-			{
-				if (this.canCaptureAt(nextPosition, board))
-				{
-					positions.add(nextPosition);
-				}
-				
-				break;
-			}
-			
-			nextPosition = nextPosition.move(offsetPair);
-		}
-		
-		return positions;
-	}
-	
-	protected Iterable<Position> getReachableSinglePositions(Position currentPosition, Board board, 
-			MovementOffsetPair[] offsetPairs)
-	{
-		ArrayList<Position> positions = new ArrayList<>();
-		
-		for (MovementOffsetPair offsetPair : offsetPairs)
+		for (OffsetPair offsetPair : offsetPairs)
 		{
 			Position nextPosition = currentPosition.move(offsetPair);
 			
-			boolean isPositionValid = this.canMoveFreelyTo(nextPosition, board) || 
-					this.canCaptureAt(nextPosition, board);
-		
-			if (isPositionValid)
+			while (true)
 			{
-				positions.add(nextPosition);
+				if (canMoveFreelyTo(nextPosition, board))
+				{
+					positions.add(nextPosition);
+				}
+				else
+				{
+					if (canCaptureAt(nextPosition, board))
+						positions.add(nextPosition);
+					
+					break;
+				}
+				
+				nextPosition = nextPosition.move(offsetPair);
 			}
 		}
 		
 		return positions;
 	}
 	
-	public abstract Iterable<Position> getAllReachablePositions(Position currentPosition, Board board);
+	protected Iterable<Position> getReachableSinglePositions(
+			Position currentPosition, 
+			Board board, 
+			OffsetPair[] offsetPairs)
+	{
+		ArrayList<Position> positions = new ArrayList<>();
+		
+		for (OffsetPair offsetPair : offsetPairs)
+		{
+			Position nextPosition = currentPosition.move(offsetPair);
+			
+			boolean isPositionValid = canMoveFreelyTo(nextPosition, board) || 
+					canCaptureAt(nextPosition, board);
+		
+			if (isPositionValid)
+				positions.add(nextPosition);
+		}
+		
+		return positions;
+	}
+	
+	public abstract Iterable<Position> getReachablePositions(Position currentPosition, Board board);
 }

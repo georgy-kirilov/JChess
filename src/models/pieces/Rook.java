@@ -1,11 +1,9 @@
 package models.pieces;
 
-import java.util.ArrayList;
-
 import common.Position;
 import enums.PieceColor;
+import common.OffsetPair;
 import models.boards.Board;
-import common.MovementOffsetPair;
 
 public class Rook extends BasePiece
 {
@@ -15,23 +13,17 @@ public class Rook extends BasePiece
 	}
 	
 	@Override
-	public Iterable<Position> getAllReachablePositions(Position currentPosition, Board board) 
+	public Iterable<Position> getReachablePositions(Position currentPosition, Board board) 
 	{
-		ArrayList<Position> reachablePositions = new ArrayList<>();
+		OffsetPair[] offsetPairs = new OffsetPair[]
+		{
+			OffsetPair.UP,
+			OffsetPair.DOWN,
+			OffsetPair.LEFT,
+			OffsetPair.RIGHT,
+		};
 		
-		reachablePositions.addAll(this.getReachableConsequtivePositions
-				(currentPosition, board, MovementOffsetPair.UP));
-
-		reachablePositions.addAll(this.getReachableConsequtivePositions
-				(currentPosition, board, MovementOffsetPair.RIGHT));
-		
-		reachablePositions.addAll(this.getReachableConsequtivePositions
-				(currentPosition, board, MovementOffsetPair.DOWN));
-		
-		reachablePositions.addAll(this.getReachableConsequtivePositions
-				(currentPosition, board, MovementOffsetPair.LEFT));
-		
-		return reachablePositions;
+		return getReachableConsequtivePositions(currentPosition, board, offsetPairs);
 	}
 }
 

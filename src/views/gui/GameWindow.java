@@ -8,15 +8,15 @@ import views.gui.drawers.TextPieceDrawer;
 @SuppressWarnings("serial")
 public class GameWindow extends JFrame
 {
-	private static final Rectangle BOUNDS = new Rectangle(0, 0, 618, 641);
+	private final Rectangle BOUNDS = new Rectangle(0, 0, 618, 641);
 	
 	public GameWindow(Board board)
 	{
-		this.setBounds(BOUNDS);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setResizable(false);
-		this.setLayout(null);
-		this.setVisible(true);
+		setBounds(BOUNDS);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
+		setLayout(null);
+		setVisible(true);
 		
 		BoardView boardView = new BoardView(
 						new Rectangle(1, 1, 600, 600), 
@@ -24,6 +24,6 @@ public class GameWindow extends JFrame
 						new TextPieceDrawer(), 
 						new StandardGameListener(board));
 		
-		this.add(boardView);
+		add(boardView);
 	}
 }

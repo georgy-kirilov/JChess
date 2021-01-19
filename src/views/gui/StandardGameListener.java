@@ -1,6 +1,9 @@
 package views.gui;
 
 import java.util.TreeSet;
+
+import javax.swing.JOptionPane;
+
 import java.util.ArrayList;
 
 import common.Position;
@@ -8,6 +11,7 @@ import jthrow.JThrower;
 import enums.GameStatus;
 import enums.PieceColor;
 import models.pieces.King;
+import models.pieces.Pawn;
 import models.pieces.Piece;
 import models.boards.Board;
 
@@ -17,42 +21,40 @@ public class StandardGameListener implements GameListener
 	private final PieceColor[] players;
 	private int currentPlayerIndex;
 	
-	public StandardGameListener(Board board)
+	public StandardGameListener(Board board) 
 	{
 		JThrower.throwIf(board).isNull();
 		this.board = board;
-		
-		this.players = this.getUniquePlayers(board);
-		this.currentPlayerIndex = 0;
-		this.kingPosition();
+		players = getUniquePlayers(board);
+		currentPlayerIndex = 0;
 	}
 	
 	@Override
 	public Iterable<Position> onFromPositionSelected(Position from)
 	{
-		Piece piece = this.board.getAt(from);
+		Piece piece = board.getAt(from);
 		
 		ArrayList<Position> validPositions = new ArrayList<>();
 		
-		if (!this.board.isEmptyAt(from) && piece.getColor() == this.currentPlayer())
+		if (!board.isEmptyAt(from) && piece.getColor() == currentPlayer())
 		{
-			Iterable<Position> allPositions = piece.getAllReachablePositions(from, this.board);
+			Iterable<Position> allPositions = piece.getReachablePositions(from, board);
 			
-			King king = (King)this.board.getAt(this.kingPosition());
+			King king = (King)board.getAt(kingPosition());
 			
 			for (Position position : allPositions)
 			{
-				Piece captured = this.board.getAt(position);
-				this.board.setAt(position, piece);
-				this.board.setToEmpty(from);
+				Piece captured = board.getAt(position);
+				board.setAt(position, piece);
+				board.setToEmpty(from);
 				
-				if (!king.isChecked(this.kingPosition(), this.board))
+				if (!king.isChecked(kingPosition(), board))
 				{
 					validPositions.add(position);
 				}
 				
-				this.board.setAt(position, captured);
-				this.board.setAt(from, piece);
+				board.setAt(position, captured);
+				board.setAt(from, piece);
 			}
 		}
 		
@@ -64,11 +66,12 @@ public class StandardGameListener implements GameListener
 	{
 		boolean isToPositionValid = false;
 		
-		for (Position position : this.onFromPositionSelected(from))
+		for (Position position : onFromPositionSelected(from))
 		{
 			if (position.equals(to))
 			{
 				isToPositionValid = true;
+				break;
 			}
 		}
 		
@@ -77,26 +80,28 @@ public class StandardGameListener implements GameListener
 			throw new IllegalArgumentException("'To' position is not reachable");
 		}
 		
-		Piece piece = this.board.getAt(from);
-		this.board.setToEmpty(from);
-		this.board.setAt(to, piece);
+		Piece piece = board.getAt(from);
+		board.setToEmpty(from);
+		board.setAt(to, piece);
 		
 		piece.move();
-		this.nextPlayer();
-		this.board.rotateAnticlockwise(2);
 		
-		Position kingPosition = this.kingPosition();
-		King king = (King)this.board.getAt(kingPosition); 
-		
-		
-		if (king.isChecked(kingPosition, this.board))
+		if (piece.getClass().equals(Pawn.class) && ((Pawn)piece).canBePromoted(to))
 		{
-			System.out.println(this.currentPlayer());
-			if (king.isCheckmated(kingPosition, this.board))
-			{
-				System.out.println("CHECKMATE");
+			JOptionPane.showMessageDialog(null, "Queen, Rook, Bishop, Knight");
+			JOptionPane.showInputDialog("Stuf");
+		}
+		
+		nextPlayer();
+		board.rotateAnticlockwise(2);
+		
+		Position kingPosition = kingPosition();
+		King king = (King)board.getAt(kingPosition);
+		
+		if (king.isChecked(kingPosition(), board))
+		{
+			if (king.isCheckmated(kingPosition(), board))
 				return GameStatus.CHECKMATE;
-			}
 	
 			return GameStatus.CHECK;
 		}
@@ -106,36 +111,29 @@ public class StandardGameListener implements GameListener
 	
 	private PieceColor currentPlayer()
 	{
-		return this.players[this.currentPlayerIndex];
+		return players[currentPlayerIndex];
 	}
 	
 	private void nextPlayer()
 	{	
-		if (this.currentPlayerIndex == this.players.length - 1)
-		{
-			this.currentPlayerIndex = 0;
-		}
-		else
-		{
-			this.currentPlayerIndex++;
-		}
+		currentPlayerIndex = currentPlayerIndex == players.length - 1 
+				? 0 : currentPlayerIndex + 1;
 	}
 	
 	private Position kingPosition()
 	{
-		for	(int i = 0; i < this.board.getHeight(); i++)
+		for	(int i = 0; i < board.getHeight(); i++)
 		{
-			for (int j = 0; j < this.board.getWidth(); j++)
+			for (int j = 0; j < board.getWidth(); j++)
 			{
-				if (!this.board.isEmptyAt(i, j))
-				{
-					Piece piece = this.board.getAt(i, j);
-					
-					if (piece.getColor() == this.currentPlayer() && piece.getClass().equals(King.class))
-					{
-						return new Position(i, j);
-					}
-				}
+				Piece piece = board.getAt(i, j);
+				
+				boolean kingFound = !board.isEmptyAt(i, j) 
+						&& piece.getColor() == currentPlayer() 
+						&& piece.getClass().equals(King.class);
+				
+				if (kingFound) 
+					return new Position(i, j);
 			}
 		}
 		
@@ -146,13 +144,13 @@ public class StandardGameListener implements GameListener
 	{
 		TreeSet<PieceColor> uniquePlayers = new TreeSet<>();
 
-		for (int row = 0; row < board.getHeight(); row++)
+		for (int i = 0; i < board.getHeight(); i++)
 		{
-			for (int col = 0; col < board.getWidth(); col++)
+			for (int j = 0; j < board.getWidth(); j++)
 			{	
-				if (!board.isEmptyAt(row, col))
+				if (!board.isEmptyAt(i, j))
 				{
-					PieceColor player = board.getAt(row, col).getColor();
+					PieceColor player = board.getAt(i, j).getColor();
 					uniquePlayers.add(player);
 				}
 			}

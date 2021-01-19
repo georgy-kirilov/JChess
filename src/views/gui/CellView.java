@@ -10,17 +10,17 @@ import java.awt.event.MouseAdapter;
 import javax.swing.JPanel;
 
 import common.Position;
-import jthrow.JThrower;
 import models.pieces.Piece;
+import validation.ThrowHelper;
 import views.gui.drawers.PieceDrawer;
 
 @SuppressWarnings("serial")
 public class CellView extends JPanel
 {
-	private static final Color DARK_BACKGROUND = new Color(122,122,122);
-	private static final Color LIGHT_BACKGROUND = new Color(192,192,192);
-	private static final Color DARK_HIGHLIGHT = new Color(0, 174, 116);
-	private static final Color LIGHT_HIGHLIGHT = Color.GREEN;
+	private final Color DARK_BACKGROUND = new Color(122,122,122);
+	private final Color LIGHT_BACKGROUND = new Color(192,192,192);
+	private final Color DARK_HIGHLIGHT = new Color(0, 174, 116);
+	private final Color LIGHT_HIGHLIGHT = new Color(0, 225, 142);
 	
 	private Piece piece;
 	private boolean highlighted;
@@ -38,27 +38,27 @@ public class CellView extends JPanel
 			CellViewListener listener, 
 			Position position)
 	{
-		this.setBounds(bounds);
-		this.setPiece(piece);
-		this.setHighlighted(false);
+		setBounds(bounds);
+		setPiece(piece);
+		setHighlighted(false);
 		
 		this.isBackgroundDark = isBackgroundDark;
 
-		JThrower.throwIf(drawer).isNull();
+		ThrowHelper.throwIfNull(drawer);
 		this.drawer = drawer;
 		
-		JThrower.throwIf(listener).isNull();
+		ThrowHelper.throwIfNull(listener);
 		this.listener = listener;
 		
-		JThrower.throwIf(position).isNull();
+		ThrowHelper.throwIfNull(position);
 		this.position = position;
 		
-		this.attachClickListener(this);
+		attachClickListener(this);
 	}
 	
 	public Piece getPiece()
 	{ 
-		return this.piece; 
+		return piece; 
 	}
 	
 	public void setPiece(Piece piece) 
@@ -68,7 +68,7 @@ public class CellView extends JPanel
 
 	public boolean isHighlighted() 
 	{ 
-		return this.highlighted; 
+		return highlighted; 
 	}
 	
 	public void setHighlighted(boolean highlighted) 
@@ -76,9 +76,9 @@ public class CellView extends JPanel
 		this.highlighted = highlighted; 
 	}
 	
-	public Position getPosition() 
+	public Position getPosition()
 	{ 
-		return this.position; 
+		return position; 
 	}
 	
 	@Override
@@ -87,32 +87,26 @@ public class CellView extends JPanel
 		super.paintComponent(graphics);
 		
 		Graphics2D g = (Graphics2D)graphics;
-		Color color = this.isBackgroundDark ? DARK_BACKGROUND : LIGHT_BACKGROUND;
+		Color color = isBackgroundDark ? DARK_BACKGROUND : LIGHT_BACKGROUND;
 		
-		if (this.isHighlighted())
-		{
-			color = this.isBackgroundDark ? DARK_HIGHLIGHT : LIGHT_HIGHLIGHT;
-		}
+		if (isHighlighted())
+			color = isBackgroundDark ? DARK_HIGHLIGHT : LIGHT_HIGHLIGHT;
 		
-		this.setBackground(color);
-		this.drawer.drawPiece(g, piece, this.getBounds());
+		setBackground(color);
+		drawer.drawPiece(g, piece, getWidth(), getHeight());
 	}
 	
 	private void attachClickListener(CellView cell)
 	{
-		this.addMouseListener(new MouseAdapter()
+		addMouseListener(new MouseAdapter()
 		{
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
 				if (!cell.isHighlighted())
-				{
 					cell.listener.onInitialClick(cell);
-				}
 				else
-				{
 					cell.listener.onConfirmationClick(cell);
-				}
 			}
 		});
 	}
