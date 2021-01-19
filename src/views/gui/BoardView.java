@@ -3,9 +3,11 @@ package views.gui;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import common.Position;
+import enums.GameStatus;
 import jthrow.JThrower;
 import models.boards.Board;
 import models.pieces.Piece;
@@ -79,9 +81,19 @@ public class BoardView extends JPanel implements CellViewListener
 	@Override
 	public void onConfirmationClick(CellView cell)
 	{
-		this.listener.onToPositionSelected(this.lastSelectedPosition, cell.getPosition());
+		GameStatus status = this.listener.onToPositionSelected(this.lastSelectedPosition, cell.getPosition());
 		this.unhighlightAllCells();
 		this.repaint();
+		
+		if (status == GameStatus.CHECKMATE)
+		{
+			JOptionPane.showMessageDialog(this, "CHECKMATE! YOU LOST!");
+			System.exit(0);
+		}
+		else if (status == GameStatus.CHECK)
+		{
+			JOptionPane.showMessageDialog(this, "CHECK");
+		}
 	}
 	
 	private void initialize()

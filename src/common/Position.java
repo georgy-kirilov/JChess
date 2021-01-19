@@ -1,5 +1,7 @@
 package common;
 
+import models.boards.Board;
+
 public class Position 
 {
 	public static final int DEFAULT_ROW = 0;
@@ -51,6 +53,12 @@ public class Position
 	{
 		return new Position(this.getRow() + offsetPair.getRowOffset(), 
 				this.getColumn() + offsetPair.getColumnOffset());
+	}
+	
+	public void translate(Board board)
+	{
+		this.setRow(board.getHeight() - 1 - this.getRow());
+		this.setColumn(board.getWidth() - 1 - this.getColumn());
 	}
 	
 	@Override

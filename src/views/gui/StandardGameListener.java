@@ -5,9 +5,11 @@ import java.util.ArrayList;
 
 import common.Position;
 import jthrow.JThrower;
+import enums.GameStatus;
 import enums.PieceColor;
-import models.boards.Board;
+import models.pieces.King;
 import models.pieces.Piece;
+import models.boards.Board;
 
 public class StandardGameListener implements GameListener
 {
@@ -22,25 +24,43 @@ public class StandardGameListener implements GameListener
 		
 		this.players = this.getUniquePlayers(board);
 		this.currentPlayerIndex = 0;
+		this.kingPosition();
 	}
 	
 	@Override
 	public Iterable<Position> onFromPositionSelected(Position from)
 	{
 		Piece piece = this.board.getAt(from);
-	
-		//TODO: Add validation for check and checkmate
 		
-		if (piece != Board.EMPTY_CELL && piece.getColor() == this.currentPlayer())
+		ArrayList<Position> validPositions = new ArrayList<>();
+		
+		if (!this.board.isEmptyAt(from) && piece.getColor() == this.currentPlayer())
 		{
-			return piece.getAllReachablePositions(from, this.board);
+			Iterable<Position> allPositions = piece.getAllReachablePositions(from, this.board);
+			
+			King king = (King)this.board.getAt(this.kingPosition());
+			
+			for (Position position : allPositions)
+			{
+				Piece captured = this.board.getAt(position);
+				this.board.setAt(position, piece);
+				this.board.setToEmpty(from);
+				
+				if (!king.isChecked(this.kingPosition(), this.board))
+				{
+					validPositions.add(position);
+				}
+				
+				this.board.setAt(position, captured);
+				this.board.setAt(from, piece);
+			}
 		}
 		
-		return new ArrayList<Position>();
+		return validPositions;
 	}
 
 	@Override
-	public void onToPositionSelected(Position from, Position to)
+	public GameStatus onToPositionSelected(Position from, Position to)
 	{
 		boolean isToPositionValid = false;
 		
@@ -54,7 +74,7 @@ public class StandardGameListener implements GameListener
 		
 		if (!isToPositionValid)
 		{
-			throw new IllegalArgumentException("'to' position is not reachable");
+			throw new IllegalArgumentException("'To' position is not reachable");
 		}
 		
 		Piece piece = this.board.getAt(from);
@@ -64,6 +84,24 @@ public class StandardGameListener implements GameListener
 		piece.move();
 		this.nextPlayer();
 		this.board.rotateAnticlockwise(2);
+		
+		Position kingPosition = this.kingPosition();
+		King king = (King)this.board.getAt(kingPosition); 
+		
+		
+		if (king.isChecked(kingPosition, this.board))
+		{
+			System.out.println(this.currentPlayer());
+			if (king.isCheckmated(kingPosition, this.board))
+			{
+				System.out.println("CHECKMATE");
+				return GameStatus.CHECKMATE;
+			}
+	
+			return GameStatus.CHECK;
+		}
+	
+		return GameStatus.CONTINUE;
 	}
 	
 	private PieceColor currentPlayer()
@@ -81,6 +119,27 @@ public class StandardGameListener implements GameListener
 		{
 			this.currentPlayerIndex++;
 		}
+	}
+	
+	private Position kingPosition()
+	{
+		for	(int i = 0; i < this.board.getHeight(); i++)
+		{
+			for (int j = 0; j < this.board.getWidth(); j++)
+			{
+				if (!this.board.isEmptyAt(i, j))
+				{
+					Piece piece = this.board.getAt(i, j);
+					
+					if (piece.getColor() == this.currentPlayer() && piece.getClass().equals(King.class))
+					{
+						return new Position(i, j);
+					}
+				}
+			}
+		}
+		
+		throw new RuntimeException("King not found");
 	}
 	
 	private PieceColor[] getUniquePlayers(Board board)
