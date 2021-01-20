@@ -67,14 +67,23 @@ public class BoardView extends JPanel implements CellViewListener
 	{
 		unhighlightAllCells();
 		
-		Iterable<Position> reachablePositions = listener.onFromPositionSelected(cell.getPosition());
-	
-		for (Position position : reachablePositions)
+		if (cell.getPosition().equals(lastSelectedPosition))
 		{
-			getAt(position).setHighlighted(true);
+			lastSelectedPosition = null;
+		}
+		else
+		{
+			Iterable<Position> reachablePositions = 
+					listener.onFromPositionSelected(cell.getPosition());
+		
+			for (Position position : reachablePositions)
+			{
+				getAt(position).setHighlighted(true);
+			}
+			
+			lastSelectedPosition = cell.getPosition();
 		}
 		
-		lastSelectedPosition = cell.getPosition(); 
 		repaint();
 	}
 
@@ -82,6 +91,7 @@ public class BoardView extends JPanel implements CellViewListener
 	public void onConfirmationClick(CellView cell)
 	{
 		listener.onToPositionSelected(lastSelectedPosition, cell.getPosition());
+		lastSelectedPosition = null;
 	}
 	
 	public void announceCheck()
