@@ -1,14 +1,14 @@
-package views.gui;
+package core;
 
 import java.awt.Rectangle;
 
 import javax.swing.JFrame;
 
 import common.Position;
-import core.GameManager;
 import enums.GameStatus;
 import enums.PieceColor;
 import models.boards.Board;
+import views.gui.BoardView;
 import views.gui.drawers.PieceDrawer;
 
 public class GameListener

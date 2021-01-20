@@ -1,7 +1,7 @@
 package tests;
 
+import core.GameListener;
 import enums.PieceColor;
-import views.gui.GameListener;
 import models.boards.StandardBoard;
 import views.gui.drawers.TextPieceDrawer;
 

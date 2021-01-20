@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import common.Position;
+import core.GameListener;
 import enums.PieceColor;
 import models.boards.Board;
 import models.pieces.Piece;
@@ -71,7 +72,6 @@ public class BoardView extends JPanel implements CellViewListener
 		for (Position position : reachablePositions)
 		{
 			getAt(position).setHighlighted(true);
-			System.out.println("1");
 		}
 		
 		lastSelectedPosition = cell.getPosition(); 
