@@ -14,7 +14,7 @@ public class TextPieceDrawer implements PieceDrawer
 	
 	public TextPieceDrawer() 
 	{
-		piecesAndSymbols.put(Pawn.class,"♟" );
+		piecesAndSymbols.put(Pawn.class, "♟");
 		piecesAndSymbols.put(Bishop.class, "♝");
 		piecesAndSymbols.put(Knight.class, "♞");
 		piecesAndSymbols.put(Rook.class, "♜");
