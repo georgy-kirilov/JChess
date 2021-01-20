@@ -2,9 +2,8 @@ package models.pieces;
 
 import common.Position;
 import enums.PieceColor;
+import common.OffsetPair;
 import models.boards.Board;
-
-import common.MovementOffsetPair;
 
 public class King extends BasePiece
 {
@@ -14,27 +13,27 @@ public class King extends BasePiece
 	}
 
 	@Override
-	public Iterable<Position> getAllReachablePositions(Position currentPosition, Board board)
+	public Iterable<Position> getReachablePositions(Position currentPosition, Board board)
 	{
-		MovementOffsetPair[] offsetPairs = new MovementOffsetPair[]
+		OffsetPair[] offsetPairs = new OffsetPair[]
 		{
-			MovementOffsetPair.UP,
-			MovementOffsetPair.DOWN,
-			MovementOffsetPair.RIGHT,
-			MovementOffsetPair.LEFT,
-			MovementOffsetPair.TOP_RIGHT,
-			MovementOffsetPair.TOP_LEFT,
-			MovementOffsetPair.BOTTOM_RIGHT,
-			MovementOffsetPair.BOTTOM_LEFT,
+			OffsetPair.UP,
+			OffsetPair.DOWN,
+			OffsetPair.RIGHT,
+			OffsetPair.LEFT,
+			OffsetPair.TOP_RIGHT,
+			OffsetPair.TOP_LEFT,
+			OffsetPair.BOTTOM_RIGHT,
+			OffsetPair.BOTTOM_LEFT,
 		};
 		
-		return this.getReachableSinglePositions(currentPosition, board, offsetPairs);
+		return getReachableSinglePositions(currentPosition, board, offsetPairs);
 	}
 	
 	public boolean isChecked(Position kingPosition, Board board)
 	{
-		kingPosition.translate(board);
-		board.rotateAnticlockwise(2);
+		kingPosition.flipOver(board);
+		board.rotate();
 		
 		for (int i = 0; i < board.getHeight(); i++)
 		{
@@ -42,14 +41,15 @@ public class King extends BasePiece
 			{
 				Piece piece = board.getAt(i, j);
 				
-				if (!board.isEmptyAt(i, j) && piece.getColor() != this.getColor())
+				if (!board.isEmptyAt(i, j) && piece.getColor() != getColor())
 				{
-					for (Position position : piece.getAllReachablePositions(new Position(i, j), board))
+					for (Position position : piece.getReachablePositions(new Position(i, j), board))
 					{
 						if (position.equals(kingPosition))
 						{
-							kingPosition.translate(board);
-							board.rotateAnticlockwise(2);
+							kingPosition.flipOver(board);
+							board.rotate();
+							
 							return true;
 						}
 					}
@@ -57,8 +57,9 @@ public class King extends BasePiece
 			}
 		}
 		
-		kingPosition.translate(board);
-		board.rotateAnticlockwise(2);
+		kingPosition.flipOver(board);
+		board.rotate();
+		
 		return false;
 	}
 	
@@ -67,44 +68,34 @@ public class King extends BasePiece
 		if (!this.isChecked(kingPosition, board))
 			return false;
 		
-		System.out.println("INSIDE");
-		
 		for (int i = 0; i < board.getHeight(); i++)
 		{
 			for (int j = 0; j < board.getWidth(); j++)
 			{
-				if (!board.isEmptyAt(i, j))
+				Piece piece = board.getAt(i, j);
+				
+				if (!board.isEmptyAt(i, j) && piece.getColor() == getColor())
 				{
-					Piece piece = board.getAt(i, j);
+					Iterable<Position> positions = piece
+							.getReachablePositions(new Position(i, j), board);
 					
-					if (piece.getColor() == this.getColor())
-					{	
-						Iterable<Position> positions = 
-								piece.getAllReachablePositions(new Position(i, j), board);
+					Position checkPosition = kingPosition;
+					
+					for (Position position : positions)
+					{
+						Piece captured = board.getAt(position);
+						board.setAt(position, piece);
+						board.setToEmpty(i, j);
 						
-						Position pos = kingPosition;
+						if (piece.getClass().equals(King.class))
+							checkPosition = position;
+		
+						boolean checked = isChecked(checkPosition, board);
 						
-						for (Position position : positions)
-						{
-							Piece captured = board.getAt(position);
-							board.setAt(position, piece);
-							board.setToEmpty(i, j);
-							
-							if (piece.getClass().equals(King.class))
-							{
-								pos = position;
-							}
-							
-							if (!this.isChecked(pos, board))
-							{
-								board.setAt(position, captured);
-								board.setAt(i, j, piece);
-								return false;
-							}
-							
-							board.setAt(position, captured);
-							board.setAt(i, j, piece);
-						}
+						board.setAt(position, captured);
+						board.setAt(i, j, piece);
+						
+						if (!checked) return false;
 					}
 				}
 			}

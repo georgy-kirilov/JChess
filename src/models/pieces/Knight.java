@@ -2,8 +2,8 @@ package models.pieces;
 
 import common.Position;
 import enums.PieceColor;
+import common.OffsetPair;
 import models.boards.Board;
-import common.MovementOffsetPair;
 
 public class Knight extends BasePiece
 {	
@@ -13,18 +13,18 @@ public class Knight extends BasePiece
 	}
 
 	@Override
-	public Iterable<Position> getAllReachablePositions(Position currentPosition, Board board)
+	public Iterable<Position> getReachablePositions(Position currentPosition, Board board)
 	{
-		MovementOffsetPair[] offsetPairs = new MovementOffsetPair[]
+		OffsetPair[] offsetPairs = new OffsetPair[]
 		{
-			MovementOffsetPair.TWICE_UP_ONCE_LEFT,
-			MovementOffsetPair.TWICE_UP_ONCE_RIGHT,
-			MovementOffsetPair.ONCE_UP_TWICE_LEFT,
-			MovementOffsetPair.ONCE_UP_TWICE_RIGHT,
-			MovementOffsetPair.TWICE_DOWN_ONCE_LEFT,
-			MovementOffsetPair.TWICE_DOWN_ONCE_RIGHT,
-			MovementOffsetPair.ONCE_DOWN_TWICE_LEFT,
-			MovementOffsetPair.ONCE_DOWN_TWICE_RIGHT,
+			new OffsetPair(-2, -1),
+			new OffsetPair(-2, 1),
+			new OffsetPair(-1, -2),
+			new OffsetPair(-1, 2),
+			new OffsetPair(2, -1),
+			new OffsetPair(2, 1),
+			new OffsetPair(1, -2),
+			new OffsetPair(1, 2),
 		};
 		
 		return this.getReachableSinglePositions(currentPosition, board, offsetPairs);

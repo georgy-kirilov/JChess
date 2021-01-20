@@ -3,14 +3,15 @@ package views.gui;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 
 import common.Position;
-import enums.GameStatus;
-import jthrow.JThrower;
+import core.GameListener;
+import enums.PieceColor;
 import models.boards.Board;
 import models.pieces.Piece;
+import validation.ThrowHelper;
 import views.gui.drawers.PieceDrawer;
 
 @SuppressWarnings("serial")
@@ -27,23 +28,23 @@ public class BoardView extends JPanel implements CellViewListener
 	
 	public BoardView(Rectangle bounds, Board board, PieceDrawer drawer, GameListener listener)
 	{
-		this.cellWidth = bounds.width / board.getWidth();
-		this.cellHeight = bounds.height / board.getHeight();
+		cellWidth = bounds.width / board.getWidth();
+		cellHeight = bounds.height / board.getHeight();
 		
-		this.setBounds(bounds);
-		this.setLayout(null);
+		setBounds(bounds);
+		setLayout(null);
 		
-		JThrower.throwIf(board).isNull();
+		ThrowHelper.throwIfNull(board);
 		this.board = board;
 		
-		JThrower.throwIf(drawer).isNull();
+		ThrowHelper.throwIfNull(drawer);
 		this.drawer = drawer;
 		
-		JThrower.throwIf(listener).isNull();
+		ThrowHelper.throwIfNull(listener);
 		this.listener = listener;
 		
-		this.cells = new CellView[board.getWidth()][board.getHeight()];
-		this.initialize();
+		cells = new CellView[board.getWidth()][board.getHeight()];
+		initialize();
 	}
 	
 	@Override
@@ -51,12 +52,12 @@ public class BoardView extends JPanel implements CellViewListener
 	{
 		super.paintComponent(graphics);
 	
-		for (int row = 0; row < board.getHeight(); row++)
+		for (int i = 0; i < board.getHeight(); i++)
 		{	
-			for (int col = 0; col < board.getWidth(); col++)
+			for (int j = 0; j < board.getWidth(); j++)
 			{
-				this.cells[row][col].setPiece(this.board.getAt(row, col));
-				this.add(this.cells[row][col]);
+				cells[i][j].setPiece(board.getAt(i, j));
+				add(cells[i][j]);
 			}
 		}
 	}
@@ -64,74 +65,74 @@ public class BoardView extends JPanel implements CellViewListener
 	@Override
 	public void onInitialClick(CellView cell)
 	{
-		this.unhighlightAllCells();
+		unhighlightAllCells();
 		
-		Iterable<Position> reachablePositions = 
-				this.listener.onFromPositionSelected(cell.getPosition());
-		
+		Iterable<Position> reachablePositions = listener.onFromPositionSelected(cell.getPosition());
+	
 		for (Position position : reachablePositions)
 		{
-			this.getAt(position).setHighlighted(true);
+			getAt(position).setHighlighted(true);
 		}
 		
-		this.lastSelectedPosition = cell.getPosition(); 
-		this.repaint();
+		lastSelectedPosition = cell.getPosition(); 
+		repaint();
 	}
 
 	@Override
 	public void onConfirmationClick(CellView cell)
 	{
-		GameStatus status = this.listener.onToPositionSelected(this.lastSelectedPosition, cell.getPosition());
-		this.unhighlightAllCells();
-		this.repaint();
-		
-		if (status == GameStatus.CHECKMATE)
-		{
-			JOptionPane.showMessageDialog(this, "CHECKMATE! YOU LOST!");
-			System.exit(0);
-		}
-		else if (status == GameStatus.CHECK)
-		{
-			JOptionPane.showMessageDialog(this, "CHECK");
-		}
+		listener.onToPositionSelected(lastSelectedPosition, cell.getPosition());
+	}
+	
+	public void announceCheck()
+	{
+		JOptionPane.showMessageDialog(this, "CHECKED");
+	}
+	
+	public void announceGameOver(PieceColor winnerColor)
+	{	
+		JOptionPane.showMessageDialog(this, "GAME OVER - " + winnerColor + " WINS!");
+		System.exit(0);
+	}
+	
+	public void redraw()
+	{
+		unhighlightAllCells();
+		repaint();
 	}
 	
 	private void initialize()
 	{
 		for (int row = 0; row < board.getHeight(); row++)
 		{
-			int y = row * this.cellHeight;
+			int y = row * cellHeight;
 			
 			for (int col = 0; col < board.getWidth(); col++)
 			{
-				int x = col * this.cellWidth;
+				int x = col * cellWidth;
 				
-				Rectangle bounds = new Rectangle(x, y, this.cellWidth, this.cellHeight);
+				Rectangle bounds = new Rectangle(x, y, cellWidth, cellHeight);
 				
-				Piece piece = this.board.getAt(row, col);
-				
+				Piece piece = board.getAt(row, col);
+
 				boolean isCellDark = !(row % 2 == 0 && col % 2 == 0 || row % 2 != 0 && col % 2 != 0);
 				
-				this.cells[row][col] = new CellView(
+				cells[row][col] = new CellView(
 						bounds, piece, isCellDark, 
-						this.drawer, this, new Position(row, col));
+						drawer, this, new Position(row, col));
 			}
 		}
 	}
 	
 	private void unhighlightAllCells()
 	{
-		for (CellView[] cellRow : this.cells)
-		{
+		for (CellView[] cellRow : cells)
 			for (CellView cell : cellRow)
-			{
 				cell.setHighlighted(false);
-			}
-		}
 	}
 	
 	private CellView getAt(Position position)
 	{
-		return this.cells[position.getRow()][position.getColumn()];
+		return cells[position.getRow()][position.getColumn()];
 	}
 }

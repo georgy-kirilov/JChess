@@ -16,5 +16,5 @@ public interface Piece
 	
 	boolean canMoveFreelyTo(Position position, Board board);
 	
-	Iterable<Position> getAllReachablePositions(Position currentPosition, Board board);
+	Iterable<Position> getReachablePositions(Position currentPosition, Board board);
 }

@@ -1,9 +1,8 @@
 package models.boards;
 
 import common.Position;
-import jthrow.JChecker;
-import jthrow.JThrower;
 import models.pieces.Piece;
+import validation.ThrowHelper;
 
 public abstract class BaseBoard implements Board
 {	
@@ -19,12 +18,9 @@ public abstract class BaseBoard implements Board
 	
 	public BaseBoard(int height, int width)
 	{
-		JThrower.throwIf(height, "height")
-				.isOutOfRange(MIN_HEIGHT, MAX_HEIGHT);
-		
-		JThrower.throwIf(width, "width")
-				.isOutOfRange(MIN_WIDTH, MAX_WIDTH);
-		
+		ThrowHelper.throwIfOutOfRange(MIN_HEIGHT, MAX_HEIGHT, height);
+		ThrowHelper.throwIfOutOfRange(MIN_WIDTH, MAX_WIDTH, width);
+	
 		this.height = height;
 		this.width = width;
 		
@@ -102,14 +98,14 @@ public abstract class BaseBoard implements Board
 		int maxRows = this.getHeight() - 1;
 		int maxColumns = this.getWidth() - 1;
 		
-		return JChecker.isInRange(0, position.getRow(), maxRows) && 
-				JChecker.isInRange(0, position.getColumn(), maxColumns);
+		return ThrowHelper.isInRange(0, maxRows, position.getRow()) && 
+				ThrowHelper.isInRange(0, maxColumns, position.getColumn());
 	}
 	
 	@Override
-	public void rotateAnticlockwise(int rotations) 
+	public void rotate() 
 	{	
-		for (int i = 0; i < rotations; i++) 
+		for (int i = 0; i < 2; i++)
 		{
 			for (int row = 0; row < this.getHeight() / 2; row++)
 	        {

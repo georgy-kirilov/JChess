@@ -27,7 +27,7 @@ public interface Board
 	
 	boolean isPositionInside(Position position);
 	
-	void rotateAnticlockwise(int rotations);
+	void rotate();
 	
 	Piece EMPTY_CELL = null;
 }

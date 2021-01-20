@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import common.Position;
 import enums.PieceColor;
+import common.OffsetPair;
 import models.boards.Board;
-import common.MovementOffsetPair;
 
 public class Pawn extends BasePiece
 {
@@ -15,41 +15,40 @@ public class Pawn extends BasePiece
 	}
 
 	@Override
-	public Iterable<Position> getAllReachablePositions(Position currentPosition, Board board)
+	public Iterable<Position> getReachablePositions(Position currentPosition, Board board)
 	{	
-		ArrayList<Position> reachablePositions = new ArrayList<>();
+		ArrayList<Position> positions = new ArrayList<>();
 		
-		Position up = currentPosition.move(MovementOffsetPair.UP);
+		Position up = currentPosition.moveBy(OffsetPair.UP);
 		
-		if (this.canMoveFreelyTo(up, board))
+		if (canMoveFreelyTo(up, board))
 		{
-			reachablePositions.add(up);
+			positions.add(up);
 			
-			if (!this.isMoved())
+			if (!isMoved())
 			{
-				Position twiceUp = currentPosition.move(MovementOffsetPair.TWICE_UP);
+				Position twiceUp = currentPosition.moveBy(new OffsetPair(-2, 0));
 				
-				if (this.canMoveFreelyTo(twiceUp, board))
-				{
-					reachablePositions.add(twiceUp);		
-				}
+				if (canMoveFreelyTo(twiceUp, board))
+					positions.add(twiceUp);
 			}
 		}
 
-		Position topRight = currentPosition.move(MovementOffsetPair.TOP_RIGHT);
+		Position topRight = currentPosition.moveBy(OffsetPair.TOP_RIGHT);
 		
-		if (this.canCaptureAt(topRight, board)) 
-		{	
-			reachablePositions.add(topRight);
-		}
+		if (canCaptureAt(topRight, board)) 
+			positions.add(topRight);
 
-		Position topLeft = currentPosition.move(MovementOffsetPair.TOP_LEFT);
+		Position topLeft = currentPosition.moveBy(OffsetPair.TOP_LEFT);
 		
-		if (this.canCaptureAt(topLeft, board)) 
-		{	
-			reachablePositions.add(topLeft);
-		}
+		if (canCaptureAt(topLeft, board)) 
+			positions.add(topLeft);
 		
-		return reachablePositions;
+		return positions;
+	}
+	
+	public boolean canBePromoted(Position pawnPosition)
+	{
+		return pawnPosition.getRow() == 0;
 	}
 }
