@@ -54,7 +54,7 @@ public class GameListener
 		}
 		else if (status == GameStatus.CHECK)
 		{
-			boardView.annonceCheck();
+			boardView.announceCheck();
 		}
 	}
 }

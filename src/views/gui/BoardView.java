@@ -3,8 +3,8 @@ package views.gui;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 
 import common.Position;
 import core.GameListener;
@@ -84,7 +84,7 @@ public class BoardView extends JPanel implements CellViewListener
 		listener.onToPositionSelected(lastSelectedPosition, cell.getPosition());
 	}
 	
-	public void annonceCheck()
+	public void announceCheck()
 	{
 		JOptionPane.showMessageDialog(this, "CHECKED");
 	}
@@ -115,7 +115,7 @@ public class BoardView extends JPanel implements CellViewListener
 				
 				Piece piece = board.getAt(row, col);
 				
-				boolean isCellDark = row % 2 == 0 && col % 2 == 0 || row % 2 != 0 && col % 2 != 0;
+				boolean isCellDark = !(row % 2 != 0 && col % 2 != 0 || row % 2 == 0 && col % 2 == 0);
 				
 				cells[row][col] = new CellView(
 						bounds, piece, isCellDark, 
