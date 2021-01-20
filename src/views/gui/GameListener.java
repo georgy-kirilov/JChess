@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import common.Position;
 import core.GameManager;
 import enums.GameStatus;
+import enums.PieceColor;
 import models.boards.Board;
 import views.gui.drawers.PieceDrawer;
 
@@ -18,9 +19,9 @@ public class GameListener
 	private final BoardView boardView;	
 	private final GameManager gameManager;
 	
-	public GameListener(Board board, PieceDrawer pieceDrawer) 
+	public GameListener(Board board, PieceDrawer pieceDrawer, PieceColor startPlayerColor) 
 	{	
-		gameManager = new GameManager(board);
+		gameManager = new GameManager(board, startPlayerColor);
 		
 		boardView = new BoardView(
 				new Rectangle(1, 1, 600, 600),

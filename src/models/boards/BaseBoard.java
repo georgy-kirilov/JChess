@@ -107,9 +107,9 @@ public abstract class BaseBoard implements Board
 	}
 	
 	@Override
-	public void rotateAnticlockwise(int rotations) 
+	public void rotate() 
 	{	
-		for (int i = 0; i < rotations; i++) 
+		for (int i = 0; i < 2; i++)
 		{
 			for (int row = 0; row < this.getHeight() / 2; row++)
 	        {

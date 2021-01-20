@@ -16,11 +16,14 @@ public class GameManager
 	private boolean gameOver;
 	private PieceColor currentPlayerColor;
 	
-	public GameManager(Board board)
+	public GameManager(Board board, PieceColor startPlayerColor)
 	{
 		ThrowHelper.throwIfNull(board);
-		currentPlayerColor = PieceColor.WHITE;
 		this.board = board;
+		
+		ThrowHelper.throwIfNull(startPlayerColor);
+		currentPlayerColor = startPlayerColor;
+		
 		gameOver = false;
 	}
 	
@@ -112,7 +115,7 @@ public class GameManager
 		
 		piece.move();
 		nextPlayer();
-		board.rotateAnticlockwise(2);
+		board.rotate();
 		
 		if (getKing().isChecked(getKingPosition(), board))
 		{

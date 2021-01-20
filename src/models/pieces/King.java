@@ -33,7 +33,7 @@ public class King extends BasePiece
 	public boolean isChecked(Position kingPosition, Board board)
 	{
 		kingPosition.flipOver(board);
-		board.rotateAnticlockwise(2);
+		board.rotate();
 		
 		for (int i = 0; i < board.getHeight(); i++)
 		{
@@ -48,7 +48,8 @@ public class King extends BasePiece
 						if (position.equals(kingPosition))
 						{
 							kingPosition.flipOver(board);
-							board.rotateAnticlockwise(2);
+							board.rotate();
+							
 							return true;
 						}
 					}
@@ -57,7 +58,8 @@ public class King extends BasePiece
 		}
 		
 		kingPosition.flipOver(board);
-		board.rotateAnticlockwise(2);
+		board.rotate();
+		
 		return false;
 	}
 	
