@@ -88,13 +88,10 @@ public class StandardGameListener implements GameListener
 		Position kingPosition = this.kingPosition();
 		King king = (King)this.board.getAt(kingPosition); 
 		
-		
 		if (king.isChecked(kingPosition, this.board))
 		{
-			System.out.println(this.currentPlayer());
 			if (king.isCheckmated(kingPosition, this.board))
 			{
-				System.out.println("CHECKMATE");
 				return GameStatus.CHECKMATE;
 			}
 	
