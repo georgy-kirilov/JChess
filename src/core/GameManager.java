@@ -63,6 +63,8 @@ public class GameManager
 	
 	public Iterable<Position> getReachablePositions(Position piecePosition)
 	{
+		//TODO: Optimize the method with hash map
+		
 		ArrayList<Position> reachablePositions = new ArrayList<>();
 		Piece piece = board.getAt(piecePosition);
 		
