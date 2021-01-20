@@ -86,7 +86,6 @@ public class GameManager
 			}
 		}
 		
-		System.out.println(reachablePositions.size());
 		return reachablePositions;
 	}
 	
@@ -117,15 +116,15 @@ public class GameManager
 		nextPlayer();
 		board.rotate();
 		
-		if (getKing().isChecked(getKingPosition(), board))
-		{
-			return GameStatus.CHECK;			
-		}
-		
 		if (getKing().isCheckmated(getKingPosition(), board))
 		{
 			gameOver = true;
 			return GameStatus.CHECKMATE;
+		}
+		
+		if (getKing().isChecked(getKingPosition(), board))
+		{
+			return GameStatus.CHECK;			
 		}
 		
 		return GameStatus.CONTINUE;

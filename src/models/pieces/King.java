@@ -78,8 +78,8 @@ public class King extends BasePiece
 				{
 					Iterable<Position> positions = piece
 							.getReachablePositions(new Position(i, j), board);
-						
-					Position pos = kingPosition;
+					
+					Position checkPosition = kingPosition;
 					
 					for (Position position : positions)
 					{
@@ -88,19 +88,14 @@ public class King extends BasePiece
 						board.setToEmpty(i, j);
 						
 						if (piece.getClass().equals(King.class))
-						{
-							pos = position;
-						}
-						
-						if (!this.isChecked(pos, board))
-						{
-							board.setAt(position, captured);
-							board.setAt(i, j, piece);
-							return false;
-						}
+							checkPosition = position;
+		
+						boolean checked = isChecked(checkPosition, board);
 						
 						board.setAt(position, captured);
 						board.setAt(i, j, piece);
+						
+						if (!checked) return false;
 					}
 				}
 			}
