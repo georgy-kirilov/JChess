@@ -55,7 +55,7 @@ public abstract class BasePiece implements Piece
 		
 		for (OffsetPair offsetPair : offsetPairs)
 		{
-			Position nextPosition = currentPosition.move(offsetPair);
+			Position nextPosition = currentPosition.moveBy(offsetPair);
 			
 			while (true)
 			{
@@ -71,7 +71,7 @@ public abstract class BasePiece implements Piece
 					break;
 				}
 				
-				nextPosition = nextPosition.move(offsetPair);
+				nextPosition = nextPosition.moveBy(offsetPair);
 			}
 		}
 		
@@ -87,7 +87,7 @@ public abstract class BasePiece implements Piece
 		
 		for (OffsetPair offsetPair : offsetPairs)
 		{
-			Position nextPosition = currentPosition.move(offsetPair);
+			Position nextPosition = currentPosition.moveBy(offsetPair);
 			
 			boolean isPositionValid = canMoveFreelyTo(nextPosition, board) || 
 					canCaptureAt(nextPosition, board);

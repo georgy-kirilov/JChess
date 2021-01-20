@@ -3,14 +3,14 @@ package views.gui;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-import javax.swing.JPanel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import common.Position;
-import enums.GameStatus;
-import jthrow.JThrower;
+import enums.PieceColor;
 import models.boards.Board;
 import models.pieces.Piece;
+import validation.ThrowHelper;
 import views.gui.drawers.PieceDrawer;
 
 @SuppressWarnings("serial")
@@ -33,13 +33,13 @@ public class BoardView extends JPanel implements CellViewListener
 		setBounds(bounds);
 		setLayout(null);
 		
-		JThrower.throwIf(board).isNull();
+		ThrowHelper.throwIfNull(board);
 		this.board = board;
 		
-		JThrower.throwIf(drawer).isNull();
+		ThrowHelper.throwIfNull(drawer);
 		this.drawer = drawer;
 		
-		JThrower.throwIf(listener).isNull();
+		ThrowHelper.throwIfNull(listener);
 		this.listener = listener;
 		
 		cells = new CellView[board.getWidth()][board.getHeight()];
@@ -67,10 +67,11 @@ public class BoardView extends JPanel implements CellViewListener
 		unhighlightAllCells();
 		
 		Iterable<Position> reachablePositions = listener.onFromPositionSelected(cell.getPosition());
-		
+	
 		for (Position position : reachablePositions)
 		{
 			getAt(position).setHighlighted(true);
+			System.out.println("1");
 		}
 		
 		lastSelectedPosition = cell.getPosition(); 
@@ -80,19 +81,24 @@ public class BoardView extends JPanel implements CellViewListener
 	@Override
 	public void onConfirmationClick(CellView cell)
 	{
-		GameStatus status = listener.onToPositionSelected(lastSelectedPosition, cell.getPosition());
+		listener.onToPositionSelected(lastSelectedPosition, cell.getPosition());
+	}
+	
+	public void annonceCheck()
+	{
+		JOptionPane.showMessageDialog(this, "CHECKED");
+	}
+	
+	public void announceGameOver(PieceColor winnerColor)
+	{	
+		JOptionPane.showMessageDialog(this, "GAME OVER - " + winnerColor + " WINS!");
+		System.exit(0);
+	}
+	
+	public void redraw()
+	{
 		unhighlightAllCells();
 		repaint();
-		
-		if (status == GameStatus.CHECKMATE)
-		{
-			JOptionPane.showMessageDialog(this, "CHECKMATE! YOU LOST!");
-			System.exit(0);
-		}
-		else if (status == GameStatus.CHECK)
-		{
-			JOptionPane.showMessageDialog(this, "CHECK");
-		}
 	}
 	
 	private void initialize()
@@ -121,12 +127,8 @@ public class BoardView extends JPanel implements CellViewListener
 	private void unhighlightAllCells()
 	{
 		for (CellView[] cellRow : cells)
-		{
 			for (CellView cell : cellRow)
-			{
 				cell.setHighlighted(false);
-			}
-		}
 	}
 	
 	private CellView getAt(Position position)

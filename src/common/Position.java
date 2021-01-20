@@ -49,13 +49,13 @@ public class Position
 		return areEqual;
 	}
 	
-	public Position move(OffsetPair offsetPair)
+	public Position moveBy(OffsetPair offsetPair)
 	{
 		return new Position(getRow() + offsetPair.getRowOffset(), 
 				getColumn() + offsetPair.getColumnOffset());
 	}
 	
-	public void translate(Board board)
+	public void flipOver(Board board)
 	{
 		setRow(board.getHeight() - 1 - getRow());
 		setColumn(board.getWidth() - 1 - getColumn());
