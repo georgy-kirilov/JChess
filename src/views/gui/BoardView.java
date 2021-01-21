@@ -99,14 +99,17 @@ public class BoardView extends JPanel implements CellViewListener
 	
 	public void announceGameOver(PieceColor winnerColor)
 	{	
-		JOptionPane.showMessageDialog(this, "GAME OVER - " + winnerColor + " WINS!");
+		String format = "GAME OVER - %s WINS!";
+		String message = String.format(format, winnerColor.toString().toUpperCase());
+		JOptionPane.showMessageDialog(this, message);
 		System.exit(0);
 	}
 	
 	public Piece announcePawnPromotion(PieceColor pawnColor)
 	{
 		char firstChar = '\0';
-		String message = "Rook / Bishop / Queen / Knight";
+		String[] options = new String[] { "[Q]ueen", "[R]ook", "[K]night", "[B]ishop" };
+		String message = String.join("  ", options);
 		
 		while (true)
 		{
