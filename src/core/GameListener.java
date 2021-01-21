@@ -179,8 +179,8 @@ public class GameListener
 		{
 			if (pair.getKingPosition().equals(position))
 			{
-				board.setAt(pair.getRookPosition(), pair.getRook());
 				board.setToEmpty(pair.getInitialRookPosition());
+				board.setAt(pair.getRookPosition(), pair.getRook());
 			}
 		}
 	}

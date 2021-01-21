@@ -167,14 +167,18 @@ public class King extends BasePiece
 				board.setAt(rookCastlePosition, rook);
 				
 				Position kingCastlePosition = rookCastlePosition.moveBy(kingDirection);
-				board.setAt(kingCastlePosition, this);
 				
-				if (!isChecked(kingCastlePosition, board))
+				if (board.isEmptyAt(kingCastlePosition))
 				{
-					castlePairs.add(new CastlePair(rook, rookCastlePosition, kingCastlePosition, new Position(row, col)));
+					board.setAt(kingCastlePosition, this);
+					
+					if (!isChecked(kingCastlePosition, board))
+					{
+						castlePairs.add(new CastlePair(rook, rookCastlePosition, kingCastlePosition, new Position(row, col)));
+					}
+					
+					board.setToEmpty(kingCastlePosition);
 				}
-				
-				board.setToEmpty(kingCastlePosition);
 			}
 			
 			board.setToEmpty(rookCastlePosition);
