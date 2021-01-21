@@ -2,6 +2,9 @@ package models.pieces;
 
 import common.Position;
 import enums.PieceColor;
+
+import java.util.ArrayList;
+
 import common.OffsetPair;
 import models.boards.Board;
 
@@ -102,5 +105,20 @@ public class King extends BasePiece
 		}
 		
 		return true;
+	}
+	
+	public Iterable<Position> getCastlePositions(Position kingPosition, Board board)
+	{
+		ArrayList<Position> castlePositions = new ArrayList<>();
+		
+		for (int i = 0; i < board.getHeight(); i++)
+		{
+			for (int j = 0; j < board.getWidth(); j++)
+			{
+				
+			}
+		}
+		
+		return castlePositions;
 	}
 }

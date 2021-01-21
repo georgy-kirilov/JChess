@@ -11,7 +11,11 @@ import common.Position;
 import enums.PieceColor;
 import core.GameListener;
 import models.boards.Board;
+import models.pieces.Bishop;
+import models.pieces.Knight;
 import models.pieces.Piece;
+import models.pieces.Queen;
+import models.pieces.Rook;
 import views.gui.drawers.PieceDrawer;
 
 @SuppressWarnings("serial")
@@ -97,6 +101,34 @@ public class BoardView extends JPanel implements CellViewListener
 	{	
 		JOptionPane.showMessageDialog(this, "GAME OVER - " + winnerColor + " WINS!");
 		System.exit(0);
+	}
+	
+	public Piece announcePawnPromotion(PieceColor pawnColor)
+	{
+		char firstChar = '\0';
+		String message = "Rook / Bishop / Queen / Knight";
+		
+		while (true)
+		{
+			String input = JOptionPane.showInputDialog(this, message);
+			
+			if (!Helper.isNullOrEmpty(input))
+			{
+				firstChar = input.charAt(0);
+				
+				if (Helper.isBishopChar(firstChar))
+					return new Bishop(pawnColor);
+				
+				if (Helper.isKnightChar(firstChar))
+					return new Knight(pawnColor);
+				
+				if (Helper.isQueenChar(firstChar))
+					return new Queen(pawnColor);
+				
+				if (Helper.isRookChar(firstChar))
+					return new Rook(pawnColor);
+			}
+		}
 	}
 	
 	public void redraw()

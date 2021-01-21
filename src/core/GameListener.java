@@ -1,9 +1,6 @@
 package core;
 
 import java.util.HashMap;
-
-import javax.swing.JOptionPane;
-
 import java.util.ArrayList;
 
 import common.Helper;
@@ -67,34 +64,10 @@ public class GameListener
 		
 		piece.move();
 		
-		//TODO: Change the input model
-		
 		if (piece.getClass().equals(Pawn.class) && ((Pawn)piece).canBePromoted(to))
 		{
 			boardView.redraw();
-			
-			String input = JOptionPane.showInputDialog(boardView, "Rook / Bishop / Queen / Knight");
-			Piece newPiece = null;
-			
-			switch (input.toUpperCase().charAt(0))
-			{
-				case 'K': 
-					newPiece = new Knight(getCurrentPlayerColor());
-					break;
-					
-				case 'Q': 
-					newPiece = new Queen(getCurrentPlayerColor());
-					break;
-				
-				case 'R': 
-					newPiece = new Rook(getCurrentPlayerColor());
-					break;
-				
-				case 'B': 
-					newPiece = new Bishop(getCurrentPlayerColor());
-					break;
-			}
-			
+			Piece newPiece = boardView.announcePawnPromotion(piece.getColor());
 			board.setAt(to, newPiece);
 		}
 		

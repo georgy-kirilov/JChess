@@ -20,9 +20,11 @@ public class CellView extends JPanel
 	private final Color LIGHT_BACKGROUND = new Color(192,192,192);
 	private final Color DARK_HIGHLIGHT = new Color(0, 174, 116);
 	private final Color LIGHT_HIGHLIGHT = new Color(0, 225, 142);
+	private final Color CASTLE_HIGHLIGHT = Color.YELLOW;
 	
 	private Piece piece;
 	private boolean highlighted;
+	private boolean castlable;
 	
 	private final Position position;
 	private final PieceDrawer drawer;
@@ -73,6 +75,11 @@ public class CellView extends JPanel
 		this.highlighted = highlighted; 
 	}
 	
+	public boolean isCastlable()
+	{
+		return castlable;
+	}
+	
 	public Position getPosition()
 	{ 
 		return position; 
@@ -87,7 +94,12 @@ public class CellView extends JPanel
 		Color color = isBackgroundDark ? DARK_BACKGROUND : LIGHT_BACKGROUND;
 		
 		if (isHighlighted())
+		{			
 			color = isBackgroundDark ? DARK_HIGHLIGHT : LIGHT_HIGHLIGHT;
+			
+			if (isCastlable())
+				color = CASTLE_HIGHLIGHT;
+		}
 		
 		setBackground(color);
 		drawer.drawPiece(g, piece, getWidth(), getHeight());
@@ -101,9 +113,9 @@ public class CellView extends JPanel
 			public void mouseClicked(MouseEvent e)
 			{
 				if (!cell.isHighlighted())
-					cell.listener.onInitialClick(cell);
+					cell.listener.onInitialClick(cell);					
 				else
-					cell.listener.onConfirmationClick(cell);
+					cell.listener.onConfirmationClick(cell);					
 			}
 		});
 	}
