@@ -65,7 +65,7 @@ public class King extends BasePiece
 	
 	public boolean isCheckmated(Position kingPosition, Board board)
 	{		
-		if (!this.isChecked(kingPosition, board))
+		if (!isChecked(kingPosition, board))
 			return false;
 		
 		for (int i = 0; i < board.getHeight(); i++)

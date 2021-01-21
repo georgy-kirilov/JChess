@@ -6,12 +6,12 @@ import java.awt.Rectangle;
 import javax.swing.JPanel;
 import javax.swing.JOptionPane;
 
+import common.Helper;
 import common.Position;
-import core.GameListener;
 import enums.PieceColor;
+import core.GameListener;
 import models.boards.Board;
 import models.pieces.Piece;
-import validation.ThrowHelper;
 import views.gui.drawers.PieceDrawer;
 
 @SuppressWarnings("serial")
@@ -26,7 +26,7 @@ public class BoardView extends JPanel implements CellViewListener
 	private final GameListener listener;
 	private Position lastSelectedPosition;
 	
-	public BoardView(Rectangle bounds, Board board, PieceDrawer drawer, GameListener listener)
+	public BoardView(Rectangle bounds, Board board, PieceDrawer drawer)
 	{
 		cellWidth = bounds.width / board.getWidth();
 		cellHeight = bounds.height / board.getHeight();
@@ -34,14 +34,13 @@ public class BoardView extends JPanel implements CellViewListener
 		setBounds(bounds);
 		setLayout(null);
 		
-		ThrowHelper.throwIfNull(board);
+		Helper.throwIfNull(board);
 		this.board = board;
 		
-		ThrowHelper.throwIfNull(drawer);
+		Helper.throwIfNull(drawer);
 		this.drawer = drawer;
-		
-		ThrowHelper.throwIfNull(listener);
-		this.listener = listener;
+
+		listener = new GameListener(board, this);
 		
 		cells = new CellView[board.getWidth()][board.getHeight()];
 		initialize();

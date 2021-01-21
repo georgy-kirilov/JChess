@@ -10,8 +10,8 @@ import java.awt.event.MouseAdapter;
 import javax.swing.JPanel;
 
 import common.Position;
+import common.Helper;
 import models.pieces.Piece;
-import validation.ThrowHelper;
 import views.gui.drawers.PieceDrawer;
 
 @SuppressWarnings("serial")
@@ -44,13 +44,13 @@ public class CellView extends JPanel
 		
 		this.isBackgroundDark = isBackgroundDark;
 
-		ThrowHelper.throwIfNull(drawer);
+		Helper.throwIfNull(drawer);
 		this.drawer = drawer;
 		
-		ThrowHelper.throwIfNull(listener);
+		Helper.throwIfNull(listener);
 		this.listener = listener;
 		
-		ThrowHelper.throwIfNull(position);
+		Helper.throwIfNull(position);
 		this.position = position;
 		
 		attachClickListener(this);

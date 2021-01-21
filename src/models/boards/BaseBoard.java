@@ -1,8 +1,8 @@
 package models.boards;
 
+import common.Helper;
 import common.Position;
 import models.pieces.Piece;
-import validation.ThrowHelper;
 
 public abstract class BaseBoard implements Board
 {	
@@ -18,8 +18,8 @@ public abstract class BaseBoard implements Board
 	
 	public BaseBoard(int height, int width)
 	{
-		ThrowHelper.throwIfOutOfRange(MIN_HEIGHT, MAX_HEIGHT, height);
-		ThrowHelper.throwIfOutOfRange(MIN_WIDTH, MAX_WIDTH, width);
+		Helper.throwIfOutOfRange(MIN_HEIGHT, MAX_HEIGHT, height);
+		Helper.throwIfOutOfRange(MIN_WIDTH, MAX_WIDTH, width);
 	
 		this.height = height;
 		this.width = width;
@@ -98,8 +98,8 @@ public abstract class BaseBoard implements Board
 		int maxRows = this.getHeight() - 1;
 		int maxColumns = this.getWidth() - 1;
 		
-		return ThrowHelper.isInRange(0, maxRows, position.getRow()) && 
-				ThrowHelper.isInRange(0, maxColumns, position.getColumn());
+		return Helper.isInRange(0, maxRows, position.getRow()) && 
+				Helper.isInRange(0, maxColumns, position.getColumn());
 	}
 	
 	@Override

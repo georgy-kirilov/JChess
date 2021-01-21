@@ -1,6 +1,6 @@
-package validation;
+package common;
 
-public class ThrowHelper
+public class Helper
 {
 	public static void throwIfNull(Object obj)
 	{

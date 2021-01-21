@@ -2,11 +2,11 @@ package models.pieces;
 
 import java.util.ArrayList;
 
+import common.Helper;
 import common.Position;
 import enums.PieceColor;
 import common.OffsetPair;
 import models.boards.Board;
-import validation.ThrowHelper;
 
 public abstract class BasePiece implements Piece
 {
@@ -15,7 +15,7 @@ public abstract class BasePiece implements Piece
 	
 	public BasePiece(PieceColor color)
 	{	
-		ThrowHelper.throwIfNull(color);
+		Helper.throwIfNull(color);
 		this.color = color;
 		moved = false;
 	}
