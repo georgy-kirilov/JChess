@@ -1,7 +1,7 @@
 package views.gui;
 
 import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.GridLayout;
 
 import javax.swing.JPanel;
 import javax.swing.JOptionPane;
@@ -16,23 +16,16 @@ import views.gui.drawers.PieceDrawer;
 
 @SuppressWarnings("serial")
 public class BoardView extends JPanel implements CellViewListener
-{
-	private final int cellWidth;
-	private final int cellHeight;
-	
+{	
 	private final Board board;
 	private final CellView[][] cells;
 	private final PieceDrawer drawer;
 	private final GameListener listener;
 	private Position lastSelectedPosition;
 	
-	public BoardView(Rectangle bounds, Board board, PieceDrawer drawer)
+	public BoardView(Board board, PieceDrawer drawer)
 	{
-		cellWidth = bounds.width / board.getWidth();
-		cellHeight = bounds.height / board.getHeight();
-		
-		setBounds(bounds);
-		setLayout(null);
+		setLayout(new GridLayout(board.getWidth(), board.getHeight()));
 		
 		Helper.throwIfNull(board);
 		this.board = board;
@@ -59,6 +52,8 @@ public class BoardView extends JPanel implements CellViewListener
 				add(cells[i][j]);
 			}
 		}
+		
+		revalidate();
 	}
 	
 	@Override
@@ -113,21 +108,13 @@ public class BoardView extends JPanel implements CellViewListener
 	private void initialize()
 	{
 		for (int row = 0; row < board.getHeight(); row++)
-		{
-			int y = row * cellHeight;
-			
+		{	
 			for (int col = 0; col < board.getWidth(); col++)
-			{
-				int x = col * cellWidth;
-				
-				Rectangle bounds = new Rectangle(x, y, cellWidth, cellHeight);
-				
+			{	
 				Piece piece = board.getAt(row, col);
-
 				boolean isCellDark = !(row % 2 == 0 && col % 2 == 0 || row % 2 != 0 && col % 2 != 0);
 				
-				cells[row][col] = new CellView(
-						bounds, piece, isCellDark, 
+				cells[row][col] = new CellView(piece, isCellDark, 
 						drawer, this, new Position(row, col));
 			}
 		}

@@ -2,15 +2,14 @@ package views.gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 
 import javax.swing.JPanel;
 
-import common.Position;
 import common.Helper;
+import common.Position;
 import models.pieces.Piece;
 import views.gui.drawers.PieceDrawer;
 
@@ -31,14 +30,12 @@ public class CellView extends JPanel
 	private final boolean isBackgroundDark;
 	
 	public CellView(
-			Rectangle bounds, 
 			Piece piece, 
 			boolean isBackgroundDark, 
 			PieceDrawer drawer, 
 			CellViewListener listener, 
 			Position position)
 	{
-		setBounds(bounds);
 		setPiece(piece);
 		setHighlighted(false);
 		

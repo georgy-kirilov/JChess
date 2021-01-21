@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 
 import models.pieces.*;
 import enums.PieceColor;
+import models.boards.Board;
 
 public class TextPieceDrawer implements PieceDrawer 
 {
@@ -20,25 +21,23 @@ public class TextPieceDrawer implements PieceDrawer
 		piecesAndSymbols.put(Rook.class, "♜");
 		piecesAndSymbols.put(Queen.class, "♛");
 		piecesAndSymbols.put(King.class, "♚");
+		piecesAndSymbols.put(null, "");
 	}
 	
 	@Override
 	public void drawPiece(Graphics2D g, Piece piece, int cellWidth, int cellHeight) 
 	{
-		String symbol = "";
+		Class<?> type = piece != Board.EMPTY_CELL ? piece.getClass() : null;
+		String symbol = piecesAndSymbols.get(type);		
 		
-		if (piece != null)
-			symbol = piecesAndSymbols.get(piece.getClass());
+		Color foregroundColor = piece != Board.EMPTY_CELL && piece.getColor() == PieceColor.WHITE 
+				? Color.WHITE : Color.BLACK;
 		
-		Color foregroundColor = Color.BLACK;
-		
-		if (piece != null && piece.getColor() == PieceColor.WHITE) 
-			foregroundColor = Color.WHITE;
-		
-		int size = cellWidth / 4 * 3;
+		int horizontalSize = cellWidth / 4 * 3;
+		int verticalSize = cellHeight / 5;
 	
-		g.setFont(new Font("Serif", Font.PLAIN, size));
+		g.setFont(new Font("Serif", Font.PLAIN, horizontalSize));
 		g.setColor(foregroundColor);
-		g.drawString(symbol, cellWidth / 2 - size / 2, cellHeight - size / 3);
+		g.drawString(symbol, cellWidth / 2 - horizontalSize / 2, cellHeight - verticalSize);
 	}
 }
