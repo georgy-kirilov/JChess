@@ -2,6 +2,9 @@ package models.pieces;
 
 import common.Position;
 import enums.PieceColor;
+
+import java.util.Collection;
+
 import common.OffsetPair;
 import models.boards.Board;
 
@@ -13,7 +16,7 @@ public class Knight extends BasePiece
 	}
 
 	@Override
-	public Iterable<Position> getReachablePositions(Position currentPosition, Board board)
+	public Collection<Position> getReachablePositions(Position currentPosition, Board board)
 	{
 		OffsetPair[] offsetPairs = new OffsetPair[]
 		{
@@ -27,6 +30,6 @@ public class Knight extends BasePiece
 			new OffsetPair(1, 2),
 		};
 		
-		return this.getReachableSinglePositions(currentPosition, board, offsetPairs);
+		return getReachableSinglePositions(currentPosition, board, offsetPairs);
 	}
 }

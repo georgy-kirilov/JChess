@@ -1,6 +1,7 @@
 package models.pieces;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import common.Position;
 import enums.PieceColor;
@@ -15,7 +16,7 @@ public class Pawn extends BasePiece
 	}
 
 	@Override
-	public Iterable<Position> getReachablePositions(Position currentPosition, Board board)
+	public Collection<Position> getReachablePositions(Position currentPosition, Board board)
 	{	
 		ArrayList<Position> positions = new ArrayList<>();
 		

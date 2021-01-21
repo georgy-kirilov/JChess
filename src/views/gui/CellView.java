@@ -80,6 +80,11 @@ public class CellView extends JPanel
 		return castlable;
 	}
 	
+	public void setCastlable(boolean castlable)
+	{
+		this.castlable = castlable;
+	}
+	
 	public Position getPosition()
 	{ 
 		return position; 

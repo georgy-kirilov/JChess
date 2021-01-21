@@ -1,6 +1,8 @@
 package models.pieces;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 import common.Helper;
 import common.Position;
@@ -46,9 +48,7 @@ public abstract class BasePiece implements Piece
 		return board.isPositionInside(position) && board.isEmptyAt(position);
 	}
 	
-	protected Iterable<Position> getReachableConsequtivePositions(
-			Position currentPosition, 
-			Board board, 
+	protected Collection<Position> getReachableConsequtivePositions(Position currentPosition, Board board, 
 			OffsetPair[] offsetPairs)
 	{
 		ArrayList<Position> positions = new ArrayList<>();
@@ -78,9 +78,7 @@ public abstract class BasePiece implements Piece
 		return positions;
 	}
 	
-	protected Iterable<Position> getReachableSinglePositions(
-			Position currentPosition, 
-			Board board, 
+	protected Collection<Position> getReachableSinglePositions(Position currentPosition, Board board, 
 			OffsetPair[] offsetPairs)
 	{
 		ArrayList<Position> positions = new ArrayList<>();
@@ -99,5 +97,5 @@ public abstract class BasePiece implements Piece
 		return positions;
 	}
 	
-	public abstract Iterable<Position> getReachablePositions(Position currentPosition, Board board);
+	public abstract Collection<Position> getReachablePositions(Position currentPosition, Board board);
 }

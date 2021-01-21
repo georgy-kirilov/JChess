@@ -2,7 +2,9 @@ package core;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Collection;
 
+import common.CastlePair;
 import common.Helper;
 import models.pieces.*;
 import common.Position;
@@ -12,7 +14,7 @@ import views.gui.BoardView;
 
 public class GameListener
 {	
-	private final HashMap<Piece, Iterable<Position>> piecesAndPositions;
+	private final HashMap<Piece, Collection<Position>> piecesAndPositions;
 	
 	private boolean gameOver;
 	private final Board board;
@@ -34,11 +36,26 @@ public class GameListener
 		gameOver = false;
 	}
 	
-	public Iterable<Position> onFromPositionSelected(Position from)
+	public Collection<Position> onFromPositionSelected(Position from)
 	{
-		return getReachablePositions(from);
+		Collection<Position> reachablePositions = getReachablePositions(from);
+		
+		if (getKingPosition().equals(from))
+		{
+			ArrayList<Position> castlePositions = new ArrayList<>();
+			
+			for (CastlePair pair : getKing().getCastlePairs(getKingPosition(), board))
+			{
+				castlePositions.add(pair.getKingPosition());				
+			}
+			
+			reachablePositions.addAll(castlePositions);
+			boardView.makeCellsCastlable(castlePositions);
+		}
+		
+		return reachablePositions;
 	}
-
+	
 	public void onToPositionSelected(Position from, Position to)
 	{
 		if (isGameOver())
@@ -57,6 +74,11 @@ public class GameListener
 		
 		if (!positionValid)
 			throw new IllegalArgumentException("'To' position is not reachable");
+		
+		if (isCastlePosition(to))
+		{
+			performCastle(to);
+		}
 		
 		Piece piece = board.getAt(from);
 		board.setToEmpty(from);
@@ -119,7 +141,7 @@ public class GameListener
 		throw new RuntimeException("Cannot obtain winner color because the game is not over");
 	}
 	
-	public Iterable<Position> getReachablePositions(Position piecePosition)
+	public Collection<Position> getReachablePositions(Position piecePosition)
 	{	
 		ArrayList<Position> reachablePositions = new ArrayList<>();
 		Piece piece = board.getAt(piecePosition);
@@ -149,6 +171,27 @@ public class GameListener
 		
 		piecesAndPositions.put(piece, reachablePositions);
 		return reachablePositions;
+	}
+	
+	private void performCastle(Position position)
+	{
+		for (CastlePair pair : getKing().getCastlePairs(getKingPosition(), board))
+		{
+			if (pair.getKingPosition().equals(position))
+			{
+				board.setAt(pair.getRookPosition(), pair.getRook());
+				board.setToEmpty(pair.getInitialRookPosition());
+			}
+		}
+	}
+	
+	private boolean isCastlePosition(Position position)
+	{
+		for (CastlePair pair : getKing().getCastlePairs(getKingPosition(), board))
+			if (pair.getKingPosition().equals(position))
+				return true;
+		
+		return false;
 	}
 	
 	private King getKing()

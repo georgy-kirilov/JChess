@@ -1,5 +1,7 @@
 package models.pieces;
 
+import java.util.Collection;
+
 import common.Position;
 import enums.PieceColor;
 import models.boards.Board;
@@ -16,5 +18,5 @@ public interface Piece
 	
 	boolean canMoveFreelyTo(Position position, Board board);
 	
-	Iterable<Position> getReachablePositions(Position currentPosition, Board board);
+	Collection<Position> getReachablePositions(Position currentPosition, Board board);
 }

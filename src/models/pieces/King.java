@@ -2,18 +2,23 @@ package models.pieces;
 
 import common.Position;
 import enums.PieceColor;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import common.CastlePair;
 import common.OffsetPair;
 import models.boards.Board;
 
 public class King extends BasePiece
-{
+{	
 	public King(PieceColor color)
 	{
 		super(color);
 	}
 
 	@Override
-	public Iterable<Position> getReachablePositions(Position currentPosition, Board board)
+	public Collection<Position> getReachablePositions(Position currentPosition, Board board)
 	{
 		OffsetPair[] offsetPairs = new OffsetPair[]
 		{
@@ -65,8 +70,7 @@ public class King extends BasePiece
 	
 	public boolean isCheckmated(Position kingPosition, Board board)
 	{		
-		if (!isChecked(kingPosition, board))
-			return false;
+		if (!isChecked(kingPosition, board)) return false;
 		
 		for (int i = 0; i < board.getHeight(); i++)
 		{
@@ -104,9 +108,80 @@ public class King extends BasePiece
 		return true;
 	}
 	
-	public Iterable<Position> getCastlePositions(Position kingPosition, Board board)
-	{
-		//TODO: Implement getCastlePositions method
-		throw new UnsupportedOperationException();
+	public Collection<CastlePair> getCastlePairs(Position kingPosition, Board board)
+	{	
+		ArrayList<CastlePair> castlePairs = new ArrayList<>();
+		
+		if (isMoved())
+			return castlePairs;
+		
+		int row = board.getHeight() - 1;
+		
+		for (int col = 0; col < board.getWidth(); col++)
+		{
+			Piece piece = board.getAt(row, col);
+			
+			boolean rookFound = !board.isEmptyAt(row, col) && piece.getColor() == getColor() 
+					&& piece.getClass().equals(Rook.class) && !piece.isMoved();
+			
+			if (!rookFound) 
+				continue;				
+			
+			Rook rook = (Rook)piece;
+			
+			boolean rookLeftFromKing = col < kingPosition.getColumn();
+			
+			OffsetPair rookDirection = rookLeftFromKing ? OffsetPair.RIGHT : OffsetPair.LEFT;
+			
+			boolean allCellsFree = true;
+			
+			Position rookPosition = new Position(row, col);
+			
+			while (true)
+			{
+				rookPosition = rookPosition.moveBy(rookDirection);
+				
+				if (!board.isEmptyAt(rookPosition))
+				{
+					if (!rookPosition.equals(kingPosition))
+					{
+						allCellsFree = false;						
+					}
+					
+					break;
+				}
+			}
+			
+			if (!allCellsFree)
+				continue;
+			
+			OffsetPair kingDirection = rookLeftFromKing ? OffsetPair.LEFT : OffsetPair.RIGHT;
+			Position rookCastlePosition = kingPosition.moveBy(kingDirection);
+			
+			board.setToEmpty(kingPosition);
+			board.setAt(rookCastlePosition, this);
+			
+			if (!isChecked(rookCastlePosition, board))
+			{
+				board.setToEmpty(row, col);
+				board.setAt(rookCastlePosition, rook);
+				
+				Position kingCastlePosition = rookCastlePosition.moveBy(kingDirection);
+				board.setAt(kingCastlePosition, this);
+				
+				if (!isChecked(kingCastlePosition, board))
+				{
+					castlePairs.add(new CastlePair(rook, rookCastlePosition, kingCastlePosition, new Position(row, col)));
+				}
+				
+				board.setToEmpty(kingCastlePosition);
+			}
+			
+			board.setToEmpty(rookCastlePosition);
+			board.setAt(kingPosition, this);
+			board.setAt(row, col, rook);
+		}
+		
+		return castlePairs;
 	}
 }

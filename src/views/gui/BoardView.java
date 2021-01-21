@@ -2,6 +2,7 @@ package views.gui;
 
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.util.Collection;
 
 import javax.swing.JPanel;
 import javax.swing.JOptionPane;
@@ -71,7 +72,7 @@ public class BoardView extends JPanel implements CellViewListener
 		}
 		else
 		{
-			Iterable<Position> reachablePositions = 
+			Collection<Position> reachablePositions = 
 					listener.onFromPositionSelected(cell.getPosition());
 		
 			for (Position position : reachablePositions)
@@ -92,9 +93,17 @@ public class BoardView extends JPanel implements CellViewListener
 		lastSelectedPosition = null;
 	}
 	
+	public void makeCellsCastlable(Collection<Position> positions)
+	{
+		for (Position position : positions)
+		{
+			getAt(position).setCastlable(true);
+		}
+	}
+	
 	public void announceCheck()
 	{
-		JOptionPane.showMessageDialog(this, "CHECKED");
+		JOptionPane.showMessageDialog(this, "CHECK");
 	}
 	
 	public void announceGameOver(PieceColor winnerColor)
@@ -158,8 +167,13 @@ public class BoardView extends JPanel implements CellViewListener
 	private void unhighlightAllCells()
 	{
 		for (CellView[] cellRow : cells)
+		{
 			for (CellView cell : cellRow)
+			{
 				cell.setHighlighted(false);
+				cell.setCastlable(false);
+			}		
+		}
 	}
 	
 	private CellView getAt(Position position)
