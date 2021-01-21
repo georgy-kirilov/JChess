@@ -3,11 +3,13 @@ package tests;
 import java.awt.Rectangle;
 
 import core.GameEngine;
-import models.boards.Board;
-import models.boards.StandardBoard;
+
 import views.gui.BoardView;
 import views.gui.GameFrame;
 import views.gui.drawers.TextPieceDrawer;
+
+import models.boards.Board;
+import models.boards.StandardBoard;
 
 public class Startup
 {
