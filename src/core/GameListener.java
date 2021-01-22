@@ -74,15 +74,17 @@ public class GameListener
 		
 		if (!positionValid)
 			throw new IllegalArgumentException("'To' position is not reachable");
-		
-		Piece piece = board.getAt(from);
-		board.setToEmpty(from);
-		board.setAt(to, piece);
 	
+		Piece piece = board.getAt(from);
+		
 		if (piece.getClass().equals(King.class) && isCastlePosition(to))
 		{
 			performCastle(to);
 		}
+		
+		piece = board.getAt(from);
+		board.setToEmpty(from);
+		board.setAt(to, piece);
 		
 		piece.move();
 		
