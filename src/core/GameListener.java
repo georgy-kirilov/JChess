@@ -79,7 +79,7 @@ public class GameListener
 		board.setToEmpty(from);
 		board.setAt(to, piece);
 	
-		if (isCastlePosition(to))
+		if (piece.getClass().equals(King.class) && isCastlePosition(to))
 		{
 			performCastle(to);
 		}
