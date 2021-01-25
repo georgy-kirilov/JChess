@@ -7,32 +7,31 @@ import java.util.Collection;
 import common.Castle;
 import common.Helper;
 import common.Position;
+import common.OffsetPair;
 
 import models.pieces.*;
 import models.boards.Board;
 
 import enums.PieceColor;
-import views.gui.BoardView;
 
 public class GameListener
 {	
 	private final HashMap<Piece, Collection<Position>> piecesAndPositions;
 	
-	private boolean gameOver;
 	private final Board board;
-	private final BoardView boardView;
-	
+	private final GameAnnouncer gameAnnouncer;	
+	private boolean gameOver;
 	private PieceColor currentPlayerColor;
 	
-	public GameListener(Board board, BoardView boardView)
+	public GameListener(Board board, GameAnnouncer gameAnnouncer)
 	{	
 		piecesAndPositions = new HashMap<>();
 		
 		Helper.throwIfNull(board);
 		this.board = board;
 		
-		Helper.throwIfNull(boardView);
-		this.boardView = boardView;
+		Helper.throwIfNull(gameAnnouncer);
+		this.gameAnnouncer = gameAnnouncer;
 		
 		currentPlayerColor = PieceColor.WHITE;
 		gameOver = false;
@@ -44,15 +43,15 @@ public class GameListener
 		
 		if (getKingPosition().equals(from))
 		{
-			ArrayList<Position> castlePositions = new ArrayList<>();
+			Collection<Position> castlingPositions = new ArrayList<>();
 			
 			for (Castle castle : getKing().getPossibleCastles(getKingPosition(), board))
 			{
-				castlePositions.add(castle.getNewKingPosition());				
+				castlingPositions.add(castle.getNewKingPosition());				
 			}
 			
-			reachablePositions.addAll(castlePositions);
-			boardView.announceCastlePositions(castlePositions);
+			reachablePositions.addAll(castlingPositions);
+			gameAnnouncer.announceCastlingPositions(castlingPositions);
 		}
 		
 		return reachablePositions;
@@ -96,8 +95,8 @@ public class GameListener
 		
 		if (piece.getClass().equals(Pawn.class) && ((Pawn)piece).canBePromoted(to))
 		{
-			boardView.redraw();
-			Piece newPiece = boardView.announcePawnPromotion(piece.getColor());
+			gameAnnouncer.redrawBoard();
+			Piece newPiece = gameAnnouncer.announcePawnPromotion(piece.getColor());
 			board.setAt(to, newPiece);
 		}
 		
@@ -105,18 +104,18 @@ public class GameListener
 		board.rotate();
 		piecesAndPositions.clear();
 		
-		boardView.redraw();
+		gameAnnouncer.redrawBoard();
 		
 		if (getKing().isChecked(getKingPosition(), board))
 		{
 			if (getKing().isCheckmated(getKingPosition(), board))
 			{
 				gameOver = true;
-				boardView.announceGameOver(getWinnerColor());
+				gameAnnouncer.announceGameOver(getWinnerColor());
 				return;
 			}
 			
-			boardView.announceCheck();
+			gameAnnouncer.announceCheck();
 		}
 	}
 	
@@ -154,6 +153,7 @@ public class GameListener
 	public Collection<Position> getReachablePositions(Position piecePosition)
 	{	
 		ArrayList<Position> reachablePositions = new ArrayList<>();
+		
 		Piece piece = board.getAt(piecePosition);
 		
 		if (!board.isEmptyAt(piecePosition) && piece.getColor() == getCurrentPlayerColor())

@@ -8,7 +8,7 @@ import java.awt.BorderLayout;
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame
 {
-	public GameFrame(Rectangle bounds, BoardView boardView)
+	public GameFrame(Rectangle bounds, BoardGuiView boardView)
 	{
 		setBounds(bounds);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

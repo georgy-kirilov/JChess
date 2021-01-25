@@ -13,12 +13,14 @@ import common.Position;
 import models.pieces.*;
 import models.boards.Board;
 
-import enums.PieceColor;
 import core.GameListener;
+import core.GameAnnouncer;
+
+import enums.PieceColor;
 import views.gui.drawers.PieceDrawer;
 
 @SuppressWarnings("serial")
-public class BoardView extends JPanel implements CellViewListener
+public class BoardGuiView extends JPanel implements CellViewListener, GameAnnouncer
 {	
 	private final Board board;
 	private final CellView[][] cells;
@@ -26,7 +28,7 @@ public class BoardView extends JPanel implements CellViewListener
 	private final GameListener gameListener;
 	private Position lastSelectedPosition;
 	
-	public BoardView(Board board, PieceDrawer pieceDrawer)
+	public BoardGuiView(Board board, PieceDrawer pieceDrawer)
 	{
 		setLayout(new GridLayout(board.getWidth(), board.getHeight()));
 		
@@ -91,19 +93,13 @@ public class BoardView extends JPanel implements CellViewListener
 		lastSelectedPosition = null;
 	}
 	
-	public void announceCastlePositions(Collection<Position> positions)
-	{
-		for (Position position : positions)
-		{
-			getAt(position).setCastlable(true);
-		}
-	}
-	
+	@Override
 	public void announceCheck()
 	{
 		JOptionPane.showMessageDialog(this, "CHECK");
 	}
 	
+	@Override
 	public void announceGameOver(PieceColor winnerColor)
 	{	
 		String format = "GAME OVER - %s WINS!";
@@ -112,11 +108,20 @@ public class BoardView extends JPanel implements CellViewListener
 		System.exit(0);
 	}
 	
+	@Override
 	public Piece announcePawnPromotion(PieceColor pawnColor)
-	{
-		char firstChar = '\0';
-		String[] options = new String[] { "[Q]ueen", "[R]ook", "[K]night", "[B]ishop" };
-		String message = String.join("  ", options);
+	{		
+		String separator = "  ";
+		
+		String[] options = new String[] 
+		{ 
+			"[Q]ueen", 
+			"[R]ook", 
+			"[K]night", 
+			"[B]ishop",
+		};
+		
+		String message = String.join(separator, options);
 		
 		while (true)
 		{
@@ -124,7 +129,7 @@ public class BoardView extends JPanel implements CellViewListener
 			
 			if (!Helper.isNullOrEmpty(input))
 			{
-				firstChar = input.charAt(0);
+				char firstChar = input.charAt(0);
 				
 				if (Helper.isBishopChar(firstChar))
 				{
@@ -149,7 +154,17 @@ public class BoardView extends JPanel implements CellViewListener
 		}
 	}
 	
-	public void redraw()
+	@Override
+	public void announceCastlingPositions(Collection<Position> positions)
+	{
+		for (Position position : positions)
+		{
+			getAt(position).setCastlable(true);
+		}
+	}
+	
+	@Override
+	public void redrawBoard()
 	{
 		unhighlightAllCells();
 		repaint();
