@@ -7,6 +7,7 @@ import java.util.Collection;
 import common.Castle;
 import common.Helper;
 import common.Position;
+import common.OffsetPair;
 
 import models.pieces.*;
 import models.boards.Board;
@@ -15,7 +16,7 @@ import enums.PieceColor;
 
 public class GameListener
 {	
-	private final String CANNOT_OBTAIN_COLOR_FORMAT = "Cannot obtain %s color because the game isn't over";
+	private final String CANNOT_OBTAIN_COLOR_MESSAGE = "Cannot obtain %s color because the game isn't over";
 	
 	private final HashMap<Piece, Collection<Position>> piecesAndPositions;
 	private Collection<Castle> possibleCastles;
@@ -25,6 +26,8 @@ public class GameListener
 	
 	private boolean gameOver;
 	private PieceColor currentPlayerColor;
+	private Position enPassantCapturePosition = null;
+	private Position enPassantPawnPosition = null;
 	
 	public GameListener(Board board, GameAnnouncer gameAnnouncer)
 	{	
@@ -49,6 +52,13 @@ public class GameListener
 		{
 			reachablePositions.addAll(getCastlingPositions());
 			gameAnnouncer.announceCastlingPositions(getCastlingPositions());
+		}
+		
+		Piece piece = board.getAt(from);
+		
+		if (canCurrentPlayerPerformEnPassant(piece, from))
+		{
+			reachablePositions.add(enPassantCapturePosition);
 		}
 		
 		return reachablePositions;
@@ -79,7 +89,28 @@ public class GameListener
 	
 		Piece piece = board.getAt(from);
 		
-		if (piece instanceof King && isCastlingPosition(to))
+		System.out.println("King: " + getKingPosition());
+		System.out.println("From: " + from);
+		System.out.println("To: " + to);
+		
+		
+		if (canCurrentPlayerPerformEnPassant(piece, from))
+		{
+			board.setToEmpty(enPassantPawnPosition);
+		}
+		
+		disableEnPassant();
+		
+		boolean canNextPlayerPerformEnPassant = piece instanceof Pawn && !piece.isMoved() && 
+				from.moveBy(OffsetPair.UP).moveBy(OffsetPair.UP).equals(to);
+		
+		if (canNextPlayerPerformEnPassant)
+		{
+			enPassantPawnPosition = to.flipOver(board);
+			enPassantCapturePosition = from.moveBy(OffsetPair.UP).flipOver(board);
+		}
+		
+		if (piece instanceof King && isValidCastlingPosition(to))
 		{
 			performCastling(to);
 		}
@@ -129,7 +160,7 @@ public class GameListener
 			return getCurrentPlayerColor();			
 		}
 		
-		throw new RuntimeException(String.format(CANNOT_OBTAIN_COLOR_FORMAT, "loser"));
+		throw new RuntimeException(String.format(CANNOT_OBTAIN_COLOR_MESSAGE, "loser"));
 	}
 	
 	public PieceColor getWinnerColor()
@@ -139,7 +170,7 @@ public class GameListener
 			return getLoserColor() == PieceColor.WHITE ? PieceColor.BLACK : PieceColor.WHITE;
 		}
 		
-		throw new RuntimeException(String.format(CANNOT_OBTAIN_COLOR_FORMAT, "winner"));
+		throw new RuntimeException(String.format(CANNOT_OBTAIN_COLOR_MESSAGE, "winner"));
 	}
 	
 	public Collection<Position> getReachablePositions(Position piecePosition)
@@ -205,7 +236,7 @@ public class GameListener
 		return castlingPositions;
 	}
 	
-	private boolean isCastlingPosition(Position position)
+	private boolean isValidCastlingPosition(Position position)
 	{
 		for (Castle castle : possibleCastles)
 		{
@@ -243,6 +274,20 @@ public class GameListener
 		}
 		
 		throw new RuntimeException("King not found");
+	}
+	
+	private boolean canCurrentPlayerPerformEnPassant(Piece piece, Position position)
+	{
+		return !board.isEmptyAt(position) && piece instanceof Pawn && 
+				piece.getColor() == getCurrentPlayerColor() &&
+				(position.moveBy(OffsetPair.TOP_LEFT).equals(enPassantCapturePosition) ||
+				position.moveBy(OffsetPair.TOP_RIGHT).equals(enPassantCapturePosition));
+	}
+	
+	private void disableEnPassant()
+	{
+		enPassantPawnPosition = null;
+		enPassantCapturePosition = null;
 	}
 	
 	private void nextPlayer()
