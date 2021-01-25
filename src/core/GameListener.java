@@ -16,7 +16,8 @@ import enums.PieceColor;
 
 public class GameListener
 {	
-	private final String CANNOT_OBTAIN_COLOR_MESSAGE = "Cannot obtain %s color because the game isn't over";
+	private final String CANNOT_OBTAIN_COLOR_MESSAGE = 
+			"Cannot obtain %s color because the game isn't over yet";
 	
 	private final HashMap<Piece, Collection<Position>> piecesAndPositions;
 	private Collection<Castle> possibleCastles;
@@ -46,22 +47,7 @@ public class GameListener
 	
 	public Collection<Position> onFromPositionSelected(Position from)
 	{
-		Collection<Position> reachablePositions = getReachablePositions(from);
-		
-		if (getKingPosition().equals(from))
-		{
-			reachablePositions.addAll(getCastlingPositions());
-			gameAnnouncer.announceCastlingPositions(getCastlingPositions());
-		}
-		
-		Piece piece = board.getAt(from);
-		
-		if (canCurrentPlayerPerformEnPassant(piece, from))
-		{
-			reachablePositions.add(enPassantCapturePosition);
-		}
-		
-		return reachablePositions;
+		return getReachablePositions(from);
 	}
 	
 	public void onToPositionSelected(Position from, Position to)
@@ -196,6 +182,17 @@ public class GameListener
 				
 				board.setAt(position, captured);
 				board.setAt(piecePosition, piece);
+			}
+			
+			if (getKingPosition().equals(piecePosition))
+			{
+				reachablePositions.addAll(getCastlingPositions());
+				gameAnnouncer.announceCastlingPositions(getCastlingPositions());
+			}
+			
+			if (canCurrentPlayerPerformEnPassant(piece, piecePosition))
+			{
+				reachablePositions.add(enPassantCapturePosition);
 			}
 		}
 		
