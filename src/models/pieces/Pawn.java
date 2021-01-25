@@ -29,7 +29,7 @@ public class Pawn extends BasePiece
 			
 			if (!isMoved())
 			{
-				Position twiceUp = currentPosition.moveBy(new OffsetPair(-2, 0));
+				Position twiceUp = currentPosition.moveBy(OffsetPair.UP).moveBy(OffsetPair.UP);
 				
 				if (canMoveFreelyTo(twiceUp, board))
 				{
