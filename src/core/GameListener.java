@@ -44,7 +44,7 @@ public class GameListener
 		{
 			ArrayList<Position> castlePositions = new ArrayList<>();
 			
-			for (Castle pair : getKing().getCastlePairs(getKingPosition(), board))
+			for (Castle pair : getKing().getCastles(getKingPosition(), board))
 			{
 				castlePositions.add(pair.getNewKingPosition());				
 			}
@@ -177,7 +177,7 @@ public class GameListener
 	
 	private void performCastle(Position position)
 	{
-		for (Castle pair : getKing().getCastlePairs(getKingPosition(), board))
+		for (Castle pair : getKing().getCastles(getKingPosition(), board))
 		{
 			if (pair.getNewKingPosition().equals(position))
 			{
@@ -189,7 +189,7 @@ public class GameListener
 	
 	private boolean isCastlePosition(Position position)
 	{
-		for (Castle pair : getKing().getCastlePairs(getKingPosition(), board))
+		for (Castle pair : getKing().getCastles(getKingPosition(), board))
 			if (pair.getNewKingPosition().equals(position))
 				return true;
 		

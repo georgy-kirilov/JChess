@@ -1,13 +1,13 @@
 package models.pieces;
 
-import common.Position;
-import enums.PieceColor;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
 import common.Castle;
+import common.Position;
 import common.OffsetPair;
+
+import enums.PieceColor;
 import models.boards.Board;
 
 public class King extends BasePiece
@@ -119,12 +119,14 @@ public class King extends BasePiece
 		return true;
 	}
 	
-	public Collection<Castle> getCastlePairs(Position kingPosition, Board board)
+	public Collection<Castle> getCastles(Position kingPosition, Board board)
 	{	
-		ArrayList<Castle> castlePairs = new ArrayList<>();
+		ArrayList<Castle> castles = new ArrayList<>();
 		
 		if (isMoved())
-			return castlePairs;
+		{
+			return castles;			
+		}
 		
 		int row = board.getHeight() - 1;
 		
@@ -135,8 +137,10 @@ public class King extends BasePiece
 			boolean rookFound = !board.isEmptyAt(row, col) && piece.getColor() == getColor() 
 					&& piece.getClass().equals(Rook.class) && !piece.isMoved();
 			
-			if (!rookFound) 
-				continue;				
+			if (!rookFound)
+			{
+				continue;								
+			}
 			
 			Rook rook = (Rook)piece;
 			
@@ -144,59 +148,68 @@ public class King extends BasePiece
 			
 			OffsetPair rookDirection = rookLeftFromKing ? OffsetPair.RIGHT : OffsetPair.LEFT;
 			
-			boolean allCellsFree = true;
+			boolean allInsideCellsFree = true;
 			
-			Position rookPosition = new Position(row, col);
+			Position rookOffset = new Position(row, col);
 			
 			while (true)
 			{
-				rookPosition = rookPosition.moveBy(rookDirection);
+				rookOffset = rookOffset.moveBy(rookDirection);
 				
-				if (!board.isEmptyAt(rookPosition))
+				if (!board.isEmptyAt(rookOffset))
 				{
-					if (!rookPosition.equals(kingPosition))
+					if (!rookOffset.equals(kingPosition))
 					{
-						allCellsFree = false;						
+						allInsideCellsFree = false;						
 					}
 					
 					break;
 				}
 			}
 			
-			if (!allCellsFree)
-				continue;
-			
-			OffsetPair kingDirection = rookLeftFromKing ? OffsetPair.LEFT : OffsetPair.RIGHT;
-			Position rookCastlePosition = kingPosition.moveBy(kingDirection);
-			
-			board.setToEmpty(kingPosition);
-			board.setAt(rookCastlePosition, this);
-			
-			if (!isChecked(rookCastlePosition, board))
+			if (!allInsideCellsFree)
 			{
-				board.setToEmpty(row, col);
-				board.setAt(rookCastlePosition, rook);
-				
-				Position kingCastlePosition = rookCastlePosition.moveBy(kingDirection);
-				
-				if (board.isEmptyAt(kingCastlePosition))
-				{
-					board.setAt(kingCastlePosition, this);
-					
-					if (!isChecked(kingCastlePosition, board))
-					{
-						castlePairs.add(new Castle(rook, rookCastlePosition, kingCastlePosition, new Position(row, col)));
-					}
-					
-					board.setToEmpty(kingCastlePosition);
-				}
+				continue;				
 			}
 			
-			board.setToEmpty(rookCastlePosition);
+			OffsetPair kingOffset = rookLeftFromKing ? OffsetPair.LEFT : OffsetPair.RIGHT;
+			Position rookCastlingPosition = kingPosition.moveBy(kingOffset);
+			
+			board.setToEmpty(kingPosition);
+			board.setAt(rookCastlingPosition, this);
+			
+			if (isChecked(rookCastlingPosition, board))
+			{
+				continue;
+			}
+			
+			board.setToEmpty(row, col);
+			board.setAt(rookCastlingPosition, rook);
+			
+			Position kingCastlingPosition = rookCastlingPosition.moveBy(kingOffset);
+			
+			if (board.isEmptyAt(kingCastlingPosition))
+			{
+				board.setAt(kingCastlingPosition, this);
+				
+				if (!isChecked(kingCastlingPosition, board))
+				{
+					Position oldRookPosition = new Position(row, col);
+					
+					Castle castle = new Castle(rook, rookCastlingPosition, 
+							kingCastlingPosition, oldRookPosition);
+					
+					castles.add(castle);
+				}
+				
+				board.setToEmpty(kingCastlingPosition);
+			}
+			
+			board.setToEmpty(rookCastlingPosition);
 			board.setAt(kingPosition, this);
 			board.setAt(row, col, rook);
 		}
 		
-		return castlePairs;
+		return castles;
 	}
 }
