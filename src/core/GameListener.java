@@ -47,6 +47,11 @@ public class GameListener
 	
 	public Collection<Position> onFromPositionSelected(Position from)
 	{
+		if (getKingPosition().equals(from))
+		{
+			gameAnnouncer.announceCastlingPositions(getCastlingPositions());			
+		}
+		
 		return getReachablePositions(from);
 	}
 	
@@ -187,7 +192,6 @@ public class GameListener
 			if (getKingPosition().equals(piecePosition))
 			{
 				reachablePositions.addAll(getCastlingPositions());
-				gameAnnouncer.announceCastlingPositions(getCastlingPositions());
 			}
 			
 			if (canCurrentPlayerPerformEnPassant(piece, piecePosition))
