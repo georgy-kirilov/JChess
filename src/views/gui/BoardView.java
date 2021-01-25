@@ -162,7 +162,8 @@ public class BoardView extends JPanel implements CellViewListener
 			for (int col = 0; col < board.getWidth(); col++)
 			{	
 				Piece piece = board.getAt(row, col);
-				boolean cellBackgroundDark = !(row % 2 == 0 && col % 2 == 0 || row % 2 != 0 && col % 2 != 0);
+				boolean cellBackgroundDark = 
+						!(row % 2 == 0 && col % 2 == 0 || row % 2 != 0 && col % 2 != 0);
 				
 				cells[row][col] = new CellView(
 						piece, cellBackgroundDark, 

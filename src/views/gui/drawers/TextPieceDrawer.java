@@ -2,12 +2,14 @@ package views.gui.drawers;
 
 import java.awt.Font;
 import java.awt.Color;
-import java.util.HashMap;
 import java.awt.Graphics2D;
 
+import java.util.HashMap;
+
 import models.pieces.*;
-import enums.PieceColor;
 import models.boards.Board;
+
+import enums.PieceColor;
 
 public class TextPieceDrawer implements PieceDrawer 
 {
