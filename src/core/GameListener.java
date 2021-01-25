@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import common.CastlePair;
+import common.Castle;
 import common.Helper;
 import models.pieces.*;
 import common.Position;
@@ -44,9 +44,9 @@ public class GameListener
 		{
 			ArrayList<Position> castlePositions = new ArrayList<>();
 			
-			for (CastlePair pair : getKing().getCastlePairs(getKingPosition(), board))
+			for (Castle pair : getKing().getCastlePairs(getKingPosition(), board))
 			{
-				castlePositions.add(pair.getKingPosition());				
+				castlePositions.add(pair.getNewKingPosition());				
 			}
 			
 			reachablePositions.addAll(castlePositions);
@@ -177,20 +177,20 @@ public class GameListener
 	
 	private void performCastle(Position position)
 	{
-		for (CastlePair pair : getKing().getCastlePairs(getKingPosition(), board))
+		for (Castle pair : getKing().getCastlePairs(getKingPosition(), board))
 		{
-			if (pair.getKingPosition().equals(position))
+			if (pair.getNewKingPosition().equals(position))
 			{
-				board.setToEmpty(pair.getInitialRookPosition());
-				board.setAt(pair.getRookPosition(), pair.getRook());
+				board.setToEmpty(pair.getOldRookPosition());
+				board.setAt(pair.getNewRookPosition(), pair.getRook());
 			}
 		}
 	}
 	
 	private boolean isCastlePosition(Position position)
 	{
-		for (CastlePair pair : getKing().getCastlePairs(getKingPosition(), board))
-			if (pair.getKingPosition().equals(position))
+		for (Castle pair : getKing().getCastlePairs(getKingPosition(), board))
+			if (pair.getNewKingPosition().equals(position))
 				return true;
 		
 		return false;

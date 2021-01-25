@@ -6,7 +6,7 @@ import enums.PieceColor;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import common.CastlePair;
+import common.Castle;
 import common.OffsetPair;
 import models.boards.Board;
 
@@ -47,8 +47,12 @@ public class King extends BasePiece
 				Piece piece = board.getAt(i, j);
 				
 				if (board.isEmptyAt(i, j) || piece.getColor() == getColor())
-					continue;
-					
+				{
+					continue;					
+				}
+				
+				// Checks for at least one enemy move which puts the king in check
+				
 				for (Position position : piece.getReachablePositions(new Position(i, j), board))
 				{
 					if (position.equals(flippedKingPosition))
@@ -82,7 +86,7 @@ public class King extends BasePiece
 					continue;					
 				}
 				
-				// Checks whether there's at least one move which doesn't put king in check
+				// Checks for at least one move which doesn't put king in check
 				
 				Collection<Position> positions = piece.getReachablePositions(new Position(i, j), board);
 				
@@ -115,9 +119,9 @@ public class King extends BasePiece
 		return true;
 	}
 	
-	public Collection<CastlePair> getCastlePairs(Position kingPosition, Board board)
+	public Collection<Castle> getCastlePairs(Position kingPosition, Board board)
 	{	
-		ArrayList<CastlePair> castlePairs = new ArrayList<>();
+		ArrayList<Castle> castlePairs = new ArrayList<>();
 		
 		if (isMoved())
 			return castlePairs;
@@ -181,7 +185,7 @@ public class King extends BasePiece
 					
 					if (!isChecked(kingCastlePosition, board))
 					{
-						castlePairs.add(new CastlePair(rook, rookCastlePosition, kingCastlePosition, new Position(row, col)));
+						castlePairs.add(new Castle(rook, rookCastlePosition, kingCastlePosition, new Position(row, col)));
 					}
 					
 					board.setToEmpty(kingCastlePosition);
