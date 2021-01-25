@@ -6,10 +6,12 @@ import java.util.Collection;
 
 import common.Castle;
 import common.Helper;
-import models.pieces.*;
 import common.Position;
-import enums.PieceColor;
+
+import models.pieces.*;
 import models.boards.Board;
+
+import enums.PieceColor;
 import views.gui.BoardView;
 
 public class GameListener
@@ -59,7 +61,9 @@ public class GameListener
 	public void onToPositionSelected(Position from, Position to)
 	{
 		if (isGameOver())
-			throw new RuntimeException("Cannot make moves if the game is over");
+		{
+			throw new RuntimeException("Cannot make moves if the game is over");			
+		}
 		
 		boolean positionValid = false;
 		
@@ -73,7 +77,9 @@ public class GameListener
 		}
 		
 		if (!positionValid)
-			throw new IllegalArgumentException("'To' position is not reachable");
+		{
+			throw new IllegalArgumentException("'To' position is not reachable");			
+		}
 	
 		Piece piece = board.getAt(from);
 		
@@ -127,7 +133,9 @@ public class GameListener
 	public PieceColor getLoserColor()
 	{
 		if (isGameOver()) 
-			return getCurrentPlayerColor();
+		{
+			return getCurrentPlayerColor();			
+		}
 		
 		throw new RuntimeException("Cannot obtain loser color because the game is not over");
 	}
@@ -151,7 +159,9 @@ public class GameListener
 		if (!board.isEmptyAt(piecePosition) && piece.getColor() == getCurrentPlayerColor())
 		{	
 			if (piecesAndPositions.containsKey(piece))
-				return piecesAndPositions.get(piece);
+			{
+				return piecesAndPositions.get(piece);				
+			}
 			
 			Iterable<Position> allPositions = piece.getReachablePositions(piecePosition, board);
 			
@@ -190,8 +200,12 @@ public class GameListener
 	private boolean isCastlePosition(Position position)
 	{
 		for (Castle pair : getKing().getPossibleCastles(getKingPosition(), board))
+		{
 			if (pair.getNewKingPosition().equals(position))
-				return true;
+			{
+				return true;				
+			}
+		}
 		
 		return false;
 	}
@@ -213,8 +227,10 @@ public class GameListener
 						&& piece.getColor() == getCurrentPlayerColor()
 						&& piece.getClass().equals(King.class);
 				
-				if (kingFound) 
-					return new Position(i, j);
+				if (kingFound)
+				{
+					return new Position(i, j);					
+				}
 			}
 		}
 		
