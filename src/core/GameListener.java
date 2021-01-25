@@ -18,6 +18,7 @@ public class GameListener
 	private final String CANNOT_OBTAIN_COLOR_FORMAT = "Cannot obtain %s color because the game isn't over";
 	
 	private final HashMap<Piece, Collection<Position>> piecesAndPositions;
+	private Collection<Castle> possibleCastles;
 	
 	private final Board board;
 	private final GameAnnouncer gameAnnouncer;
@@ -27,8 +28,6 @@ public class GameListener
 	
 	public GameListener(Board board, GameAnnouncer gameAnnouncer)
 	{	
-		piecesAndPositions = new HashMap<>();
-		
 		Helper.throwIfNull(board);
 		this.board = board;
 		
@@ -37,6 +36,9 @@ public class GameListener
 		
 		currentPlayerColor = PieceColor.WHITE;
 		gameOver = false;
+		
+		piecesAndPositions = new HashMap<>();
+		possibleCastles = getKing().getPossibleCastles(getKingPosition(), board);
 	}
 	
 	public Collection<Position> onFromPositionSelected(Position from)
@@ -45,15 +47,8 @@ public class GameListener
 		
 		if (getKingPosition().equals(from))
 		{
-			Collection<Position> castlingPositions = new ArrayList<>();
-			
-			for (Castle castle : getKing().getPossibleCastles(getKingPosition(), board))
-			{
-				castlingPositions.add(castle.getNewKingPosition());				
-			}
-			
-			reachablePositions.addAll(castlingPositions);
-			gameAnnouncer.announceCastlingPositions(castlingPositions);
+			reachablePositions.addAll(getCastlingPositions());
+			gameAnnouncer.announceCastlingPositions(getCastlingPositions());
 		}
 		
 		return reachablePositions;
@@ -79,7 +74,7 @@ public class GameListener
 		
 		if (!positionValid)
 		{
-			throw new IllegalArgumentException("'To' position is not reachable");			
+			throw new IllegalArgumentException("'To' position is not reachable");	
 		}
 	
 		Piece piece = board.getAt(from);
@@ -179,12 +174,13 @@ public class GameListener
 		}
 		
 		piecesAndPositions.put(piece, reachablePositions);
+		
 		return reachablePositions;
 	}
 	
 	private void performCastling(Position position)
 	{
-		for (Castle castle : getKing().getPossibleCastles(getKingPosition(), board))
+		for (Castle castle : possibleCastles)
 		{
 			if (castle.getNewKingPosition().equals(position))
 			{
@@ -197,13 +193,25 @@ public class GameListener
 		throw new IllegalArgumentException("Cannot perform castling");
 	}
 	
+	private Collection<Position> getCastlingPositions()
+	{
+		Collection<Position> castlingPositions = new ArrayList<Position>();
+		
+		for (Castle castle : possibleCastles)
+		{
+			castlingPositions.add(castle.getNewKingPosition());
+		}
+		
+		return castlingPositions;
+	}
+	
 	private boolean isCastlingPosition(Position position)
 	{
-		for (Castle castle : getKing().getPossibleCastles(getKingPosition(), board))
+		for (Castle castle : possibleCastles)
 		{
 			if (castle.getNewKingPosition().equals(position))
 			{
-				return true;				
+				return true;
 			}
 		}
 		
@@ -245,5 +253,6 @@ public class GameListener
 		board.rotate();
 		piecesAndPositions.clear();
 		gameAnnouncer.redrawBoard();
+		possibleCastles = getKing().getPossibleCastles(getKingPosition(), board);
 	}
 }
