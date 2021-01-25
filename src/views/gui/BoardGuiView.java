@@ -127,7 +127,7 @@ public class BoardGuiView extends JPanel implements CellViewListener, GameAnnoun
 		{
 			String input = JOptionPane.showInputDialog(this, message);
 			
-			if (!Helper.isNullOrEmpty(input))
+			if (!Helper.isNullOrEmpty(input) && input.length() == 1)
 			{
 				char firstChar = input.charAt(0);
 				
