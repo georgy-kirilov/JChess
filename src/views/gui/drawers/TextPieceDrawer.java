@@ -30,6 +30,7 @@ public class TextPieceDrawer implements PieceDrawer
 	public void drawPiece(Graphics2D g, Piece piece, int cellWidth, int cellHeight) 
 	{
 		Class<?> type = piece != Board.EMPTY_CELL ? piece.getClass() : null;
+		
 		String symbol = piecesAndSymbols.get(type);		
 		
 		Color foregroundColor = piece != Board.EMPTY_CELL && piece.getColor() == PieceColor.WHITE 

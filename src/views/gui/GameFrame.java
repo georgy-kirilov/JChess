@@ -1,7 +1,8 @@
 package views.gui;
 
-import java.awt.Rectangle;
 import javax.swing.JFrame;
+
+import java.awt.Rectangle;
 import java.awt.BorderLayout;
 
 @SuppressWarnings("serial")

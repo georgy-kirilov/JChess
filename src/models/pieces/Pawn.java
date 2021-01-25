@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import common.Position;
-import enums.PieceColor;
 import common.OffsetPair;
+
+import enums.PieceColor;
 import models.boards.Board;
 
 public class Pawn extends BasePiece
@@ -31,19 +32,25 @@ public class Pawn extends BasePiece
 				Position twiceUp = currentPosition.moveBy(new OffsetPair(-2, 0));
 				
 				if (canMoveFreelyTo(twiceUp, board))
-					positions.add(twiceUp);
+				{
+					positions.add(twiceUp);					
+				}
 			}
 		}
 
 		Position topRight = currentPosition.moveBy(OffsetPair.TOP_RIGHT);
 		
-		if (canCaptureAt(topRight, board)) 
-			positions.add(topRight);
+		if (canCaptureAt(topRight, board))
+		{
+			positions.add(topRight);			
+		}
 
 		Position topLeft = currentPosition.moveBy(OffsetPair.TOP_LEFT);
 		
-		if (canCaptureAt(topLeft, board)) 
-			positions.add(topLeft);
+		if (canCaptureAt(topLeft, board))
+		{
+			positions.add(topLeft);			
+		}
 		
 		return positions;
 	}

@@ -1,11 +1,11 @@
 package models.pieces;
 
-import common.Position;
-import enums.PieceColor;
-
 import java.util.Collection;
 
+import common.Position;
 import common.OffsetPair;
+
+import enums.PieceColor;
 import models.boards.Board;
 
 public class Rook extends BasePiece

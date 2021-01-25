@@ -91,7 +91,7 @@ public class BoardView extends JPanel implements CellViewListener
 		lastSelectedPosition = null;
 	}
 	
-	public void makeCellsCastlable(Collection<Position> positions)
+	public void announceCastlePositions(Collection<Position> positions)
 	{
 		for (Position position : positions)
 		{

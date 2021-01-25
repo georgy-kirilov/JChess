@@ -46,13 +46,13 @@ public class GameListener
 		{
 			ArrayList<Position> castlePositions = new ArrayList<>();
 			
-			for (Castle pair : getKing().getPossibleCastles(getKingPosition(), board))
+			for (Castle castle : getKing().getPossibleCastles(getKingPosition(), board))
 			{
-				castlePositions.add(pair.getNewKingPosition());				
+				castlePositions.add(castle.getNewKingPosition());				
 			}
 			
 			reachablePositions.addAll(castlePositions);
-			boardView.makeCellsCastlable(castlePositions);
+			boardView.announceCastlePositions(castlePositions);
 		}
 		
 		return reachablePositions;
@@ -85,7 +85,7 @@ public class GameListener
 		
 		if (piece.getClass().equals(King.class) && isCastlePosition(to))
 		{
-			performCastle(to);
+			performCastling(to);
 		}
 		
 		piece = board.getAt(from);
@@ -163,7 +163,7 @@ public class GameListener
 				return piecesAndPositions.get(piece);				
 			}
 			
-			Iterable<Position> allPositions = piece.getReachablePositions(piecePosition, board);
+			Collection<Position> allPositions = piece.getReachablePositions(piecePosition, board);
 			
 			for (Position position : allPositions)
 			{
@@ -185,23 +185,26 @@ public class GameListener
 		return reachablePositions;
 	}
 	
-	private void performCastle(Position position)
+	private void performCastling(Position position)
 	{
-		for (Castle pair : getKing().getPossibleCastles(getKingPosition(), board))
+		for (Castle castle : getKing().getPossibleCastles(getKingPosition(), board))
 		{
-			if (pair.getNewKingPosition().equals(position))
+			if (castle.getNewKingPosition().equals(position))
 			{
-				board.setToEmpty(pair.getOldRookPosition());
-				board.setAt(pair.getNewRookPosition(), pair.getRook());
+				board.setToEmpty(castle.getOldRookPosition());
+				board.setAt(castle.getNewRookPosition(), castle.getRook());
+				return;
 			}
 		}
+		
+		throw new IllegalArgumentException("Cannot perform castling");
 	}
 	
 	private boolean isCastlePosition(Position position)
 	{
-		for (Castle pair : getKing().getPossibleCastles(getKingPosition(), board))
+		for (Castle castle : getKing().getPossibleCastles(getKingPosition(), board))
 		{
-			if (pair.getNewKingPosition().equals(position))
+			if (castle.getNewKingPosition().equals(position))
 			{
 				return true;				
 			}
