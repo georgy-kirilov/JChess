@@ -7,7 +7,9 @@ public class Helper
 	public static void throwIfNull(Object obj)
 	{
 		if (obj == null)
-			throw new NullPointerException("Parameter cannot be null");
+		{
+			throw new NullPointerException("Parameter cannot be null");			
+		}
 	}
 	
 	public static boolean isInRange(int min, int max, int actual)
@@ -18,7 +20,9 @@ public class Helper
 	public static void throwIfOutOfRange(int min, int max, int actual)
 	{
 		if (!isInRange(min, max, actual))
-			throw new IllegalArgumentException("Parameter was out of range");
+		{
+			throw new IllegalArgumentException("Parameter was out of range");	
+		}
 	}
 	
 	public static boolean isNullOrEmpty(String str)
