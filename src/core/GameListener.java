@@ -7,7 +7,6 @@ import java.util.Collection;
 import common.Castle;
 import common.Helper;
 import common.Position;
-import common.OffsetPair;
 
 import models.pieces.*;
 import models.boards.Board;
@@ -16,10 +15,13 @@ import enums.PieceColor;
 
 public class GameListener
 {	
+	private final String CANNOT_OBTAIN_COLOR_FORMAT = "Cannot obtain %s color because the game isn't over";
+	
 	private final HashMap<Piece, Collection<Position>> piecesAndPositions;
 	
 	private final Board board;
-	private final GameAnnouncer gameAnnouncer;	
+	private final GameAnnouncer gameAnnouncer;
+	
 	private boolean gameOver;
 	private PieceColor currentPlayerColor;
 	
@@ -61,7 +63,7 @@ public class GameListener
 	{
 		if (isGameOver())
 		{
-			throw new RuntimeException("Cannot make moves if the game is over");			
+			throw new RuntimeException("Cannot make moves because the game is over");			
 		}
 		
 		boolean positionValid = false;
@@ -82,7 +84,7 @@ public class GameListener
 	
 		Piece piece = board.getAt(from);
 		
-		if (piece.getClass().equals(King.class) && isCastlePosition(to))
+		if (piece instanceof King && isCastlingPosition(to))
 		{
 			performCastling(to);
 		}
@@ -93,7 +95,7 @@ public class GameListener
 		
 		piece.move();
 		
-		if (piece.getClass().equals(Pawn.class) && ((Pawn)piece).canBePromoted(to))
+		if (piece instanceof Pawn && ((Pawn)piece).canBePromoted(to))
 		{
 			gameAnnouncer.redrawBoard();
 			Piece newPiece = gameAnnouncer.announcePawnPromotion(piece.getColor());
@@ -101,10 +103,6 @@ public class GameListener
 		}
 		
 		nextPlayer();
-		board.rotate();
-		piecesAndPositions.clear();
-		
-		gameAnnouncer.redrawBoard();
 		
 		if (getKing().isChecked(getKingPosition(), board))
 		{
@@ -119,14 +117,14 @@ public class GameListener
 		}
 	}
 	
-	public PieceColor getCurrentPlayerColor()
-	{
-		return currentPlayerColor;
-	}
-	
 	public boolean isGameOver()
 	{
 		return gameOver;
+	}
+	
+	public PieceColor getCurrentPlayerColor()
+	{
+		return currentPlayerColor;
 	}
 	
 	public PieceColor getLoserColor()
@@ -136,18 +134,17 @@ public class GameListener
 			return getCurrentPlayerColor();			
 		}
 		
-		throw new RuntimeException("Cannot obtain loser color because the game is not over");
+		throw new RuntimeException(String.format(CANNOT_OBTAIN_COLOR_FORMAT, "loser"));
 	}
 	
 	public PieceColor getWinnerColor()
 	{
 		if (isGameOver())
 		{
-			return getLoserColor() == PieceColor.WHITE 
-					? PieceColor.BLACK : PieceColor.WHITE;
+			return getLoserColor() == PieceColor.WHITE ? PieceColor.BLACK : PieceColor.WHITE;
 		}
 		
-		throw new RuntimeException("Cannot obtain winner color because the game is not over");
+		throw new RuntimeException(String.format(CANNOT_OBTAIN_COLOR_FORMAT, "winner"));
 	}
 	
 	public Collection<Position> getReachablePositions(Position piecePosition)
@@ -200,7 +197,7 @@ public class GameListener
 		throw new IllegalArgumentException("Cannot perform castling");
 	}
 	
-	private boolean isCastlePosition(Position position)
+	private boolean isCastlingPosition(Position position)
 	{
 		for (Castle castle : getKing().getPossibleCastles(getKingPosition(), board))
 		{
@@ -242,7 +239,11 @@ public class GameListener
 	
 	private void nextPlayer()
 	{
-		currentPlayerColor = currentPlayerColor == PieceColor.WHITE 
-				? PieceColor.BLACK : PieceColor.WHITE;
+		currentPlayerColor = currentPlayerColor == PieceColor.WHITE ? 
+				PieceColor.BLACK : PieceColor.WHITE;
+		
+		board.rotate();
+		piecesAndPositions.clear();
+		gameAnnouncer.redrawBoard();
 	}
 }
