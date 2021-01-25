@@ -11,8 +11,8 @@ public class OffsetPair
 	public static final OffsetPair BOTTOM_RIGHT = new OffsetPair(1, 1);
 	public static final OffsetPair BOTTOM_LEFT = new OffsetPair(1, -1);
 	
-	private int rowOffset;
-	private int columnOffset;
+	private final int rowOffset;
+	private final int columnOffset;
 	
 	public OffsetPair(int rowOffset, int columnOffset)
 	{
@@ -22,11 +22,11 @@ public class OffsetPair
 	
 	public int getRowOffset()
 	{
-		return this.rowOffset;
+		return rowOffset;
 	}
 	
 	public int getColumnOffset()
 	{
-		return this.columnOffset;
+		return columnOffset;
 	}
 }
