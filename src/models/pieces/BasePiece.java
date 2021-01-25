@@ -1,13 +1,13 @@
 package models.pieces;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 import common.Helper;
 import common.Position;
-import enums.PieceColor;
 import common.OffsetPair;
+
+import enums.PieceColor;
 import models.boards.Board;
 
 public abstract class BasePiece implements Piece
@@ -19,6 +19,7 @@ public abstract class BasePiece implements Piece
 	{	
 		Helper.throwIfNull(color);
 		this.color = color;
+		
 		moved = false;
 	}
 	
@@ -66,7 +67,9 @@ public abstract class BasePiece implements Piece
 				else
 				{
 					if (canCaptureAt(nextPosition, board))
-						positions.add(nextPosition);
+					{
+						positions.add(nextPosition);						
+					}
 					
 					break;
 				}
@@ -87,11 +90,13 @@ public abstract class BasePiece implements Piece
 		{
 			Position nextPosition = currentPosition.moveBy(offsetPair);
 			
-			boolean isPositionValid = canMoveFreelyTo(nextPosition, board) || 
+			boolean positionValid = canMoveFreelyTo(nextPosition, board) || 
 					canCaptureAt(nextPosition, board);
 		
-			if (isPositionValid)
-				positions.add(nextPosition);
+			if (positionValid)
+			{
+				positions.add(nextPosition);				
+			}
 		}
 		
 		return positions;

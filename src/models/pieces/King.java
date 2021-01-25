@@ -119,7 +119,7 @@ public class King extends BasePiece
 		return true;
 	}
 	
-	public Collection<Castle> getCastles(Position kingPosition, Board board)
+	public Collection<Castle> getPossibleCastles(Position kingPosition, Board board)
 	{	
 		ArrayList<Castle> castles = new ArrayList<>();
 		
