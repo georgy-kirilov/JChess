@@ -9,14 +9,12 @@ import javax.swing.JOptionPane;
 
 import common.Helper;
 import common.Position;
+
+import models.pieces.*;
+import models.boards.Board;
+
 import enums.PieceColor;
 import core.GameListener;
-import models.boards.Board;
-import models.pieces.Bishop;
-import models.pieces.Knight;
-import models.pieces.Piece;
-import models.pieces.Queen;
-import models.pieces.Rook;
 import views.gui.drawers.PieceDrawer;
 
 @SuppressWarnings("serial")
@@ -24,21 +22,21 @@ public class BoardView extends JPanel implements CellViewListener
 {	
 	private final Board board;
 	private final CellView[][] cells;
-	private final PieceDrawer drawer;
-	private final GameListener listener;
+	private final PieceDrawer pieceDrawer;
+	private final GameListener gameListener;
 	private Position lastSelectedPosition;
 	
-	public BoardView(Board board, PieceDrawer drawer)
+	public BoardView(Board board, PieceDrawer pieceDrawer)
 	{
 		setLayout(new GridLayout(board.getWidth(), board.getHeight()));
 		
 		Helper.throwIfNull(board);
 		this.board = board;
 		
-		Helper.throwIfNull(drawer);
-		this.drawer = drawer;
+		Helper.throwIfNull(pieceDrawer);
+		this.pieceDrawer = pieceDrawer;
 
-		listener = new GameListener(board, this);
+		gameListener = new GameListener(board, this);
 		
 		cells = new CellView[board.getWidth()][board.getHeight()];
 		initialize();
@@ -73,7 +71,7 @@ public class BoardView extends JPanel implements CellViewListener
 		else
 		{
 			Collection<Position> reachablePositions = 
-					listener.onFromPositionSelected(cell.getPosition());
+					gameListener.onFromPositionSelected(cell.getPosition());
 		
 			for (Position position : reachablePositions)
 			{
@@ -89,7 +87,7 @@ public class BoardView extends JPanel implements CellViewListener
 	@Override
 	public void onConfirmationClick(CellView cell)
 	{
-		listener.onToPositionSelected(lastSelectedPosition, cell.getPosition());
+		gameListener.onToPositionSelected(lastSelectedPosition, cell.getPosition());
 		lastSelectedPosition = null;
 	}
 	
@@ -129,16 +127,24 @@ public class BoardView extends JPanel implements CellViewListener
 				firstChar = input.charAt(0);
 				
 				if (Helper.isBishopChar(firstChar))
-					return new Bishop(pawnColor);
+				{
+					return new Bishop(pawnColor);					
+				}
 				
 				if (Helper.isKnightChar(firstChar))
-					return new Knight(pawnColor);
+				{
+					return new Knight(pawnColor);					
+				}
 				
 				if (Helper.isQueenChar(firstChar))
-					return new Queen(pawnColor);
+				{
+					return new Queen(pawnColor);					
+				}
 				
 				if (Helper.isRookChar(firstChar))
-					return new Rook(pawnColor);
+				{
+					return new Rook(pawnColor);					
+				}
 			}
 		}
 	}
@@ -159,7 +165,7 @@ public class BoardView extends JPanel implements CellViewListener
 				boolean isCellDark = !(row % 2 == 0 && col % 2 == 0 || row % 2 != 0 && col % 2 != 0);
 				
 				cells[row][col] = new CellView(piece, isCellDark, 
-						drawer, this, new Position(row, col));
+						pieceDrawer, this, new Position(row, col));
 			}
 		}
 	}
