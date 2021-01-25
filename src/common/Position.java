@@ -55,10 +55,10 @@ public class Position
 				getColumn() + offsetPair.getColumnOffset());
 	}
 	
-	public void flipOver(Board board)
+	public Position flipOver(Board board)
 	{
-		setRow(board.getHeight() - 1 - getRow());
-		setColumn(board.getWidth() - 1 - getColumn());
+		return new Position(board.getHeight() - 1 - getRow(), 
+				board.getWidth() - 1 - getColumn());
 	}
 	
 	@Override

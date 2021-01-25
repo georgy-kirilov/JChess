@@ -37,7 +37,7 @@ public class King extends BasePiece
 	
 	public boolean isChecked(Position kingPosition, Board board)
 	{
-		kingPosition.flipOver(board);
+		Position flippedKingPosition = kingPosition.flipOver(board);
 		board.rotate();
 		
 		for (int i = 0; i < board.getHeight(); i++)
@@ -46,31 +46,30 @@ public class King extends BasePiece
 			{
 				Piece piece = board.getAt(i, j);
 				
-				if (!board.isEmptyAt(i, j) && piece.getColor() != getColor())
+				if (board.isEmptyAt(i, j) || piece.getColor() == getColor())
+					continue;
+					
+				for (Position position : piece.getReachablePositions(new Position(i, j), board))
 				{
-					for (Position position : piece.getReachablePositions(new Position(i, j), board))
+					if (position.equals(flippedKingPosition))
 					{
-						if (position.equals(kingPosition))
-						{
-							kingPosition.flipOver(board);
-							board.rotate();
-							
-							return true;
-						}
+						board.rotate();
+						return true;
 					}
 				}
 			}
 		}
 		
-		kingPosition.flipOver(board);
 		board.rotate();
-		
 		return false;
 	}
 	
 	public boolean isCheckmated(Position kingPosition, Board board)
 	{		
-		if (!isChecked(kingPosition, board)) return false;
+		if (!isChecked(kingPosition, board))
+		{
+			return false;			
+		}
 		
 		for (int i = 0; i < board.getHeight(); i++)
 		{
@@ -78,28 +77,36 @@ public class King extends BasePiece
 			{
 				Piece piece = board.getAt(i, j);
 				
-				if (!board.isEmptyAt(i, j) && piece.getColor() == getColor())
+				if (board.isEmptyAt(i, j) || piece.getColor() != getColor())
 				{
-					Iterable<Position> positions = piece
-							.getReachablePositions(new Position(i, j), board);
+					continue;					
+				}
+				
+				// Checks whether there's at least one move which doesn't put king in check
+				
+				Collection<Position> positions = piece.getReachablePositions(new Position(i, j), board);
+				
+				Position checkPosition = kingPosition;
+				
+				for (Position position : positions)
+				{
+					Piece captured = board.getAt(position);
+					board.setAt(position, piece);
+					board.setToEmpty(i, j);
 					
-					Position checkPosition = kingPosition;
-					
-					for (Position position : positions)
+					if (piece.getClass().equals(King.class))
 					{
-						Piece captured = board.getAt(position);
-						board.setAt(position, piece);
-						board.setToEmpty(i, j);
-						
-						if (piece.getClass().equals(King.class))
-							checkPosition = position;
-		
-						boolean checked = isChecked(checkPosition, board);
-						
-						board.setAt(position, captured);
-						board.setAt(i, j, piece);
-						
-						if (!checked) return false;
+						checkPosition = position;						
+					}
+	
+					boolean checked = isChecked(checkPosition, board);
+					
+					board.setAt(position, captured);
+					board.setAt(i, j, piece);
+					
+					if (!checked)
+					{
+						return false;						
 					}
 				}
 			}
