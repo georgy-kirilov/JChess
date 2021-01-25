@@ -68,7 +68,7 @@ public class GameListener
 	{
 		if (isGameOver())
 		{
-			throw new RuntimeException("Cannot make moves because the game is over");			
+			throw new RuntimeException("Cannot make moves because the game is over");						
 		}
 		
 		boolean positionValid = false;
@@ -84,19 +84,14 @@ public class GameListener
 		
 		if (!positionValid)
 		{
-			throw new IllegalArgumentException("'To' position is not reachable");	
+			throw new IllegalArgumentException("'To' position is not reachable");				
 		}
 	
 		Piece piece = board.getAt(from);
 		
-		System.out.println("King: " + getKingPosition());
-		System.out.println("From: " + from);
-		System.out.println("To: " + to);
-		
-		
 		if (canCurrentPlayerPerformEnPassant(piece, from))
 		{
-			board.setToEmpty(enPassantPawnPosition);
+			board.setToEmpty(enPassantPawnPosition);			
 		}
 		
 		disableEnPassant();

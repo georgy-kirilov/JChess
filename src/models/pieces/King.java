@@ -47,9 +47,9 @@ public class King extends BasePiece
 				Piece piece = board.getAt(i, j);
 				
 				if (board.isEmptyAt(i, j) || piece.getColor() == getColor())
-					continue;
-				
-				// Checks for at least one enemy move which puts the king in check
+				{
+					continue;					
+				}
 				
 				for (Position position : piece.getReachablePositions(new Position(i, j), board))
 				{
@@ -69,7 +69,9 @@ public class King extends BasePiece
 	public boolean isCheckmated(Position kingPosition, Board board)
 	{		
 		if (!isChecked(kingPosition, board))
+		{
 			return false;			
+		}
 		
 		for (int i = 0; i < board.getHeight(); i++)
 		{
@@ -78,9 +80,9 @@ public class King extends BasePiece
 				Piece piece = board.getAt(i, j);
 				
 				if (board.isEmptyAt(i, j) || piece.getColor() != getColor())
-					continue;
-				
-				// Checks for at least one move which doesn't put king in check
+				{
+					continue;					
+				}
 				
 				Collection<Position> positions = piece.getReachablePositions(new Position(i, j), board);
 				
@@ -93,7 +95,9 @@ public class King extends BasePiece
 					board.setToEmpty(i, j);
 					
 					if (piece.getClass().equals(King.class))
-						checkPosition = position;						
+					{
+						checkPosition = position;												
+					}
 	
 					boolean checked = isChecked(checkPosition, board);
 					
@@ -101,7 +105,9 @@ public class King extends BasePiece
 					board.setAt(i, j, piece);
 					
 					if (!checked)
-						return false;				
+					{
+						return false;										
+					}
 				}
 			}
 		}
@@ -114,7 +120,9 @@ public class King extends BasePiece
 		ArrayList<Castle> castles = new ArrayList<>();
 		
 		if (isMoved())
-			return castles;
+		{
+			return castles;			
+		}
 		
 		int row = board.getHeight() - 1;
 		
@@ -126,7 +134,9 @@ public class King extends BasePiece
 					&& piece.getClass().equals(Rook.class) && !piece.isMoved();
 			
 			if (!rookFound)
-				continue;
+			{
+				continue;				
+			}
 			
 			Rook rook = (Rook)piece;
 			
@@ -145,14 +155,18 @@ public class King extends BasePiece
 				if (!board.isEmptyAt(rookOffset))
 				{
 					if (!rookOffset.equals(kingPosition))
-						allInsideCellsFree = false;						
+					{
+						allInsideCellsFree = false;												
+					}
 					
 					break;
 				}
 			}
 			
 			if (!allInsideCellsFree)
-				continue;
+			{
+				continue;				
+			}
 			
 			OffsetPair kingOffset = rookLeftFromKing ? OffsetPair.LEFT : OffsetPair.RIGHT;
 			Position rookCastlingPosition = kingPosition.moveBy(kingOffset);
