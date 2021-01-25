@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import common.Helper;
 import common.Position;
+
 import models.pieces.Piece;
 import views.gui.drawers.PieceDrawer;
 
@@ -27,27 +28,27 @@ public class CellView extends JPanel
 	private boolean castlable;
 	
 	private final Position position;
-	private final PieceDrawer drawer;
-	private final CellViewListener listener;
-	private final boolean isBackgroundDark;
+	private final PieceDrawer pieceDrawer;
+	private final CellViewListener cellViewListener;
+	private final boolean backgroundDark;
 	
 	public CellView(
 			Piece piece, 
-			boolean isBackgroundDark, 
-			PieceDrawer drawer, 
-			CellViewListener listener, 
+			boolean backgroundDark, 
+			PieceDrawer pieceDrawer, 
+			CellViewListener cellViewListener, 
 			Position position)
 	{
 		setPiece(piece);
 		setHighlighted(false);
 		
-		this.isBackgroundDark = isBackgroundDark;
+		this.backgroundDark = backgroundDark;
 
-		Helper.throwIfNull(drawer);
-		this.drawer = drawer;
+		Helper.throwIfNull(pieceDrawer);
+		this.pieceDrawer = pieceDrawer;
 		
-		Helper.throwIfNull(listener);
-		this.listener = listener;
+		Helper.throwIfNull(cellViewListener);
+		this.cellViewListener = cellViewListener;
 		
 		Helper.throwIfNull(position);
 		this.position = position;
@@ -96,18 +97,20 @@ public class CellView extends JPanel
 		super.paintComponent(graphics);
 		
 		Graphics2D g = (Graphics2D)graphics;
-		Color color = isBackgroundDark ? DARK_BACKGROUND : LIGHT_BACKGROUND;
+		Color color = backgroundDark ? DARK_BACKGROUND : LIGHT_BACKGROUND;
 		
 		if (isHighlighted())
 		{			
-			color = isBackgroundDark ? DARK_HIGHLIGHT : LIGHT_HIGHLIGHT;
+			color = backgroundDark ? DARK_HIGHLIGHT : LIGHT_HIGHLIGHT;
 			
 			if (isCastlable())
-				color = CASTLE_HIGHLIGHT;
+			{
+				color = CASTLE_HIGHLIGHT;				
+			}
 		}
 		
 		setBackground(color);
-		drawer.drawPiece(g, piece, getWidth(), getHeight());
+		pieceDrawer.drawPiece(g, piece, getWidth(), getHeight());
 	}
 	
 	private void attachClickListener(CellView cell)
@@ -118,9 +121,13 @@ public class CellView extends JPanel
 			public void mouseClicked(MouseEvent e)
 			{
 				if (!cell.isHighlighted())
-					cell.listener.onInitialClick(cell);					
+				{
+					cell.cellViewListener.onInitialClick(cell);										
+				}
 				else
-					cell.listener.onConfirmationClick(cell);					
+				{
+					cell.cellViewListener.onConfirmationClick(cell);					
+				}
 			}
 		});
 	}
