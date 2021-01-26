@@ -9,18 +9,19 @@ import javax.swing.JOptionPane;
 
 import common.Helper;
 import common.Position;
+import common.GlobalConstants;
 
 import models.pieces.*;
 import models.boards.Board;
 
 import core.GameListener;
-import core.IOProvider;
+import core.GuiIOProvider;
 
 import enums.PieceColor;
 import views.gui.drawers.PieceDrawer;
 
 @SuppressWarnings("serial")
-public class BoardGuiView extends JPanel implements CellViewListener, IOProvider
+public class BoardGuiView extends JPanel implements CellViewListener, GuiIOProvider
 {	
 	private final Board board;
 	private final CellView[][] cells;
@@ -96,14 +97,16 @@ public class BoardGuiView extends JPanel implements CellViewListener, IOProvider
 	@Override
 	public void announceCheck()
 	{
-		JOptionPane.showMessageDialog(this, "CHECK");
+		JOptionPane.showMessageDialog(this, GlobalConstants.Messages.CHECK);
 	}
 	
 	@Override
 	public void announceGameOver(PieceColor winnerColor)
 	{	
-		String format = "GAME OVER - %s WINS!";
-		String message = String.format(format, winnerColor.toString().toUpperCase());
+		String message = String.format(
+				GlobalConstants.Messages.CHECKMATE_FORMAT, 
+				winnerColor.toString().toUpperCase());
+		
 		JOptionPane.showMessageDialog(this, message);
 		System.exit(0);
 	}
@@ -111,21 +114,10 @@ public class BoardGuiView extends JPanel implements CellViewListener, IOProvider
 	@Override
 	public Piece announcePawnPromotion(PieceColor pawnColor)
 	{		
-		String separator = "  ";
-		
-		String[] options = new String[] 
-		{ 
-			"[Q]ueen", 
-			"[R]ook", 
-			"[K]night", 
-			"[B]ishop",
-		};
-		
-		String message = String.join(separator, options);
-		
 		while (true)
 		{
-			String input = JOptionPane.showInputDialog(this, message);
+			String input = JOptionPane.showInputDialog
+					(this, GlobalConstants.Messages.PAWN_PROMOTION);
 			
 			if (!Helper.isNullOrEmpty(input) && input.length() == 1)
 			{

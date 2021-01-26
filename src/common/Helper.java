@@ -31,7 +31,7 @@ public class Helper
 	}
 	
 	public static boolean isQueenChar(char character)
-	{
+	{	
 		return character == 'Q' || character == 'q';
 	}
 	
