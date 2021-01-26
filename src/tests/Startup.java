@@ -22,6 +22,6 @@ public class Startup
 		
 		IOProvider gameAnnouncer = new BoardGuiView(board, new TextPieceDrawer());
 		
-		GameEngine engine = new GameEngine(new GameFrame(GAME_FRAME_BOUNDS, gameAnnouncer));
+		new GameEngine(new GameFrame(GAME_FRAME_BOUNDS, gameAnnouncer));
 	}
 }

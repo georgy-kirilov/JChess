@@ -2,10 +2,10 @@ package views.gui;
 
 import javax.swing.JFrame;
 
-import core.IOProvider;
-
 import java.awt.Rectangle;
 import java.awt.BorderLayout;
+
+import core.IOProvider;
 
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame

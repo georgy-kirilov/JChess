@@ -97,14 +97,14 @@ public class BoardGuiView extends JPanel implements CellViewListener, GuiIOProvi
 	@Override
 	public void announceCheck()
 	{
-		JOptionPane.showMessageDialog(this, GlobalConstants.Messages.CHECK);
+		JOptionPane.showMessageDialog(this, GlobalConstants.GameMessages.CHECK);
 	}
 	
 	@Override
 	public void announceGameOver(PieceColor winnerColor)
 	{	
 		String message = String.format(
-				GlobalConstants.Messages.CHECKMATE_FORMAT, 
+				GlobalConstants.GameMessages.CHECKMATE_FORMAT, 
 				winnerColor.toString().toUpperCase());
 		
 		JOptionPane.showMessageDialog(this, message);
@@ -117,7 +117,7 @@ public class BoardGuiView extends JPanel implements CellViewListener, GuiIOProvi
 		while (true)
 		{
 			String input = JOptionPane.showInputDialog
-					(this, GlobalConstants.Messages.PAWN_PROMOTION);
+					(this, GlobalConstants.GameMessages.PAWN_PROMOTION);
 			
 			if (!Helper.isNullOrEmpty(input) && input.length() == 1)
 			{

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import common.Castle;
+import common.GlobalConstants;
 import common.Helper;
 import common.Position;
 import common.OffsetPair;
@@ -16,11 +17,8 @@ import enums.PieceColor;
 
 public class GameListener
 {	
-	private final String CANNOT_OBTAIN_COLOR_MESSAGE = 
-			"Cannot obtain %s color because the game isn't over yet";
-	
-	private final HashMap<Piece, Collection<Position>> piecesAndPositions;
 	private Collection<Castle> possibleCastles;
+	private final HashMap<Piece, Collection<Position>> piecesAndPositions;
 	
 	private final Board board;
 	private final IOProvider ioProvider;
@@ -88,8 +86,8 @@ public class GameListener
 		
 		disableEnPassant();
 		
-		boolean canNextPlayerPerformEnPassant = piece instanceof Pawn && !piece.isMoved() && 
-				from.moveBy(OffsetPair.UP).moveBy(OffsetPair.UP).equals(to);
+		boolean canNextPlayerPerformEnPassant = piece instanceof Pawn && !piece.isMoved()
+				 && from.moveBy(OffsetPair.UP).moveBy(OffsetPair.UP).equals(to);
 		
 		if (canNextPlayerPerformEnPassant)
 		{
@@ -116,6 +114,7 @@ public class GameListener
 		}
 		
 		nextPlayer();
+		nextTurn();
 		
 		if (getKing().isChecked(getKingPosition(), board))
 		{
@@ -147,7 +146,7 @@ public class GameListener
 			return getCurrentPlayerColor();			
 		}
 		
-		throw new RuntimeException(String.format(CANNOT_OBTAIN_COLOR_MESSAGE, "loser"));
+		throw new RuntimeException(GlobalConstants.ErrorMessages.CANNOT_OBTAIN_LOSER);
 	}
 	
 	public PieceColor getWinnerColor()
@@ -157,7 +156,7 @@ public class GameListener
 			return getLoserColor() == PieceColor.WHITE ? PieceColor.BLACK : PieceColor.WHITE;
 		}
 		
-		throw new RuntimeException(String.format(CANNOT_OBTAIN_COLOR_MESSAGE, "winner"));
+		throw new RuntimeException(GlobalConstants.ErrorMessages.CANNOT_OBTAIN_WINNER);
 	}
 	
 	public Collection<Position> getReachablePositions(Position piecePosition)
@@ -166,29 +165,42 @@ public class GameListener
 		
 		Piece piece = board.getAt(piecePosition);
 		
-		if (!board.isEmptyAt(piecePosition) && piece.getColor() == getCurrentPlayerColor())
+		boolean pieceExists = !board.isEmptyAt(piecePosition) 
+				&& piece.getColor() == getCurrentPlayerColor();
+		
+		if (pieceExists)
 		{	
+			// Checks whether the piece has already been used and returns its data from the hash map
+			
 			if (piecesAndPositions.containsKey(piece))
 			{
 				return piecesAndPositions.get(piece);				
 			}
 			
-			Collection<Position> allPositions = piece.getReachablePositions(piecePosition, board);
+			Collection<Position> allPiecePositions = piece.getReachablePositions(piecePosition, board);
 			
-			for (Position position : allPositions)
+			for (Position position : allPiecePositions)
 			{
+				// Makes the move
+				
 				Piece captured = board.setToEmpty(position);
 				board.setAt(position, piece);
 				board.setToEmpty(piecePosition);
+				
+				// Checks whether the move is valid
 				
 				if (!getKing().isChecked(getKingPosition(), board))
 				{
 					reachablePositions.add(position);
 				}
 				
+				// Reverts the move
+				
 				board.setAt(position, captured);
 				board.setAt(piecePosition, piece);
 			}
+			
+			// Checks whether the piece is King and if so adds its castling positions to the list
 			
 			if (getKingPosition().equals(piecePosition))
 			{
@@ -206,11 +218,11 @@ public class GameListener
 		return reachablePositions;
 	}
 	
-	private void performCastling(Position position)
+	private void performCastling(Position kingCastlingPosition)
 	{
 		for (Castle castle : possibleCastles)
 		{
-			if (castle.getNewKingPosition().equals(position))
+			if (castle.getNewKingPosition().equals(kingCastlingPosition))
 			{
 				board.setToEmpty(castle.getOldRookPosition());
 				board.setAt(castle.getNewRookPosition(), castle.getRook());
@@ -233,11 +245,11 @@ public class GameListener
 		return castlingPositions;
 	}
 	
-	private boolean isValidCastlingPosition(Position position)
+	private boolean isValidCastlingPosition(Position kingCastlingPosition)
 	{
 		for (Castle castle : possibleCastles)
 		{
-			if (castle.getNewKingPosition().equals(position))
+			if (castle.getNewKingPosition().equals(kingCastlingPosition))
 			{
 				return true;
 			}
@@ -279,20 +291,23 @@ public class GameListener
 		enPassantCapturePosition = null;
 	}
 	
-	private boolean canCurrentPlayerPerformEnPassant(Piece piece, Position position)
+	private boolean canCurrentPlayerPerformEnPassant(Piece piece, Position piecePosition)
 	{
-		return !board.isEmptyAt(position) && 
-				piece instanceof Pawn && 
-				piece.getColor() == getCurrentPlayerColor() &&
-				(position.moveBy(OffsetPair.TOP_LEFT).equals(enPassantCapturePosition) ||
-				position.moveBy(OffsetPair.TOP_RIGHT).equals(enPassantCapturePosition));
+		return !board.isEmptyAt(piecePosition) 
+				&& piece instanceof Pawn 
+				&& piece.getColor() == getCurrentPlayerColor() 
+				&& (piecePosition.moveBy(OffsetPair.TOP_LEFT).equals(enPassantCapturePosition) 
+				|| piecePosition.moveBy(OffsetPair.TOP_RIGHT).equals(enPassantCapturePosition));
 	}
 	
 	private void nextPlayer()
 	{
 		currentPlayerColor = currentPlayerColor == PieceColor.WHITE ? 
 				PieceColor.BLACK : PieceColor.WHITE;
-		
+	}
+	
+	private void nextTurn()
+	{
 		board.rotate();
 		piecesAndPositions.clear();
 		ioProvider.redrawBoard();
