@@ -117,7 +117,7 @@ public class King extends BasePiece
 	
 	public Collection<Castle> getPossibleCastles(Position kingPosition, Board board)
 	{	
-		ArrayList<Castle> castles = new ArrayList<>();
+		Collection<Castle> castles = new ArrayList<>();
 		
 		if (isMoved())
 		{

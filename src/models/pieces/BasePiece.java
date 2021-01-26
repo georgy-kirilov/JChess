@@ -49,10 +49,9 @@ public abstract class BasePiece implements Piece
 		return board.isPositionInside(position) && board.isEmptyAt(position);
 	}
 	
-	protected Collection<Position> getReachableConsequtivePositions(Position currentPosition, Board board, 
-			OffsetPair[] offsetPairs)
+	protected Collection<Position> getReachableConsequtivePositions(Position currentPosition, Board board, OffsetPair[] offsetPairs)
 	{
-		ArrayList<Position> positions = new ArrayList<>();
+		Collection<Position> positions = new ArrayList<>();
 		
 		for (OffsetPair offsetPair : offsetPairs)
 		{
@@ -81,10 +80,9 @@ public abstract class BasePiece implements Piece
 		return positions;
 	}
 	
-	protected Collection<Position> getReachableSinglePositions(Position currentPosition, Board board, 
-			OffsetPair[] offsetPairs)
+	protected Collection<Position> getReachableSinglePositions(Position currentPosition, Board board, OffsetPair[] offsetPairs)
 	{
-		ArrayList<Position> positions = new ArrayList<>();
+		Collection<Position> positions = new ArrayList<>();
 		
 		for (OffsetPair offsetPair : offsetPairs)
 		{
