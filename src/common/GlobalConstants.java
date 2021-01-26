@@ -38,5 +38,9 @@ public class GlobalConstants
 		public static final String CANNOT_PERFORM_CASTLING = "Castling cannot be performed";
 		
 		public static final String KING_NOT_FOUND = "Unable to find the king";
+		
+		public static final String OUT_OF_RANGE = "Parameter was out of range";
+		
+		public static final String CANNOT_BE_NULL = "Parameter cannot be null";
 	}
 }

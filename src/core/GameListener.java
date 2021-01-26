@@ -174,7 +174,9 @@ public class GameListener
 			Piece piece = board.getAt(piecePosition);
 			
 			if (piecesAndPositions.containsKey(piece))
-				return piecesAndPositions.get(piece);
+			{
+				return piecesAndPositions.get(piece);				
+			}
 			
 			Collection<Position> allPositions = piece.getReachablePositions(piecePosition, board);
 			
@@ -185,17 +187,23 @@ public class GameListener
 				board.setToEmpty(piecePosition);
 				
 				if (!isCurrentPlayerInCheck())
-					reachablePositions.add(position);
+				{
+					reachablePositions.add(position);					
+				}
 				
 				board.setAt(position, captured);
 				board.setAt(piecePosition, piece);
 			}
 			
 			if (getKingPosition().equals(piecePosition))
-				reachablePositions.addAll(getCastlingPositions());
+			{
+				reachablePositions.addAll(getCastlingPositions());				
+			}
 			
 			if (canCurrentPlayerPerformEnPassant(piece, piecePosition))
-				reachablePositions.add(enPassantCapturePosition);
+			{
+				reachablePositions.add(enPassantCapturePosition);				
+			}
 			
 			piecesAndPositions.put(piece, reachablePositions);
 		}
@@ -281,7 +289,9 @@ public class GameListener
 						&& piece instanceof King;
 				
 				if (kingFound)
-					return new Position(row, col);
+				{
+					return new Position(row, col);					
+				}
 			}
 		}
 		
@@ -426,7 +436,9 @@ public class GameListener
 		Collection<Position> castlingPositions = new ArrayList<Position>();
 		
 		for (Castle castle : possibleCastles)
-			castlingPositions.add(castle.getNewKingPosition());
+		{
+			castlingPositions.add(castle.getNewKingPosition());			
+		}
 		
 		return castlingPositions;
 	}

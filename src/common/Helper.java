@@ -8,7 +8,8 @@ public class Helper
 	{
 		if (obj == null)
 		{
-			throw new NullPointerException("Parameter cannot be null");			
+			throw new NullPointerException(
+					GlobalConstants.ErrorMessages.CANNOT_BE_NULL);			
 		}
 	}
 	
@@ -21,7 +22,8 @@ public class Helper
 	{
 		if (!isInRange(min, max, actual))
 		{
-			throw new IllegalArgumentException("Parameter was out of range");	
+			throw new IllegalArgumentException(
+					GlobalConstants.ErrorMessages.OUT_OF_RANGE);			
 		}
 	}
 	
