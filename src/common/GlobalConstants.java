@@ -25,10 +25,16 @@ public class GlobalConstants
 	
 	public static class ErrorMessages
 	{
-		public static final String CANNOT_OBTAIN_WINNER = 
-				"Cannot obtain winner color as the game is still going";
+		public static final String CANNOT_OBTAIN_WINNER = "Cannot obtain winner color as the game is still going";
 		
-		public static final String CANNOT_OBTAIN_LOSER = 
-				"Cannot obtain loser color as the game is still going";
+		public static final String CANNOT_OBTAIN_LOSER = "Cannot obtain loser color as the game is still going";
+		
+		public static final String CANNOT_MAKE_MOVES = "Cannot make moves because the game is over";
+		
+		public static final String UNREACHABLE_POSITION = "Destination position is not reachable";
+		
+		public static final String CANNOT_PERFORM_CASTLING = "Castling cannot be performed";
+		
+		public static final String KING_NOT_FOUND = "Unable to find the king";
 	}
 }

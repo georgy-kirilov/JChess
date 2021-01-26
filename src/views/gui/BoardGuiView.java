@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.util.Collection;
 
-import javax.swing.JPanel;
 import javax.swing.JOptionPane;
 
 import common.Helper;
@@ -15,13 +14,13 @@ import models.pieces.*;
 import models.boards.Board;
 
 import core.GameListener;
-import core.GuiIOProvider;
+import core.GuiIoProvider;
 
 import enums.PieceColor;
 import views.gui.drawers.PieceDrawer;
 
 @SuppressWarnings("serial")
-public class BoardGuiView extends JPanel implements CellViewListener, GuiIOProvider
+public class BoardGuiView extends GuiIoProvider implements CellViewListener
 {	
 	private final Board board;
 	private final CellView[][] cells;

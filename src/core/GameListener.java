@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import common.Castle;
-import common.GlobalConstants;
 import common.Helper;
 import common.Position;
 import common.OffsetPair;
+import common.GlobalConstants;
 
 import models.pieces.*;
 import models.boards.Board;
@@ -21,7 +21,7 @@ public class GameListener
 	private final HashMap<Piece, Collection<Position>> piecesAndPositions;
 	
 	private final Board board;
-	private final IOProvider ioProvider;
+	private final IoProvider ioProvider;
 	
 	private boolean gameOver;
 	private PieceColor currentPlayerColor;
@@ -29,7 +29,7 @@ public class GameListener
 	private Position enPassantPawnPosition;
 	private Position enPassantCapturePosition;
 	
-	public GameListener(Board board, IOProvider ioProvider)
+	public GameListener(Board board, IoProvider ioProvider)
 	{	
 		Helper.throwIfNull(board);
 		this.board = board;
@@ -58,7 +58,7 @@ public class GameListener
 	{
 		if (isGameOver())
 		{
-			throw new RuntimeException("Cannot make moves because the game is over");						
+			throw new RuntimeException(GlobalConstants.ErrorMessages.CANNOT_MAKE_MOVES);						
 		}
 		
 		boolean positionValid = false;
@@ -74,7 +74,7 @@ public class GameListener
 		
 		if (!positionValid)
 		{
-			throw new IllegalArgumentException("'To' position is not reachable");				
+			throw new IllegalArgumentException(GlobalConstants.ErrorMessages.UNREACHABLE_POSITION);				
 		}
 	
 		Piece piece = board.getAt(from);
@@ -230,7 +230,7 @@ public class GameListener
 			}
 		}
 		
-		throw new IllegalArgumentException("Cannot perform castling");
+		throw new IllegalArgumentException(GlobalConstants.ErrorMessages.CANNOT_PERFORM_CASTLING);
 	}
 	
 	private Collection<Position> getCastlingPositions()
@@ -282,7 +282,7 @@ public class GameListener
 			}
 		}
 		
-		throw new RuntimeException("King not found");
+		throw new RuntimeException(GlobalConstants.ErrorMessages.KING_NOT_FOUND);
 	}
 	
 	private void disableEnPassant()
