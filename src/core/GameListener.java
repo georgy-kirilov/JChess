@@ -42,7 +42,7 @@ public class GameListener
 		gameOver = false;
 		
 		piecesAndPositions = new HashMap<>();
-		possibleCastles = getKing().getPossibleCastles(getKingPosition(), board);
+		possibleCastles = calculatePossibleCastles();
 	}
 	
 	public Collection<Position> onFromPositionSelected(Position from)
@@ -59,7 +59,8 @@ public class GameListener
 	{
 		if (isGameOver())
 		{
-			throw new RuntimeException(GlobalConstants.ErrorMessages.CANNOT_MAKE_MOVES);						
+			throw new RuntimeException(
+					GlobalConstants.ErrorMessages.CANNOT_MAKE_MOVES);							
 		}
 		
 		boolean positionValid = false;
@@ -75,14 +76,15 @@ public class GameListener
 		
 		if (!positionValid)
 		{
-			throw new IllegalArgumentException(GlobalConstants.ErrorMessages.UNREACHABLE_POSITION);				
+			throw new IllegalArgumentException(
+					GlobalConstants.ErrorMessages.UNREACHABLE_POSITION);				
 		}
 	
 		Piece piece = board.getAt(from);
 		
 		if (canCurrentPlayerPerformEnPassant(piece, from))
 		{
-			board.setToEmpty(enPassantPawnPosition);			
+			board.setToEmpty(enPassantPawnPosition);		
 		}
 		
 		disableEnPassant();
@@ -117,9 +119,9 @@ public class GameListener
 		nextPlayer();
 		nextTurn();
 		
-		if (getKing().isChecked(getKingPosition(), board))
+		if (isCurrentPlayerInCheck())
 		{
-			if (getKing().isCheckmated(getKingPosition(), board))
+			if (isCurrentPlayerInCheckmate())
 			{
 				gameOver = true;
 				ioProvider.announceGameOver(getWinnerColor());
@@ -128,24 +130,9 @@ public class GameListener
 			
 			ioProvider.announceCheck();
 		}
-		else
-		{
-			for (int i = 0; i < board.getHeight(); i++)
-			{
-				for (int j = 0; j < board.getWidth(); j++)
-				{
-					Piece current = board.getAt(i, j);
-					
-					if (!board.isEmptyAt(i, j) && current.getColor() == getCurrentPlayerColor())
-					{
-						Collection<Position> positions = getReachablePositions(new Position(i, j));
-						
-						if (positions.size() != 0)
-							return;
-					}
-				}
-			}
-			
+		else if (isCurrentPlayerInStalemate())
+		{	
+			gameOver = true;
 			ioProvider.announceDraw(ReasonForDraw.STALEMATE);
 		}
 	}
@@ -163,80 +150,285 @@ public class GameListener
 	public PieceColor getLoserColor()
 	{
 		if (isGameOver()) 
-		{
 			return getCurrentPlayerColor();			
-		}
 		
-		throw new RuntimeException(GlobalConstants.ErrorMessages.CANNOT_OBTAIN_LOSER);
+		throw new RuntimeException(
+				GlobalConstants.ErrorMessages.CANNOT_OBTAIN_LOSER);
 	}
 	
 	public PieceColor getWinnerColor()
 	{
 		if (isGameOver())
-		{
 			return getLoserColor() == PieceColor.WHITE ? PieceColor.BLACK : PieceColor.WHITE;
-		}
 		
-		throw new RuntimeException(GlobalConstants.ErrorMessages.CANNOT_OBTAIN_WINNER);
+		throw new RuntimeException(
+				GlobalConstants.ErrorMessages.CANNOT_OBTAIN_WINNER);
 	}
 	
-	public Collection<Position> getReachablePositions(Position piecePosition)
+	private Collection<Position> getReachablePositions(Position piecePosition)
 	{	
 		Collection<Position> reachablePositions = new ArrayList<>();
 		
-		Piece piece = board.getAt(piecePosition);
-		
-		boolean pieceExists = !board.isEmptyAt(piecePosition) 
-				&& piece.getColor() == getCurrentPlayerColor();
-		
-		if (pieceExists)
+		if (checkForMyPieceAt(piecePosition.getRow(), piecePosition.getColumn()))
 		{	
-			// Checks whether the piece has already been used and returns its data from the hash map
+			Piece piece = board.getAt(piecePosition);
 			
 			if (piecesAndPositions.containsKey(piece))
-			{
-				return piecesAndPositions.get(piece);				
-			}
+				return piecesAndPositions.get(piece);
 			
-			Collection<Position> allPiecePositions = piece.getReachablePositions(piecePosition, board);
+			Collection<Position> allPositions = piece.getReachablePositions(piecePosition, board);
 			
-			for (Position position : allPiecePositions)
-			{
-				// Makes the move
-				
+			for (Position position : allPositions)
+			{	
 				Piece captured = board.setToEmpty(position);
 				board.setAt(position, piece);
 				board.setToEmpty(piecePosition);
 				
-				// Checks whether the move is valid
-				
-				if (!getKing().isChecked(getKingPosition(), board))
-				{
+				if (!isCurrentPlayerInCheck())
 					reachablePositions.add(position);
-				}
-				
-				// Reverts the move
 				
 				board.setAt(position, captured);
 				board.setAt(piecePosition, piece);
 			}
 			
-			// Checks whether the piece is King and if so adds its castling positions to the list
-			
 			if (getKingPosition().equals(piecePosition))
-			{
 				reachablePositions.addAll(getCastlingPositions());
-			}
 			
 			if (canCurrentPlayerPerformEnPassant(piece, piecePosition))
-			{
 				reachablePositions.add(enPassantCapturePosition);
+			
+			piecesAndPositions.put(piece, reachablePositions);
+		}
+		
+		return reachablePositions;
+	}
+	
+	private boolean isCurrentPlayerInCheck()
+	{	
+		Position flippedKingPosition = getKingPosition().flipOver(board);
+		board.rotate();
+		
+		for (int row = 0; row < board.getHeight(); row++)
+		{
+			for (int col = 0; col < board.getWidth(); col++)
+			{
+				if (!checkForEnemyPieceAt(row, col))
+					continue;
+				
+				Piece piece = board.getAt(row, col);
+				
+				for (Position position : piece.getReachablePositions(new Position(row, col), board))
+				{
+					if (position.equals(flippedKingPosition))
+					{
+						board.rotate();
+						return true;
+					}
+				}
 			}
 		}
 		
-		piecesAndPositions.put(piece, reachablePositions);
+		board.rotate();
+		return false;
+	}
+	
+	private boolean isCurrentPlayerInCheckmate()
+	{	
+		for (int row = 0; row < board.getHeight(); row++)
+		{
+			for (int col = 0; col < board.getWidth(); col++)
+			{
+				if (!checkForMyPieceAt(row, col))
+					continue;
+				
+				Piece piece = board.getAt(row, col);
+				Collection<Position> positions = piece.getReachablePositions(new Position(row, col), board);
+				
+				for (Position position : positions)
+				{
+					Piece captured = board.getAt(position);
+					board.setAt(position, piece);
+					board.setToEmpty(row, col);
+	
+					boolean checked = isCurrentPlayerInCheck();
+					
+					board.setAt(position, captured);
+					board.setAt(row, col, piece);
+					
+					if (!checked)
+						return false;
+				}
+			}
+		}
 		
-		return reachablePositions;
+		return true;
+	}
+	
+	private King getKing()
+	{
+		return (King)board.getAt(getKingPosition());
+	}
+	
+	private Position getKingPosition()
+	{
+		for	(int row = 0; row < board.getHeight(); row++)
+		{
+			for (int col = 0; col < board.getWidth(); col++)
+			{
+				Piece piece = board.getAt(row, col);
+				
+				boolean kingFound = checkForMyPieceAt(row, col)
+						&& piece instanceof King;
+				
+				if (kingFound)
+					return new Position(row, col);
+			}
+		}
+		
+		throw new RuntimeException(
+				GlobalConstants.ErrorMessages.KING_NOT_FOUND);
+	}
+	
+	private boolean isCurrentPlayerInStalemate()
+	{
+		for (int row = 0; row < board.getHeight(); row++)
+		{
+			for (int col = 0; col < board.getWidth(); col++)
+			{
+				if (!checkForMyPieceAt(row, col))
+					continue;
+				
+				Collection<Position> positions = getReachablePositions(new Position(row, col));
+					
+				if (positions.size() != 0) 
+					return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	private void disableEnPassant()
+	{
+		enPassantPawnPosition = null;
+		enPassantCapturePosition = null;
+	}
+	
+	private boolean canCurrentPlayerPerformEnPassant(Piece piece, Position piecePosition)
+	{
+		return checkForMyPieceAt(piecePosition.getRow(), piecePosition.getColumn())
+				&& piece instanceof Pawn
+				&& (piecePosition.moveBy(OffsetPair.TOP_LEFT).equals(enPassantCapturePosition)
+				|| piecePosition.moveBy(OffsetPair.TOP_RIGHT).equals(enPassantCapturePosition));
+	}
+	
+	private Collection<Castle> calculatePossibleCastles()
+	{
+		Collection<Castle> castles = new ArrayList<>();
+		
+		King king = getKing();
+		Position kingPosition = getKingPosition();
+		
+		if (king.isMoved())
+			return castles;
+		
+		int row = board.getHeight() - 1;
+		
+		for (int col = 0; col < board.getWidth(); col++)
+		{
+			Piece piece = board.getAt(row, col);
+			
+			boolean rookFound = checkForMyPieceAt(row, col)
+					&& piece.getClass().equals(Rook.class) && !piece.isMoved();
+			
+			if (!rookFound)
+				continue;
+			
+			Rook rook = (Rook)piece;
+			
+			boolean rookLeftFromKing = col < kingPosition.getColumn();
+			
+			OffsetPair rookOffset = rookLeftFromKing ? OffsetPair.RIGHT : OffsetPair.LEFT;
+			
+			boolean allInsideCellsFree = true;
+			
+			Position rookPosition = new Position(row, col);
+			
+			while (true)
+			{
+				rookPosition = rookPosition.moveBy(rookOffset);
+				
+				if (!board.isEmptyAt(rookPosition))
+				{
+					if (!rookPosition.equals(kingPosition))
+						allInsideCellsFree = false;												
+					
+					break;
+				}
+			}
+			
+			if (!allInsideCellsFree)
+				continue;
+			
+			OffsetPair kingOffset = rookLeftFromKing ? OffsetPair.LEFT : OffsetPair.RIGHT;
+			Position rookCastlingPosition = kingPosition.moveBy(kingOffset);
+			
+			board.setToEmpty(kingPosition);
+			board.setAt(rookCastlingPosition, king);
+			
+			if (!isCurrentPlayerInCheck())
+			{
+				board.setToEmpty(row, col);
+				board.setAt(rookCastlingPosition, rook);
+				
+				Position kingCastlingPosition = rookCastlingPosition.moveBy(kingOffset);
+				
+				if (board.isEmptyAt(kingCastlingPosition))
+				{
+					board.setAt(kingCastlingPosition, king);
+					
+					if (!isCurrentPlayerInCheck())
+					{
+						Position oldRookPosition = new Position(row, col);
+						
+						Castle castle = new Castle(
+								rook, rookCastlingPosition, 
+								kingCastlingPosition, oldRookPosition);
+						
+						castles.add(castle);
+					}
+					
+					board.setToEmpty(kingCastlingPosition);
+				}
+			}
+			
+			board.setToEmpty(rookCastlingPosition);
+			board.setAt(kingPosition, king);
+			board.setAt(row, col, rook);
+		}
+		
+		return castles;
+	}
+	
+	private boolean isValidCastlingPosition(Position kingCastlingPosition)
+	{
+		for (Castle castle : possibleCastles)
+		{
+			if (castle.getNewKingPosition().equals(kingCastlingPosition))
+				return true;			
+		}
+		
+		return false;
+	}
+	
+	private Collection<Position> getCastlingPositions()
+	{
+		Collection<Position> castlingPositions = new ArrayList<Position>();
+		
+		for (Castle castle : possibleCastles)
+			castlingPositions.add(castle.getNewKingPosition());
+		
+		return castlingPositions;
 	}
 	
 	private void performCastling(Position kingCastlingPosition)
@@ -251,80 +443,14 @@ public class GameListener
 			}
 		}
 		
-		throw new IllegalArgumentException(GlobalConstants.ErrorMessages.CANNOT_PERFORM_CASTLING);
-	}
-	
-	private Collection<Position> getCastlingPositions()
-	{
-		Collection<Position> castlingPositions = new ArrayList<Position>();
-		
-		for (Castle castle : possibleCastles)
-		{
-			castlingPositions.add(castle.getNewKingPosition());
-		}
-		
-		return castlingPositions;
-	}
-	
-	private boolean isValidCastlingPosition(Position kingCastlingPosition)
-	{
-		for (Castle castle : possibleCastles)
-		{
-			if (castle.getNewKingPosition().equals(kingCastlingPosition))
-			{
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	private King getKing()
-	{
-		return (King)board.getAt(getKingPosition());
-	}
-	
-	private Position getKingPosition()
-	{
-		for	(int i = 0; i < board.getHeight(); i++)
-		{
-			for (int j = 0; j < board.getWidth(); j++)
-			{
-				Piece piece = board.getAt(i, j);
-				
-				boolean kingFound = !board.isEmptyAt(i, j) 
-						&& piece.getColor() == getCurrentPlayerColor()
-						&& piece instanceof King;
-				
-				if (kingFound)
-				{
-					return new Position(i, j);					
-				}
-			}
-		}
-		
-		throw new RuntimeException(GlobalConstants.ErrorMessages.KING_NOT_FOUND);
-	}
-	
-	private void disableEnPassant()
-	{
-		enPassantPawnPosition = null;
-		enPassantCapturePosition = null;
-	}
-	
-	private boolean canCurrentPlayerPerformEnPassant(Piece piece, Position piecePosition)
-	{
-		return !board.isEmptyAt(piecePosition) 
-				&& piece instanceof Pawn 
-				&& piece.getColor() == getCurrentPlayerColor() 
-				&& (piecePosition.moveBy(OffsetPair.TOP_LEFT).equals(enPassantCapturePosition) 
-				|| piecePosition.moveBy(OffsetPair.TOP_RIGHT).equals(enPassantCapturePosition));
+		throw new IllegalArgumentException(
+				GlobalConstants.ErrorMessages.CANNOT_PERFORM_CASTLING);
 	}
 	
 	private void nextPlayer()
 	{
-		currentPlayerColor = currentPlayerColor == PieceColor.WHITE ? 
-				PieceColor.BLACK : PieceColor.WHITE;
+		currentPlayerColor = currentPlayerColor == PieceColor.WHITE 
+				? PieceColor.BLACK : PieceColor.WHITE;
 	}
 	
 	private void nextTurn()
@@ -332,6 +458,18 @@ public class GameListener
 		board.rotate();
 		piecesAndPositions.clear();
 		ioProvider.redrawBoard();
-		possibleCastles = getKing().getPossibleCastles(getKingPosition(), board);
+		possibleCastles = calculatePossibleCastles();
+	}
+	
+	private boolean checkForMyPieceAt(int row, int column)
+	{
+		return !board.isEmptyAt(row, column) 
+			&& board.getAt(row, column).getColor() == getCurrentPlayerColor();
+	}
+	
+	private boolean checkForEnemyPieceAt(int row, int column)
+	{
+		return !board.isEmptyAt(row, column) 
+			&& board.getAt(row, column).getColor() != getCurrentPlayerColor();
 	}
 }
