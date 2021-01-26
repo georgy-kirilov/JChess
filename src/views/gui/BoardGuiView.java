@@ -17,6 +17,7 @@ import core.GameListener;
 import core.GuiIoProvider;
 
 import enums.PieceColor;
+import enums.ReasonForDraw;
 import views.gui.drawers.PieceDrawer;
 
 @SuppressWarnings("serial")
@@ -152,6 +153,12 @@ public class BoardGuiView extends GuiIoProvider implements CellViewListener
 		{
 			getAt(position).setCastlable(true);
 		}
+	}
+	
+	@Override
+	public void announceDraw(ReasonForDraw reasonForDraw)
+	{
+		JOptionPane.showMessageDialog(this, "STALEMATE");
 	}
 	
 	@Override

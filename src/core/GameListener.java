@@ -14,6 +14,7 @@ import models.pieces.*;
 import models.boards.Board;
 
 import enums.PieceColor;
+import enums.ReasonForDraw;
 
 public class GameListener
 {	
@@ -126,6 +127,26 @@ public class GameListener
 			}
 			
 			ioProvider.announceCheck();
+		}
+		else
+		{
+			for (int i = 0; i < board.getHeight(); i++)
+			{
+				for (int j = 0; j < board.getWidth(); j++)
+				{
+					Piece current = board.getAt(i, j);
+					
+					if (!board.isEmptyAt(i, j) && current.getColor() == getCurrentPlayerColor())
+					{
+						Collection<Position> positions = getReachablePositions(new Position(i, j));
+						
+						if (positions.size() != 0)
+							return;
+					}
+				}
+			}
+			
+			ioProvider.announceDraw(ReasonForDraw.STALEMATE);
 		}
 	}
 	
