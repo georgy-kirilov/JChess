@@ -20,7 +20,7 @@ public class StandardBoard extends BaseBoard
 		int whitePawnsRow = 6, blackPawnsRow = 1;
 		Position currentPawnPosition = new Position();
 		
-		for	(int i = 0; i < this.getWidth(); i++)
+		for	(int i = 0; i < getWidth(); i++)
 		{
 			currentPawnPosition.setColumn(i);
 			
