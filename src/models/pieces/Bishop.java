@@ -16,7 +16,7 @@ public class Bishop extends BasePiece
 	}
 
 	@Override
-	public Collection<Position> getReachablePositions(Position currentPosition, Board board) 
+	public Collection<Position> getReachablePositions(Position bishopPosition, Board board) 
 	{		
 		OffsetPair[] offsetPairs = new OffsetPair[]
 		{
@@ -26,6 +26,6 @@ public class Bishop extends BasePiece
 			OffsetPair.BOTTOM_RIGHT,
 		};
 				
-		return getReachableConsequtivePositions(currentPosition, board, offsetPairs);
+		return getReachableConsequtivePositions(bishopPosition, board, offsetPairs);
 	}
 }

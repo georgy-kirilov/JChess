@@ -18,5 +18,5 @@ public interface Piece
 	
 	boolean canMoveFreelyTo(Position position, Board board);
 	
-	Collection<Position> getReachablePositions(Position currentPosition, Board board);
+	Collection<Position> getReachablePositions(Position piecePosition, Board board);
 }

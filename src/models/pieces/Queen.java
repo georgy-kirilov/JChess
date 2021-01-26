@@ -16,7 +16,7 @@ public class Queen extends BasePiece
 	}
 	
 	@Override
-	public Collection<Position> getReachablePositions(Position currentPosition, Board board) 
+	public Collection<Position> getReachablePositions(Position queenPosition, Board board) 
 	{
 		OffsetPair[] offsetPairs = new OffsetPair[]
 		{
@@ -30,6 +30,6 @@ public class Queen extends BasePiece
 			OffsetPair.BOTTOM_RIGHT,
 		};
 		
-		return getReachableConsequtivePositions(currentPosition, board, offsetPairs);
+		return getReachableConsequtivePositions(queenPosition, board, offsetPairs);
 	}
 }

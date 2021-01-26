@@ -18,7 +18,7 @@ public class King extends BasePiece
 	}
 
 	@Override
-	public Collection<Position> getReachablePositions(Position currentPosition, Board board)
+	public Collection<Position> getReachablePositions(Position kingPosition, Board board)
 	{
 		OffsetPair[] offsetPairs = new OffsetPair[]
 		{
@@ -32,7 +32,7 @@ public class King extends BasePiece
 			OffsetPair.BOTTOM_LEFT,
 		};
 		
-		return getReachableSinglePositions(currentPosition, board, offsetPairs);
+		return getReachableSinglePositions(kingPosition, board, offsetPairs);
 	}
 	
 	public boolean isChecked(Position kingPosition, Board board)

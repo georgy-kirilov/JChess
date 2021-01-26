@@ -17,11 +17,11 @@ public class Pawn extends BasePiece
 	}
 
 	@Override
-	public Collection<Position> getReachablePositions(Position currentPosition, Board board)
+	public Collection<Position> getReachablePositions(Position pawnPosition, Board board)
 	{	
 		ArrayList<Position> positions = new ArrayList<>();
 		
-		Position up = currentPosition.moveBy(OffsetPair.UP);
+		Position up = pawnPosition.moveBy(OffsetPair.UP);
 		
 		if (canMoveFreelyTo(up, board))
 		{
@@ -29,7 +29,7 @@ public class Pawn extends BasePiece
 			
 			if (!isMoved())
 			{
-				Position twiceUp = currentPosition.moveBy(OffsetPair.UP).moveBy(OffsetPair.UP);
+				Position twiceUp = pawnPosition.moveBy(OffsetPair.UP).moveBy(OffsetPair.UP);
 				
 				if (canMoveFreelyTo(twiceUp, board))
 				{
@@ -38,14 +38,14 @@ public class Pawn extends BasePiece
 			}
 		}
 
-		Position topRight = currentPosition.moveBy(OffsetPair.TOP_RIGHT);
+		Position topRight = pawnPosition.moveBy(OffsetPair.TOP_RIGHT);
 		
 		if (canCaptureAt(topRight, board))
 		{
 			positions.add(topRight);			
 		}
 
-		Position topLeft = currentPosition.moveBy(OffsetPair.TOP_LEFT);
+		Position topLeft = pawnPosition.moveBy(OffsetPair.TOP_LEFT);
 		
 		if (canCaptureAt(topLeft, board))
 		{

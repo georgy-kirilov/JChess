@@ -16,7 +16,7 @@ public class Rook extends BasePiece
 	}
 	
 	@Override
-	public Collection<Position> getReachablePositions(Position currentPosition, Board board) 
+	public Collection<Position> getReachablePositions(Position rookPosition, Board board) 
 	{
 		OffsetPair[] offsetPairs = new OffsetPair[]
 		{
@@ -26,7 +26,7 @@ public class Rook extends BasePiece
 			OffsetPair.RIGHT,
 		};
 		
-		return getReachableConsequtivePositions(currentPosition, board, offsetPairs);
+		return getReachableConsequtivePositions(rookPosition, board, offsetPairs);
 	}
 }
 

@@ -16,7 +16,7 @@ public class Knight extends BasePiece
 	}
 
 	@Override
-	public Collection<Position> getReachablePositions(Position currentPosition, Board board)
+	public Collection<Position> getReachablePositions(Position knightPosition, Board board)
 	{
 		OffsetPair[] offsetPairs = new OffsetPair[]
 		{
@@ -30,6 +30,6 @@ public class Knight extends BasePiece
 			new OffsetPair(1, 2),
 		};
 		
-		return getReachableSinglePositions(currentPosition, board, offsetPairs);
+		return getReachableSinglePositions(knightPosition, board, offsetPairs);
 	}
 }

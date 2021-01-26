@@ -99,8 +99,8 @@ public abstract class BaseBoard implements Board
 		int maxRows = getHeight() - 1;
 		int maxColumns = getWidth() - 1;
 		
-		return Helper.isInRange(0, maxRows, position.getRow()) && 
-				Helper.isInRange(0, maxColumns, position.getColumn());
+		return Helper.isInRange(0, maxRows, position.getRow())
+			   && Helper.isInRange(0, maxColumns, position.getColumn());
 	}
 	
 	@Override
