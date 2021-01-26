@@ -13,5 +13,6 @@ public class GuiChessEngine
 	public GuiChessEngine(GuiIoProvider guiIoProvider)
 	{
 		gameFrame = new GameFrame(GAME_FRAME_BOUNDS, guiIoProvider);
+		gameFrame.setVisible(true);
 	}
 } 
