@@ -6,7 +6,7 @@ import common.Position;
 import enums.PieceColor;
 import models.pieces.Piece;
 
-public interface GameAnnouncer
+public interface IOProvider
 {
 	void announceCheck();
 	

@@ -14,13 +14,13 @@ import models.pieces.*;
 import models.boards.Board;
 
 import core.GameListener;
-import core.GameAnnouncer;
+import core.IOProvider;
 
 import enums.PieceColor;
 import views.gui.drawers.PieceDrawer;
 
 @SuppressWarnings("serial")
-public class BoardGuiView extends JPanel implements CellViewListener, GameAnnouncer
+public class BoardGuiView extends JPanel implements CellViewListener, IOProvider
 {	
 	private final Board board;
 	private final CellView[][] cells;
@@ -148,7 +148,7 @@ public class BoardGuiView extends JPanel implements CellViewListener, GameAnnoun
 				
 				if (Helper.isRookChar(firstChar))
 				{
-					return new Rook(pawnColor);					
+					return new Rook(pawnColor);			
 				}
 			}
 		}

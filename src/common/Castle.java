@@ -4,14 +4,14 @@ import models.pieces.Rook;
 
 public class Castle
 {
-	private final Rook rook;
-	private final Position newRookPosition;
-	private final Position newKingPosition;
-	private final Position oldRookPosition;
+	private Rook rook;
+	private Position newRookPosition;
+	private Position newKingPosition;
+	private Position oldRookPosition;
 	
 	public Castle(
-			Rook rook, 
-			Position newRookPosition, 
+			Rook rook,
+			Position newRookPosition,
 			Position newKingPosition, 
 			Position oldRookPosition)
 	{
