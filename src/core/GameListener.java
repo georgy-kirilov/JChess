@@ -14,7 +14,7 @@ import models.pieces.*;
 import models.boards.Board;
 
 import enums.PieceColor;
-import enums.ReasonForDraw;
+import enums.DrawStatus;
 
 public class GameListener
 {	
@@ -124,7 +124,7 @@ public class GameListener
 			if (isCurrentPlayerInCheckmate())
 			{
 				gameOver = true;
-				ioProvider.announceGameOver(getWinnerColor());
+				ioProvider.announceCheckmate(getWinnerColor());
 				return;
 			}
 			
@@ -133,7 +133,7 @@ public class GameListener
 		else if (isCurrentPlayerInStalemate())
 		{	
 			gameOver = true;
-			ioProvider.announceDraw(ReasonForDraw.STALEMATE);
+			ioProvider.announceDraw(DrawStatus.STALEMATE);
 		}
 	}
 	

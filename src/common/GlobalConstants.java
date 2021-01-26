@@ -21,6 +21,8 @@ public class GlobalConstants
 		public static final String CHECKMATE_FORMAT = "GAME OVER - %s WINS!";
 		
 		public static final String PAWN_PROMOTION = String.join(OPTIONS_SEPARATOR, PAWN_PROMOTION_OPTIONS);
+		
+		public static final String DRAW_FORMAT = "DRAW: %s";
 	}
 	
 	public static class ErrorMessages

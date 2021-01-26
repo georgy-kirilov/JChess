@@ -17,7 +17,7 @@ import core.GameListener;
 import core.GuiIoProvider;
 
 import enums.PieceColor;
-import enums.ReasonForDraw;
+import enums.DrawStatus;
 import views.gui.drawers.PieceDrawer;
 
 @SuppressWarnings("serial")
@@ -69,7 +69,7 @@ public class BoardGuiView extends GuiIoProvider implements CellViewListener
 		
 		if (cell.getPosition().equals(lastSelectedPosition))
 		{
-			lastSelectedPosition = null;
+			lastSelectedPosition = null;			
 		}
 		else
 		{
@@ -77,9 +77,7 @@ public class BoardGuiView extends GuiIoProvider implements CellViewListener
 					gameListener.onFromPositionSelected(cell.getPosition());
 		
 			for (Position position : reachablePositions)
-			{
 				getAt(position).setHighlighted(true);
-			}
 			
 			lastSelectedPosition = cell.getPosition();
 		}
@@ -101,7 +99,7 @@ public class BoardGuiView extends GuiIoProvider implements CellViewListener
 	}
 	
 	@Override
-	public void announceGameOver(PieceColor winnerColor)
+	public void announceCheckmate(PieceColor winnerColor)
 	{	
 		String message = String.format(
 				GlobalConstants.GameMessages.CHECKMATE_FORMAT, 
@@ -116,32 +114,24 @@ public class BoardGuiView extends GuiIoProvider implements CellViewListener
 	{		
 		while (true)
 		{
-			String input = JOptionPane.showInputDialog
-					(this, GlobalConstants.GameMessages.PAWN_PROMOTION);
+			String input = JOptionPane.showInputDialog(
+					this, GlobalConstants.GameMessages.PAWN_PROMOTION);
 			
 			if (!Helper.isNullOrEmpty(input) && input.length() == 1)
 			{
 				char firstChar = input.charAt(0);
 				
 				if (Helper.isBishopChar(firstChar))
-				{
 					return new Bishop(pawnColor);					
-				}
 				
 				if (Helper.isKnightChar(firstChar))
-				{
 					return new Knight(pawnColor);					
-				}
 				
 				if (Helper.isQueenChar(firstChar))
-				{
 					return new Queen(pawnColor);					
-				}
 				
 				if (Helper.isRookChar(firstChar))
-				{
-					return new Rook(pawnColor);			
-				}
+					return new Rook(pawnColor);
 			}
 		}
 	}
@@ -150,15 +140,18 @@ public class BoardGuiView extends GuiIoProvider implements CellViewListener
 	public void announceCastlingPositions(Collection<Position> positions)
 	{
 		for (Position position : positions)
-		{
 			getAt(position).setCastlable(true);
-		}
 	}
 	
 	@Override
-	public void announceDraw(ReasonForDraw reasonForDraw)
+	public void announceDraw(DrawStatus drawStatus)
 	{
-		JOptionPane.showMessageDialog(this, "STALEMATE");
+		String message = String.format(
+				GlobalConstants.GameMessages.DRAW_FORMAT, 
+				drawStatus.toString().toUpperCase());
+		
+		JOptionPane.showMessageDialog(this, message);
+		System.exit(0);
 	}
 	
 	@Override
