@@ -99,6 +99,4 @@ public abstract class BasePiece implements Piece
 		
 		return positions;
 	}
-	
-	public abstract Collection<Position> getReachablePositions(Position piecePosition, Board board);
 }

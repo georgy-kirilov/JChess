@@ -116,8 +116,6 @@ public abstract class BaseBoard implements Board
 		}
 	}
 	
-	public abstract void initialize();
-	
 	private void initializeAsEmpty()
 	{	
 		for (int row = 0; row < getHeight(); row++)
