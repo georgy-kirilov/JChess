@@ -88,8 +88,8 @@ public abstract class BasePiece implements Piece
 		{
 			Position nextPosition = piecePosition.moveBy(offsetPair);
 			
-			boolean positionValid = canMoveFreelyTo(nextPosition, board) || 
-					canCaptureAt(nextPosition, board);
+			boolean positionValid = canMoveFreelyTo(nextPosition, board) 
+					|| canCaptureAt(nextPosition, board);
 		
 			if (positionValid)
 			{

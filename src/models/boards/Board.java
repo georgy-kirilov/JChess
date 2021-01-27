@@ -29,5 +29,7 @@ public interface Board
 	
 	void rotate();
 	
+	void initialize();
+	
 	Piece EMPTY_CELL = null;
 }

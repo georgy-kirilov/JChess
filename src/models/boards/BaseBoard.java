@@ -7,9 +7,9 @@ import models.pieces.Piece;
 
 public abstract class BaseBoard implements Board
 {	
-	private final int MIN_HEIGHT = 5;
+	private final int MIN_HEIGHT = 4;
 	private final int MAX_HEIGHT = 16;
-	private final int MIN_WIDTH = 5;
+	private final int MIN_WIDTH = 4;
 	private final int MAX_WIDTH = 16;
 	
 	private final int height;
@@ -29,43 +29,36 @@ public abstract class BaseBoard implements Board
 		initializeAsEmpty();
 	}
 
-	@Override
 	public int getHeight()
 	{
 		return height;
 	}
 
-	@Override
 	public int getWidth()
 	{
 		return width;
 	}
 
-	@Override
 	public Piece getAt(Position position)
 	{
 		return getAt(position.getRow(), position.getColumn());
 	}
 	
-	@Override
 	public Piece getAt(int row, int column)
 	{
 		return cells[row][column];
 	}
 
-	@Override
 	public void setAt(Position position, Piece piece)
 	{
 		setAt(position.getRow(), position.getColumn(), piece);
 	}
 
-	@Override
 	public void setAt(int row, int column, Piece piece)
 	{
 		cells[row][column] = piece;
 	}
 	
-	@Override
 	public Piece setToEmpty(Position position) 
 	{
 		Piece oldPiece = getAt(position);
@@ -73,7 +66,6 @@ public abstract class BaseBoard implements Board
 		return oldPiece;
 	}
 	
-	@Override
 	public Piece setToEmpty(int row, int column) 
 	{
 		Piece oldPiece = getAt(row, column);
@@ -81,19 +73,16 @@ public abstract class BaseBoard implements Board
 		return oldPiece;
 	}
 	
-	@Override
 	public boolean isEmptyAt(Position position) 
 	{
 		return getAt(position) == EMPTY_CELL;
 	}
 
-	@Override
 	public boolean isEmptyAt(int row, int column)
 	{
 		return getAt(row, column) == EMPTY_CELL;
 	}
 	
-	@Override
 	public boolean isPositionInside(Position position)
 	{
 		int maxRows = getHeight() - 1;
@@ -103,10 +92,11 @@ public abstract class BaseBoard implements Board
 			   && Helper.isInRange(0, maxColumns, position.getColumn());
 	}
 	
-	@Override
 	public void rotate() 
 	{	
-		for (int i = 0; i < 2; i++)
+		int rotationsCount = 2;
+		
+		for (int rotation = 0; rotation < rotationsCount; rotation++)
 		{
 			for (int row = 0; row < getHeight() / 2; row++)
 	        {
@@ -124,7 +114,9 @@ public abstract class BaseBoard implements Board
 	            } 
 	        } 
 		}
-	} 
+	}
+	
+	public abstract void initialize();
 	
 	private void initializeAsEmpty()
 	{	
