@@ -101,7 +101,7 @@ public abstract class BaseBoard implements Board
 			for (int row = 0; row < getHeight() / 2; row++)
 	        {
 	            for (int col = row; col < getWidth() - row - 1; col++) 
-	            { 
+	            {
 	                Piece temp = getAt(row, col);
 	  
 	                int newCol = getHeight() - 1 - row;

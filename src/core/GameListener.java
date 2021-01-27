@@ -4,11 +4,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import common.Castle;
-import common.Helper;
-import common.Position;
-import common.OffsetPair;
-import common.GlobalConstants;
+import common.*;
 
 import models.pieces.*;
 import models.boards.Board;
