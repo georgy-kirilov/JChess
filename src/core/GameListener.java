@@ -57,6 +57,7 @@ public class GameListener
 	
 	public void onToPositionSelected(Position from, Position to)
 	{
+		// Piece TO and FROM positions validation
 		if (isGameOver())
 		{
 			throw new RuntimeException(
@@ -82,6 +83,7 @@ public class GameListener
 	
 		Piece piece = board.getAt(from);
 		
+		// EN-PASSANT
 		if (canCurrentPlayerPerformEnPassant(piece, from))
 		{
 			board.setToEmpty(enPassantPawnPosition);		
@@ -98,17 +100,20 @@ public class GameListener
 			enPassantCapturePosition = from.moveBy(OffsetPair.UP).flipOver(board);
 		}
 		
+		// CASTLING
 		if (piece instanceof King && isValidCastlingPosition(to))
 		{
 			performCastling(to);
 		}
 		
+		// BASIC PIECE MOVEMENT
 		piece = board.getAt(from);
 		board.setToEmpty(from);
 		board.setAt(to, piece);
 		
 		piece.move();
 		
+		// PAWN PROMOTION
 		if (piece instanceof Pawn && ((Pawn)piece).canBePromoted(to))
 		{
 			ioProvider.redrawBoard();
@@ -119,8 +124,10 @@ public class GameListener
 		nextPlayer();
 		nextTurn();
 		
+		// CHECK
 		if (isCurrentPlayerInCheck())
 		{
+			// CHECKMATE
 			if (isCurrentPlayerInCheckmate())
 			{
 				gameOver = true;
@@ -130,10 +137,14 @@ public class GameListener
 			
 			ioProvider.announceCheck();
 		}
-		else if (isCurrentPlayerInStalemate())
+		else 
 		{	
-			gameOver = true;
-			ioProvider.announceDraw(DrawStatus.STALEMATE);
+			// STALEMATE
+			if (isCurrentPlayerInStalemate())
+			{
+				gameOver = true;
+				ioProvider.announceDraw(DrawStatus.STALEMATE);
+			}
 		}
 	}
 	
@@ -393,7 +404,8 @@ public class GameListener
 				
 				Position kingCastlingPosition = rookCastlingPosition.moveBy(kingOffset);
 				
-				if (board.isEmptyAt(kingCastlingPosition))
+				if (board.isPositionInside(kingCastlingPosition) 
+						&& board.isEmptyAt(kingCastlingPosition))
 				{
 					board.setAt(kingCastlingPosition, king);
 					

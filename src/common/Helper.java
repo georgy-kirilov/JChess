@@ -15,7 +15,7 @@ public class Helper
 	
 	public static boolean isInRange(int min, int max, int actual)
 	{
-		return min <= actual && actual <= max;
+		return actual >= min && actual <= max;
 	}
 	
 	public static void throwIfOutOfRange(int min, int max, int actual)
@@ -23,7 +23,7 @@ public class Helper
 		if (!isInRange(min, max, actual))
 		{
 			throw new IllegalArgumentException(
-					GlobalConstants.ErrorMessages.OUT_OF_RANGE);			
+					GlobalConstants.ErrorMessages.OUT_OF_RANGE);	
 		}
 	}
 	
