@@ -13,11 +13,6 @@ public class Helper
 		}
 	}
 	
-	public static boolean isInRange(int min, int max, int actual)
-	{
-		return actual >= min && actual <= max;
-	}
-	
 	public static void throwIfOutOfRange(int min, int max, int actual)
 	{
 		if (!isInRange(min, max, actual))
@@ -25,6 +20,11 @@ public class Helper
 			throw new IllegalArgumentException(
 					GlobalConstants.ErrorMessages.OUT_OF_RANGE);	
 		}
+	}
+	
+	public static boolean isInRange(int min, int max, int actual)
+	{
+		return actual >= min && actual <= max;
 	}
 	
 	public static boolean isNullOrEmpty(String str)
