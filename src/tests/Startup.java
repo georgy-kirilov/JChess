@@ -10,6 +10,6 @@ public class Startup
 {	
 	public static void main(String[] args) 
 	{
-		new GuiChessEngine(new BoardGuiView(new FischerRandomBoard(), new TextPieceDrawer()));
+		new GuiChessEngine(new BoardGuiView(new RandomBoard(), new TextPieceDrawer()));
 	}
 }

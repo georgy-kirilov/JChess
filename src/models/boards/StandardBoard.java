@@ -21,7 +21,7 @@ public class StandardBoard extends BaseBoard
 		int whiteKingRow = getHeight() - 1, blackKingRow = 0;
 		int whitePawnsRow = whiteKingRow - 1, blackPawnsRow = blackKingRow + 1;
 		
-		// Setting up both color pawns
+		// Pawns
 		
 		for	(int col = 0; col < getWidth(); col++)
 		{
@@ -29,7 +29,7 @@ public class StandardBoard extends BaseBoard
 			setAt(blackPawnsRow, col, new Pawn(PieceColor.BLACK));
 		}
 		
-		// Setting up the whites
+		// All other whites
 		
 		setAt(new Position(whiteKingRow, 0), new Rook(PieceColor.WHITE));
 		setAt(new Position(whiteKingRow, 1), new Knight(PieceColor.WHITE));
@@ -40,7 +40,7 @@ public class StandardBoard extends BaseBoard
 		setAt(new Position(whiteKingRow, 6), new Knight(PieceColor.WHITE));
 		setAt(new Position(whiteKingRow, 7), new Rook(PieceColor.WHITE));
 		
-		// Setting up the blacks
+		// All other blacks
 		
 		setAt(new Position(blackKingRow, 0), new Rook(PieceColor.BLACK));
 		setAt(new Position(blackKingRow, 1), new Knight(PieceColor.BLACK));

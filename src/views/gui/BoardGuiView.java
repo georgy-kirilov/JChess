@@ -140,7 +140,9 @@ public class BoardGuiView extends GuiIoProvider implements CellViewListener
 	public void announceCastlingPositions(Collection<Position> positions)
 	{
 		for (Position position : positions)
-			getAt(position).setCastlable(true);
+		{
+			getAt(position).setCastlable(true);			
+		}
 	}
 	
 	@Override

@@ -3,8 +3,10 @@ package core;
 import java.util.Collection;
 
 import common.Position;
+
 import enums.PieceColor;
 import enums.DrawStatus;
+
 import models.pieces.Piece;
 
 public interface IoProvider

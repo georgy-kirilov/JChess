@@ -10,12 +10,12 @@ import models.pieces.Pawn;
 import models.pieces.Queen;
 import models.pieces.Rook;
 
-public class FischerRandomBoard extends BaseBoard
+public class RandomBoard extends BaseBoard
 {
 	private static final int BOARD_HEIGHT = 8;
 	private static final int BOARD_WIDTH = 8;
 	
-	public FischerRandomBoard()
+	public RandomBoard()
 	{
 		super(BOARD_HEIGHT, BOARD_WIDTH);
 		initialize();
@@ -26,6 +26,8 @@ public class FischerRandomBoard extends BaseBoard
 	{
 		int whiteKingRow = getHeight() - 1, blackKingRow = 0;
 		int whitePawnsRow = whiteKingRow - 1, blackPawnsRow = blackKingRow + 1;
+		
+		// Pawns
 		
 		for (int col = 0; col < getWidth(); col++)
 		{

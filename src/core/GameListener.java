@@ -374,7 +374,9 @@ public class GameListener
 				if (!board.isEmptyAt(rookPosition))
 				{
 					if (!rookPosition.equals(kingPosition))
-						allInsideCellsFree = false;												
+					{
+						allInsideCellsFree = false;																		
+					}
 					
 					break;
 				}
