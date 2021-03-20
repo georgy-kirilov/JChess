@@ -10,6 +10,7 @@ import common.Helper;
 import common.Position;
 import common.GlobalConstants;
 
+import models.boards.StandardBoard;
 import models.pieces.*;
 import models.boards.Board;
 
@@ -19,6 +20,7 @@ import core.GuiIoProvider;
 import enums.PieceColor;
 import enums.DrawStatus;
 import views.gui.drawers.PieceDrawer;
+import views.gui.drawers.TextPieceDrawer;
 
 @SuppressWarnings("serial")
 public class BoardGuiView extends GuiIoProvider implements CellViewListener
@@ -29,7 +31,7 @@ public class BoardGuiView extends GuiIoProvider implements CellViewListener
 	private final GameListener gameListener;
 	private Position lastSelectedPosition;
 	
-	public BoardGuiView(Board board, PieceDrawer pieceDrawer)
+	public BoardGuiView(Board board, PieceDrawer pieceDrawer, PieceColor startingPlayerColor)
 	{
 		setLayout(new GridLayout(board.getWidth(), board.getHeight()));
 		
@@ -39,7 +41,7 @@ public class BoardGuiView extends GuiIoProvider implements CellViewListener
 		Helper.throwIfNull(pieceDrawer);
 		this.pieceDrawer = pieceDrawer;
 
-		gameListener = new GameListener(board, this);
+		gameListener = new GameListener(board, this, startingPlayerColor);
 		
 		cells = new CellView[board.getWidth()][board.getHeight()];
 		initialize();
@@ -106,7 +108,6 @@ public class BoardGuiView extends GuiIoProvider implements CellViewListener
 				winnerColor.toString().toUpperCase());
 		
 		JOptionPane.showMessageDialog(this, message);
-		System.exit(0);
 	}
 	
 	@Override

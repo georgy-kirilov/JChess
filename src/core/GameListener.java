@@ -26,7 +26,7 @@ public class GameListener
 	private Position enPassantPawnPosition;
 	private Position enPassantCapturePosition;
 	
-	public GameListener(Board board, IoProvider ioProvider)
+	public GameListener(Board board, IoProvider ioProvider, PieceColor startingPlayerColor)
 	{	
 		Helper.throwIfNull(board);
 		this.board = board;
@@ -34,9 +34,14 @@ public class GameListener
 		Helper.throwIfNull(ioProvider);
 		this.ioProvider = ioProvider;
 		
-		currentPlayerColor = PieceColor.WHITE;
+		currentPlayerColor = startingPlayerColor;
+
+		if (currentPlayerColor == PieceColor.BLACK)
+		{
+			board.rotate();
+		}
+
 		gameOver = false;
-		
 		piecesAndPositions = new HashMap<>();
 		possibleCastles = calculatePossibleCastles();
 	}
