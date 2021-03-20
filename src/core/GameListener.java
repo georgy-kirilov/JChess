@@ -58,84 +58,27 @@ public class GameListener
 			throw new RuntimeException(
 					GlobalConstants.ErrorMessages.CANNOT_MAKE_MOVES);							
 		}
-		
-		boolean positionValid = false;
-		
-		for (Position position : getReachablePositions(from))
-		{
-			if (position.equals(to))
-			{
-				positionValid = true;
-				break;
-			}
-		}
-		
-		if (!positionValid)
-		{
-			throw new IllegalArgumentException(
-					GlobalConstants.ErrorMessages.UNREACHABLE_POSITION);				
-		}
-	
+
+		validateToPosition(from, to);
+
 		Piece piece = board.getAt(from);
 
-		if (canCurrentPlayerPerformEnPassant(piece, from))
-		{
-			board.setToEmpty(enPassantPawnPosition);		
-		}
-		
-		disableEnPassant();
-		
-		boolean canNextPlayerPerformEnPassant = piece instanceof Pawn && !piece.isMoved()
-				 && from.moveBy(OffsetPair.UP).moveBy(OffsetPair.UP).equals(to);
-		
-		if (canNextPlayerPerformEnPassant)
-		{
-			enPassantPawnPosition = to.flipOver(board);
-			enPassantCapturePosition = from.moveBy(OffsetPair.UP).flipOver(board);
-		}
-		
-		if (piece instanceof King && isValidCastlingPosition(to))
-		{
-			performCastling(to);
-		}
+		manageEnPassant(piece, from, to);
+		manageCastling(piece, to);
 		
 		piece = board.getAt(from);
 		board.setToEmpty(from);
 		board.setAt(to, piece);
 		
 		piece.move();
-		
-		if (piece instanceof Pawn && ((Pawn)piece).canBePromoted(to))
-		{
-			ioProvider.redrawBoard();
-			Piece newPiece = ioProvider.announcePawnPromotion(piece.getColor());
-			board.setAt(to, newPiece);
-		}
+		managePawnPromotion(piece, to);
 		
 		nextPlayer();
 		nextTurn();
 
-		if (isCurrentPlayerInCheck())
-		{
-			if (isCurrentPlayerInCheckmate())
-			{
-				gameOver = true;
-				ioProvider.announceCheckmate(getWinnerColor());
-				return;
-			}
-			
-			ioProvider.announceCheck();
-		}
-		else 
-		{	
-			if (isCurrentPlayerInStalemate())
-			{
-				gameOver = true;
-				ioProvider.announceDraw(DrawStatus.STALEMATE);
-			}
-		}
+		manageGameState();
 	}
-	
+
 	public boolean isGameOver()
 	{
 		return gameOver;
@@ -209,7 +152,87 @@ public class GameListener
 		
 		return reachablePositions;
 	}
-	
+
+	private void validateToPosition(Position from, Position to)
+	{
+		boolean positionValid = false;
+
+		for (Position position : getReachablePositions(from))
+		{
+			if (position.equals(to))
+			{
+				positionValid = true;
+				break;
+			}
+		}
+
+		if (!positionValid)
+		{
+			throw new IllegalArgumentException(
+					GlobalConstants.ErrorMessages.UNREACHABLE_POSITION);
+		}
+	}
+
+	private void manageEnPassant(Piece piece, Position from, Position to)
+	{
+		if (canCurrentPlayerPerformEnPassant(piece, from))
+		{
+			board.setToEmpty(enPassantPawnPosition);
+		}
+
+		disableEnPassant();
+
+		boolean canNextPlayerPerformEnPassant = piece instanceof Pawn && !piece.isMoved()
+				&& from.moveBy(OffsetPair.UP).moveBy(OffsetPair.UP).equals(to);
+
+		if (canNextPlayerPerformEnPassant)
+		{
+			enPassantPawnPosition = to.flipOver(board);
+			enPassantCapturePosition = from.moveBy(OffsetPair.UP).flipOver(board);
+		}
+	}
+
+	private void managePawnPromotion(Piece piece, Position to)
+	{
+		if (piece instanceof Pawn && ((Pawn)piece).canBePromoted(to))
+		{
+			ioProvider.redrawBoard();
+			Piece newPiece = ioProvider.announcePawnPromotion(piece.getColor());
+			board.setAt(to, newPiece);
+		}
+	}
+
+	private void manageGameState()
+	{
+		if (isCurrentPlayerInCheck())
+		{
+			if (isCurrentPlayerInCheckmate())
+			{
+				gameOver = true;
+				ioProvider.announceCheckmate(getWinnerColor());
+				return;
+			}
+
+			ioProvider.announceCheck();
+		}
+		else
+		{
+			if (isCurrentPlayerInStalemate())
+			{
+				gameOver = true;
+				ioProvider.announceDraw(DrawStatus.STALEMATE);
+			}
+		}
+	}
+
+	private void manageCastling(Piece piece, Position to)
+	{
+		if (piece instanceof King && isValidCastlingPosition(to))
+		{
+			performCastling(to);
+		}
+	}
+
 	private boolean isCurrentPlayerInCheck()
 	{	
 		Position flippedKingPosition = getKingPosition().flipOver(board);
@@ -338,8 +361,7 @@ public class GameListener
 		King king = getKing();
 		Position kingPosition = getKingPosition();
 		
-		if (king.isMoved())
-			return castles;
+		if (king.isMoved()) return castles;
 		
 		int row = board.getHeight() - 1;
 		
@@ -350,17 +372,12 @@ public class GameListener
 			boolean rookFound = checkForMyPieceAt(row, col)
 					&& piece.getClass().equals(Rook.class) && !piece.isMoved();
 			
-			if (!rookFound)
-				continue;
+			if (!rookFound) continue;
 			
 			Rook rook = (Rook)piece;
-			
 			boolean rookLeftFromKing = col < kingPosition.getColumn();
-			
 			OffsetPair rookOffset = rookLeftFromKing ? OffsetPair.RIGHT : OffsetPair.LEFT;
-			
 			boolean allInsideCellsFree = true;
-			
 			Position rookPosition = new Position(row, col);
 			
 			while (true)
@@ -378,8 +395,7 @@ public class GameListener
 				}
 			}
 			
-			if (!allInsideCellsFree)
-				continue;
+			if (!allInsideCellsFree) continue;
 			
 			OffsetPair kingOffset = rookLeftFromKing ? OffsetPair.LEFT : OffsetPair.RIGHT;
 			Position rookCastlingPosition = kingPosition.moveBy(kingOffset);
