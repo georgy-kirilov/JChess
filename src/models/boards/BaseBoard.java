@@ -102,7 +102,7 @@ public abstract class BaseBoard implements Board
 	        {
 	            for (int col = row; col < getWidth() - row - 1; col++) 
 	            {
-	                Piece temp = getAt(row, col);
+	                Piece temporary = getAt(row, col);
 	  
 	                int newCol = getHeight() - 1 - row;
 	                int newRow = getWidth() - 1 - col;
@@ -110,7 +110,7 @@ public abstract class BaseBoard implements Board
 	                cells[row][col] = cells[col][newCol]; 
 	                cells[col][newCol] = cells[newCol][newRow];
 	                cells[newCol][newRow] = cells[newRow][row]; 
-	                cells[newRow][row] = temp;
+	                cells[newRow][row] = temporary;
 	            } 
 	        } 
 		}
